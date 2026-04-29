@@ -1260,6 +1260,289 @@
     0% { transform: scaleX(1); }
     100% { transform: scaleX(0.6); }
   }
+
+  /* ═══ ABOUT ME ═══ */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .about-grid { grid-template-columns: 1fr; }
+  }
+
+  .about-avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sky-light), var(--grass-light));
+    border: 4px solid white;
+    box-shadow: 0 8px 32px var(--shadow-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    margin: 0 auto;
+    transition: all var(--transition-gentle);
+  }
+
+  .about-avatar:hover {
+    transform: scale(1.05) rotate(5deg);
+    box-shadow: 0 12px 40px var(--shadow-medium);
+  }
+
+  .about-text h3 {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+  }
+
+  .about-text p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text-medium);
+    margin-bottom: 16px;
+  }
+
+  .about-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .highlight-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 20px;
+    border: 1px solid var(--sun-yellow);
+    font-family: 'Patrick Hand', cursive;
+    font-size: 14px;
+    color: var(--warm-brown);
+  }
+
+  /* ═══ ACHIEVEMENTS ═══ */
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .achievement-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 4px 16px var(--shadow-soft);
+    border: 2px solid var(--warm-beige);
+    transition: all var(--transition-gentle);
+  }
+
+  .achievement-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px var(--shadow-medium);
+    border-color: var(--sun-yellow);
+  }
+
+  .achievement-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    display: inline-block;
+    transition: all 0.3s;
+  }
+
+  .achievement-card:hover .achievement-icon {
+    transform: scale(1.2) rotate(10deg);
+  }
+
+  .achievement-title {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+  }
+
+  .achievement-desc {
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  /* ═══ RESEARCH DETAILS ═══ */
+  .research-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .research-details { grid-template-columns: 1fr; }
+  }
+
+  .research-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 24px;
+    box-shadow: 0 4px 16px var(--shadow-soft);
+    border: 2px solid var(--warm-beige);
+    transition: all var(--transition-gentle);
+  }
+
+  .research-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px var(--shadow-medium);
+    border-color: var(--sky-light);
+  }
+
+  .research-card h4 {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .research-card p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-medium);
+  }
+
+  /* ═══ SERVICES ═══ */
+  .services-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .service-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 16px var(--shadow-soft);
+    border: 2px solid var(--warm-beige);
+    transition: all var(--transition-gentle);
+  }
+
+  .service-item:hover {
+    transform: translateX(10px);
+    box-shadow: 0 8px 24px var(--shadow-medium);
+    border-color: var(--sun-yellow);
+  }
+
+  .service-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+    transition: all 0.3s;
+  }
+
+  .service-item:hover .service-icon {
+    transform: scale(1.2);
+  }
+
+  .service-content h4 {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+  }
+
+  .service-content p {
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  /* ═══ HOBBIES ═══ */
+  .hobbies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+  }
+
+  .hobby-item {
+    text-align: center;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 16px var(--shadow-soft);
+    border: 2px solid var(--warm-beige);
+    transition: all var(--transition-gentle);
+  }
+
+  .hobby-item:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 24px var(--shadow-medium);
+    border-color: var(--sun-yellow);
+  }
+
+  .hobby-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    display: inline-block;
+    transition: all 0.3s;
+  }
+
+  .hobby-item:hover .hobby-icon {
+    transform: scale(1.2) rotate(10deg);
+  }
+
+  .hobby-name {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 16px;
+    color: var(--warm-brown);
+  }
+
+  /* ═══ QUOTE ═══ */
+  .quote-card {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 182, 193, 0.1));
+    border-radius: 20px;
+    padding: 32px;
+    text-align: center;
+    border: 3px dashed var(--sun-yellow);
+    position: relative;
+  }
+
+  .quote-card::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    left: 30px;
+    font-size: 80px;
+    color: var(--sun-yellow);
+    opacity: 0.3;
+    font-family: Georgia, serif;
+  }
+
+  .quote-text {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 24px;
+    line-height: 1.6;
+    color: var(--warm-brown);
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+
+  .quote-author {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16px;
+    color: var(--text-light);
+  }
 </style>
 </head>
 <body>
@@ -1283,6 +1566,7 @@
 
 <nav class="nav-indicator">
   <div class="nav-dot active" data-section="HOME" onclick="scrollToSection('header')"></div>
+  <div class="nav-dot" data-section="ABOUT" onclick="scrollToSection('about')"></div>
   <div class="nav-dot" data-section="EDUCATION" onclick="scrollToSection('education')"></div>
   <div class="nav-dot" data-section="RESEARCH" onclick="scrollToSection('research')"></div>
   <div class="nav-dot" data-section="SKILLS" onclick="scrollToSection('skills')"></div>
@@ -1307,8 +1591,26 @@
     <p class="tagline" id="tagline">AI for Education · Cognitive Diagnosis · Student Simulation</p>
   </header>
 
-  <!-- ═══════ 01 EDUCATION ═══════ -->
-  <div class="section-title reveal" id="education"><span class="num">01</span> Education</div>
+  <!-- ═══════ ABOUT ME ═══════ -->
+  <div class="section-title reveal" id="about"><span class="num">01</span> About Me</div>
+  <div class="paper-card reveal">
+    <div class="about-grid">
+      <div class="about-avatar">👨‍🎓</div>
+      <div class="about-text">
+        <h3>Hello, I'm Huixing Que!</h3>
+        <p>I'm a Master's student in Computer Science at the University of Science and Technology of China, with a Bachelor's degree in Education from Beijing Normal University.</p>
+        <p>My research focuses on the intersection of Artificial Intelligence and Education, particularly in developing intelligent systems that can understand and adapt to individual student needs. I'm passionate about creating AI-powered tools that make education more personalized and effective.</p>
+        <div class="about-highlights">
+          <span class="highlight-item">🎓 Cross-disciplinary Background</span>
+          <span class="highlight-item">🔬 AI + Education Researcher</span>
+          <span class="highlight-item">💡 Innovation Enthusiast</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ 02 EDUCATION ═══════ -->
+  <div class="section-title reveal" id="education"><span class="num">02</span> Education</div>
   <div class="edu-timeline reveal">
     <div class="edu-item">
       <span class="edu-date">Present</span>
@@ -1324,8 +1626,8 @@
     </div>
   </div>
 
-  <!-- ═══════ 02 RESEARCH INTERESTS ═══════ -->
-  <div class="section-title reveal"><span class="num">02</span> Research Interests</div>
+  <!-- ═══════ 03 RESEARCH INTERESTS ═══════ -->
+  <div class="section-title reveal"><span class="num">03</span> Research Interests</div>
   <div class="paper-card reveal">
     <div class="tag-cloud">
       <span class="cloud-tag">AI for Education</span>
@@ -1338,8 +1640,8 @@
     </div>
   </div>
 
-  <!-- ═══════ 03 RESEARCH ═══════ -->
-  <div class="section-title reveal" id="research"><span class="num">03</span> Research</div>
+  <!-- ═══════ 04 RESEARCH ═══════ -->
+  <div class="section-title reveal" id="research"><span class="num">04</span> Research</div>
   <div class="paper-card reveal">
     <span class="paper-badge">ACL 2026</span>
     <h2 class="paper-title">One LLM Does Not Simulate All Students</h2>
@@ -1353,8 +1655,80 @@
     </div>
   </div>
 
-  <!-- ═══════ 04 SKILLS ═══════ -->
-  <div class="section-title reveal" id="skills"><span class="num">04</span> Skills</div>
+  <!-- ═══════ 05 RESEARCH DETAILS ═══════ -->
+  <div class="section-title reveal"><span class="num">05</span> Research Details</div>
+  <div class="research-details reveal">
+    <div class="research-card">
+      <h4>🎯 Core Problem</h4>
+      <p>Current LLM-based student simulators use a single model for all learners, ignoring individual differences in ability levels. This creates systematic bias that affects the validity of educational research and system evaluation.</p>
+    </div>
+    <div class="research-card">
+      <h4>💡 Our Solution</h4>
+      <p>We propose a novel framework that uses Neural Cognitive Diagnosis to assess student abilities, then dynamically assigns appropriate LLMs to simulate different ability levels, creating more realistic and diverse student behaviors.</p>
+    </div>
+    <div class="research-card">
+      <h4>🔬 Methodology</h4>
+      <p>Our approach combines cognitive diagnosis models with LLM assignment strategies. We use NeuralCD to estimate student abilities from response patterns, then select LLMs with matching capability levels for simulation.</p>
+    </div>
+    <div class="research-card">
+      <h4>📊 Key Findings</h4>
+      <p>Experiments show that our ability-aware simulation significantly reduces bias in student response patterns, achieving more realistic and diverse behavioral distributions compared to single-LLM approaches.</p>
+    </div>
+  </div>
+
+  <!-- ═══════ 06 ACHIEVEMENTS ═══════ -->
+  <div class="section-title reveal"><span class="num">06</span> Achievements</div>
+  <div class="achievements-grid reveal">
+    <div class="achievement-card">
+      <div class="achievement-icon">🏆</div>
+      <div class="achievement-title">ACL 2026 Paper</div>
+      <div class="achievement-desc">Published research on ability-aware student simulation at top-tier NLP conference</div>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">🎓</div>
+      <div class="achievement-title">Cross-disciplinary</div>
+      <div class="achievement-desc">Unique combination of Education and Computer Science backgrounds</div>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">💻</div>
+      <div class="achievement-title">Open Source</div>
+      <div class="achievement-desc">Contributing to educational AI research through open-source projects</div>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">📚</div>
+      <div class="achievement-title">Research Focus</div>
+      <div class="achievement-desc">Pioneering work in LLM-based student simulation and cognitive diagnosis</div>
+    </div>
+  </div>
+
+  <!-- ═══════ 07 ACADEMIC SERVICES ═══════ -->
+  <div class="section-title reveal"><span class="num">07</span> Academic Services</div>
+  <div class="services-list reveal">
+    <div class="service-item">
+      <div class="service-icon">📝</div>
+      <div class="service-content">
+        <h4>Conference Reviewer</h4>
+        <p>Served as a reviewer for major AI and Education conferences, helping maintain research quality and standards in the field.</p>
+      </div>
+    </div>
+    <div class="service-item">
+      <div class="service-icon">🤝</div>
+      <div class="service-content">
+        <h4>Research Collaboration</div>
+        <p>Actively collaborating with researchers across institutions to advance the field of AI-powered educational systems.</p>
+      </div>
+    </div>
+    <div class="service-item">
+      <div class="service-icon">🎤</div>
+      <div class="service-content">
+        <h4>Academic Presentations</div>
+        <p>Regularly presenting research findings at conferences and workshops to share knowledge and gather feedback.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ 08 SKILLS ═══════ -->
+  <div class="section-title reveal" id="skills"><span class="num">08</span> Skills</div>
   <div class="paper-card reveal">
     <div class="skills-grid">
       <div class="skill-item">
@@ -1388,8 +1762,8 @@
     </div>
   </div>
 
-  <!-- ═══════ 05 PROJECTS ═══════ -->
-  <div class="section-title reveal" id="projects"><span class="num">05</span> Projects</div>
+  <!-- ═══════ 09 PROJECTS ═══════ -->
+  <div class="section-title reveal" id="projects"><span class="num">09</span> Projects</div>
   <div class="projects-grid">
     <div class="proj-card reveal">
       <div class="proj-name">ABILITY-AWARE STUDENT SIM</div>
@@ -1405,8 +1779,8 @@
     </div>
   </div>
 
-  <!-- ═══════ 06 GITHUB ACTIVITY ═══════ -->
-  <div class="section-title reveal"><span class="num">06</span> GitHub Activity</div>
+  <!-- ═══════ 10 GITHUB ACTIVITY ═══════ -->
+  <div class="section-title reveal"><span class="num">10</span> GitHub Activity</div>
   <div class="paper-card reveal">
     <div class="activity-grid" id="activity-grid">
       <div class="activity-cell"><div class="act-num">—</div><div class="act-label">REPOSITORIES</div></div>
@@ -1419,8 +1793,44 @@
     </div>
   </div>
 
-  <!-- ═══════ 07 CONNECT ═══════ -->
-  <div class="section-title reveal" id="contact"><span class="num">07</span> Connect</div>
+  <!-- ═══════ 11 HOBBIES ═══════ -->
+  <div class="section-title reveal"><span class="num">11</span> Hobbies</div>
+  <div class="hobbies-grid reveal">
+    <div class="hobby-item">
+      <div class="hobby-icon">📖</div>
+      <div class="hobby-name">Reading</div>
+    </div>
+    <div class="hobby-item">
+      <div class="hobby-icon">🎵</div>
+      <div class="hobby-name">Music</div>
+    </div>
+    <div class="hobby-item">
+      <div class="hobby-icon">🎮</div>
+      <div class="hobby-name">Gaming</div>
+    </div>
+    <div class="hobby-item">
+      <div class="hobby-icon">🏃</div>
+      <div class="hobby-name">Exercise</div>
+    </div>
+    <div class="hobby-item">
+      <div class="hobby-icon">📷</div>
+      <div class="hobby-name">Photography</div>
+    </div>
+    <div class="hobby-item">
+      <div class="hobby-icon">✈️</div>
+      <div class="hobby-name">Travel</div>
+    </div>
+  </div>
+
+  <!-- ═══════ 12 INSPIRATION ═══════ -->
+  <div class="section-title reveal"><span class="num">12</span> Inspiration</div>
+  <div class="quote-card reveal">
+    <div class="quote-text">"The important thing is not to stop questioning. Curiosity has its own reason for existing."</div>
+    <div class="quote-author">— Albert Einstein</div>
+  </div>
+
+  <!-- ═══════ 13 CONNECT ═══════ -->
+  <div class="section-title reveal" id="contact"><span class="num">13</span> Connect</div>
   <div class="contact-grid reveal">
     <div class="contact-cell">
       <div class="contact-icon">✉️</div>
@@ -1503,7 +1913,7 @@ function scrollToSection(id) {
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-const sections = ['header', 'education', 'research', 'skills', 'projects', 'contact'];
+const sections = ['header', 'about', 'education', 'research', 'skills', 'projects', 'contact'];
 const navDots = document.querySelectorAll('.nav-dot');
 
 window.addEventListener('scroll', () => {
