@@ -1955,7 +1955,7 @@ window.addEventListener('scroll', () => {
 
   function render(user, repos) {
     const ownRepos = repos.filter(r => !r.fork);
-    const displayRepos = repos.length ? repos.slice(0, 5) : fallback.repos;
+    const displayRepos = repos.length ? repos : fallback.repos;
     const totalStars = ownRepos.reduce((s, r) => s + r.stargazers_count, 0);
     const totalForks = ownRepos.reduce((s, r) => s + r.forks_count, 0);
 
