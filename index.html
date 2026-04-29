@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阙辉兴 · Huixing Que</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #020810;
+    --bg-panel: rgba(8, 20, 36, 0.72);
+    --cyan: #4fc3f7;
+    --cyan-dim: rgba(79, 195, 247, 0.35);
+    --cyan-glow: rgba(79, 195, 247, 0.15);
+    --blue: #0288d1;
+    --white-blue: #e0f7fa;
+    --grid-color: rgba(79, 195, 247, 0.04);
+    --border: rgba(79, 195, 247, 0.18);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg-deep);
+    color: var(--white-blue);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ═══ BACKGROUND LAYERS ═══ */
+  #holo-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .grid-overlay {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background-image:
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 30%, black 30%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 30%, black 30%, transparent 70%);
+  }
+  .scanline {
+    position: fixed; inset: 0; z-index: 2; pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  }
+  .scan-sweep {
+    position: fixed; z-index: 3; pointer-events: none;
+    top: -2px; left: 0; width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0.3; animation: scanSweep 6s linear infinite;
+  }
+  @keyframes scanSweep { 0% { top: -2px; } 100% { top: 100vh; } }
+
+  /* ═══ CONTAINER ═══ */
+  .container { position: relative; z-index: 10; max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ═══ HEADER ═══ */
+  .header { text-align: center; padding: 80px 0 50px; position: relative; }
+  .header-status {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Orbitron', monospace; font-size: 10px; letter-spacing: 3px;
+    color: var(--cyan); opacity: 0.6; margin-bottom: 30px;
+    padding: 6px 16px; border: 0.5px solid var(--border); border-radius: 2px;
+    background: rgba(79, 195, 247, 0.04);
+  }
+  .header-status .dot {
+    width: 5px; height: 5px; border-radius: 50%; background: var(--cyan);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 3px var(--cyan), 0 0 6px var(--cyan); }
+    50% { box-shadow: 0 0 6px var(--cyan), 0 0 14px var(--cyan); }
+  }
+  .name-cn {
+    font-family: 'Orbitron', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    font-size: clamp(48px, 8vw, 84px); font-weight: 900; letter-spacing: 14px;
+    background: linear-gradient(180deg, #e0f7fa 0%, #4fc3f7 40%, #0288d1 80%, rgba(2,136,209,0.3) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    filter: drop-shadow(0 0 24px rgba(79,195,247,0.5)) drop-shadow(0 0 60px rgba(79,195,247,0.2));
+    line-height: 1.2;
+  }
+  .name-en {
+    font-family: 'Orbitron', monospace; font-size: clamp(12px, 1.8vw, 16px);
+    font-weight: 500; letter-spacing: 8px; color: var(--cyan); opacity: 0.7;
+    margin-top: 12px; text-transform: uppercase;
+  }
+  .header-line { width: 200px; height: 0.5px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); margin: 28px auto; opacity: 0.5; }
+  .affiliation { font-size: 12px; letter-spacing: 3px; color: var(--cyan); opacity: 0.5; font-family: 'Orbitron', monospace; }
+
+  /* ═══ SECTION TITLE ═══ */
+  .section-title {
+    font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 600;
+    letter-spacing: 4px; color: var(--cyan); margin: 60px 0 28px;
+    padding-bottom: 14px; border-bottom: 0.5px solid var(--border);
+    display: flex; align-items: center; gap: 12px; text-transform: uppercase;
+  }
+  .section-title::before { content: ''; width: 24px; height: 0.5px; background: var(--cyan); opacity: 0.6; }
+  .section-title .num { font-size: 9px; opacity: 0.4; font-weight: 400; }
+
+  /* ═══ GLASS PANEL ═══ */
+  .panel {
+    background: var(--bg-panel); border: 0.5px solid var(--border);
+    border-radius: 4px; padding: 32px; position: relative;
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    transition: border-color 0.4s, box-shadow 0.4s;
+  }
+  .panel:hover { border-color: var(--cyan-dim); box-shadow: 0 0 20px var(--cyan-glow), inset 0 0 20px var(--cyan-glow); }
+  .panel::before, .panel::after { content: ''; position: absolute; width: 16px; height: 16px; pointer-events: none; opacity: 0.5; transition: opacity 0.4s; }
+  .panel::before { top: -0.5px; left: -0.5px; border-top: 1px solid var(--cyan); border-left: 1px solid var(--cyan); }
+  .panel::after { bottom: -0.5px; right: -0.5px; border-bottom: 1px solid var(--cyan); border-right: 1px solid var(--cyan); }
+  .panel:hover::before, .panel:hover::after { opacity: 1; }
+
+  /* ═══ EDUCATION TIMELINE ═══ */
+  .edu-timeline { position: relative; }
+  .edu-item { display: flex; gap: 20px; padding: 16px 0; position: relative; }
+  .edu-item + .edu-item { border-top: 0.5px solid rgba(79,195,247,0.08); }
+  .edu-marker {
+    flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--cyan); margin-top: 6px;
+    box-shadow: 0 0 6px var(--cyan), 0 0 14px var(--cyan-glow);
+  }
+  .edu-content { flex: 1; }
+  .edu-date { font-family: 'Orbitron', monospace; font-size: 9px; letter-spacing: 2px; color: var(--cyan); opacity: 0.5; text-transform: uppercase; }
+  .edu-degree { font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 600; letter-spacing: 2px; color: var(--white-blue); margin: 6px 0 4px; }
+  .edu-school { font-size: 13px; color: var(--cyan); opacity: 0.7; }
+  .edu-dept { font-size: 11px; color: rgba(79,195,247,0.45); margin-top: 2px; }
+
+  /* ═══ RESEARCH INTERESTS TAG CLOUD ═══ */
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; padding: 8px 0; }
+  .cloud-tag {
+    font-family: 'Orbitron', monospace; letter-spacing: 1px;
+    padding: 8px 18px; border: 0.5px solid var(--border);
+    border-radius: 2px; transition: all 0.35s; cursor: default;
+    animation: tagFloat 4s ease-in-out infinite;
+  }
+  .cloud-tag:nth-child(1) { animation-delay: 0s; font-size: 10px; color: rgba(79,195,247,0.5); }
+  .cloud-tag:nth-child(2) { animation-delay: 0.3s; font-size: 13px; color: rgba(79,195,247,0.7); }
+  .cloud-tag:nth-child(3) { animation-delay: 0.6s; font-size: 11px; color: rgba(79,195,247,0.6); }
+  .cloud-tag:nth-child(4) { animation-delay: 0.9s; font-size: 14px; color: rgba(79,195,247,0.8); border-color: var(--cyan-dim); }
+  .cloud-tag:nth-child(5) { animation-delay: 1.2s; font-size: 10px; color: rgba(79,195,247,0.5); }
+  .cloud-tag:nth-child(6) { animation-delay: 1.5s; font-size: 12px; color: rgba(79,195,247,0.65); }
+  .cloud-tag:nth-child(7) { animation-delay: 1.8s; font-size: 9px; color: rgba(79,195,247,0.45); }
+  .cloud-tag:hover { border-color: var(--cyan); background: rgba(79,195,247,0.08); box-shadow: 0 0 14px var(--cyan-glow); }
+  @keyframes tagFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  /* ═══ PAPER ═══ */
+  .paper-badge {
+    display: inline-block; font-family: 'Orbitron', monospace; font-size: 10px;
+    letter-spacing: 2px; padding: 5px 14px; border: 0.5px solid var(--cyan-dim);
+    color: var(--cyan); background: rgba(79,195,247,0.06); border-radius: 2px; margin-bottom: 20px;
+  }
+  .paper-title {
+    font-size: 20px; font-weight: 700; line-height: 1.4; color: var(--white-blue);
+    margin-bottom: 8px; font-family: 'Orbitron', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  }
+  .paper-subtitle { font-size: 13px; color: var(--cyan); opacity: 0.7; margin-bottom: 20px; font-style: italic; }
+  .paper-abstract { font-size: 13px; line-height: 1.8; color: rgba(224,247,250,0.6); margin-bottom: 24px; }
+  .paper-links { display: flex; gap: 16px; flex-wrap: wrap; }
+  .link-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Orbitron', monospace; font-size: 11px; letter-spacing: 1.5px;
+    padding: 10px 20px; border: 0.5px solid var(--border); color: var(--cyan);
+    text-decoration: none; border-radius: 2px; background: rgba(79,195,247,0.04);
+    transition: all 0.3s;
+  }
+  .link-btn:hover { background: rgba(79,195,247,0.12); border-color: var(--cyan); box-shadow: 0 0 14px var(--cyan-glow); }
+
+  /* ═══ SKILLS ═══ */
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 40px; }
+  @media (max-width: 640px) { .skills-grid { grid-template-columns: 1fr; } }
+  .skill-item { margin-bottom: 16px; }
+  .skill-label {
+    display: flex; justify-content: space-between; margin-bottom: 6px;
+    font-family: 'Orbitron', monospace; font-size: 10px; letter-spacing: 2px; color: var(--cyan); opacity: 0.7;
+  }
+  .skill-bar {
+    height: 3px; background: rgba(79,195,247,0.06); border-radius: 2px; overflow: hidden;
+  }
+  .skill-fill {
+    height: 100%; border-radius: 2px;
+    background: linear-gradient(90deg, var(--cyan), #e0f7fa, var(--cyan));
+    box-shadow: 0 0 8px var(--cyan-glow);
+    width: 0; transition: width 1.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .skill-fill.animated { /* JS fills width inline */ }
+
+  /* ═══ PROJECTS ═══ */
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 640px) { .projects-grid { grid-template-columns: 1fr; } }
+  .proj-card {
+    background: var(--bg-panel); border: 0.5px solid var(--border);
+    border-radius: 4px; padding: 28px; position: relative;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    transition: border-color 0.4s, box-shadow 0.4s;
+  }
+  .proj-card:hover { border-color: var(--cyan-dim); box-shadow: 0 0 18px var(--cyan-glow), inset 0 0 18px var(--cyan-glow); }
+  .proj-card::before { content: ''; position: absolute; top: -0.5px; left: -0.5px; width: 12px; height: 12px; border-top: 1px solid var(--cyan); border-left: 1px solid var(--cyan); opacity: 0.4; }
+  .proj-card .proj-name { font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 600; letter-spacing: 2px; color: var(--white-blue); margin-bottom: 10px; }
+  .proj-card .proj-desc { font-size: 12px; line-height: 1.7; color: rgba(224,247,250,0.5); margin-bottom: 16px; }
+  .proj-card .proj-meta { display: flex; gap: 16px; align-items: center; font-size: 11px; flex-wrap: wrap; }
+  .tag { font-family: 'Orbitron', monospace; font-size: 9px; letter-spacing: 1.5px; padding: 4px 10px; border: 0.5px solid var(--border); color: var(--cyan); border-radius: 2px; }
+  .stat { color: var(--cyan); opacity: 0.5; font-size: 10px; letter-spacing: 1px; }
+  .proj-link {
+    display: inline-block; margin-top: 16px; font-family: 'Orbitron', monospace;
+    font-size: 10px; letter-spacing: 1.5px; color: var(--cyan);
+    text-decoration: none; opacity: 0.6; transition: opacity 0.3s;
+  }
+  .proj-link:hover { opacity: 1; }
+
+  /* ═══ GITHUB ACTIVITY ═══ */
+  .activity-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 0.5px solid var(--border); border-radius: 4px; overflow: hidden; }
+  @media (max-width: 640px) { .activity-grid { grid-template-columns: repeat(2, 1fr); } }
+  .activity-cell {
+    background: var(--bg-panel); padding: 20px; text-align: center;
+    transition: background 0.3s;
+  }
+  .activity-cell:hover { background: rgba(79,195,247,0.05); }
+  .activity-cell .act-num {
+    font-family: 'Orbitron', monospace; font-size: 28px; font-weight: 700;
+    color: var(--cyan); letter-spacing: 2px;
+    text-shadow: 0 0 12px var(--cyan-glow);
+  }
+  .activity-cell .act-label {
+    font-family: 'Orbitron', monospace; font-size: 8px; letter-spacing: 2px;
+    color: var(--cyan); opacity: 0.5; margin-top: 6px; text-transform: uppercase;
+  }
+  .repo-list { margin-top: 20px; }
+  .repo-row {
+    display: flex; align-items: center; gap: 16px; padding: 14px 0;
+    border-bottom: 0.5px solid rgba(79,195,247,0.06);
+  }
+  .repo-row:last-child { border-bottom: none; }
+  .repo-icon { font-size: 16px; opacity: 0.6; flex-shrink: 0; }
+  .repo-info { flex: 1; min-width: 0; }
+  .repo-name {
+    font-family: 'Orbitron', monospace; font-size: 12px; letter-spacing: 1.5px; color: var(--cyan);
+    text-decoration: none; transition: opacity 0.3s;
+  }
+  .repo-name:hover { opacity: 0.7; }
+  .repo-desc { font-size: 11px; color: rgba(224,247,250,0.4); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .repo-stats { display: flex; gap: 14px; align-items: center; flex-shrink: 0; font-size: 10px; color: var(--cyan); opacity: 0.45; }
+
+  /* ═══ CONTACT ═══ */
+  .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 0.5px solid var(--border); border-radius: 4px; overflow: hidden; }
+  @media (max-width: 640px) { .contact-grid { grid-template-columns: 1fr; } }
+  .contact-cell { background: var(--bg-panel); padding: 24px; text-align: center; }
+  .contact-cell .label { font-family: 'Orbitron', monospace; font-size: 9px; letter-spacing: 2px; color: var(--cyan); opacity: 0.5; margin-bottom: 8px; }
+  .contact-cell .value { font-size: 12px; color: var(--white-blue); word-break: break-all; }
+  .contact-cell .value a { color: var(--cyan); text-decoration: none; transition: opacity 0.3s; }
+  .contact-cell .value a:hover { opacity: 0.7; }
+
+  /* ═══ FOOTER ═══ */
+  .footer { text-align: center; margin-top: 60px; padding: 30px 0; font-family: 'Orbitron', monospace; font-size: 9px; letter-spacing: 3px; color: var(--cyan); opacity: 0.3; }
+
+  /* ═══ REVEAL ═══ */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  ::selection { background: rgba(79,195,247,0.25); color: var(--white-blue); }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg-deep); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="grid-overlay"></div>
+<div class="scanline"></div>
+<div class="scan-sweep"></div>
+<canvas id="holo-canvas"></canvas>
+
+<div class="container">
+
+  <!-- ═══════ HEADER ═══════ -->
+  <header class="header reveal">
+    <div class="header-status"><span class="dot"></span> SYSTEM ONLINE · HOLOGRAPHIC PROJECTION</div>
+    <h1 class="name-cn">阙 辉 兴</h1>
+    <p class="name-en">Huixing Que</p>
+    <div class="header-line"></div>
+    <p class="affiliation">University of Science and Technology of China</p>
+    <p class="affiliation" style="margin-top:6px;">Computer Science</p>
+  </header>
+
+  <!-- ═══════ 01 EDUCATION ═══════ -->
+  <div class="section-title reveal"><span class="num">01</span> Education</div>
+  <div class="panel reveal">
+    <div class="edu-timeline">
+      <div class="edu-item">
+        <div class="edu-marker"></div>
+        <div class="edu-content">
+          <span class="edu-date">Present</span>
+          <h3 class="edu-degree">M.Sc. in Computer Science</h3>
+          <p class="edu-school">University of Science and Technology of China</p>
+          <p class="edu-dept">School of Computer Science and Technology · 计算机科学与技术学院</p>
+        </div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-marker"></div>
+        <div class="edu-content">
+          <span class="edu-date">Graduated</span>
+          <h3 class="edu-degree">B.A. in Education</h3>
+          <p class="edu-school">Beijing Normal University</p>
+          <p class="edu-dept">Faculty of Education · 教育学部</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ 02 RESEARCH INTERESTS ═══════ -->
+  <div class="section-title reveal"><span class="num">02</span> Research Interests</div>
+  <div class="panel reveal">
+    <div class="tag-cloud">
+      <span class="cloud-tag">AI for Education</span>
+      <span class="cloud-tag">Cognitive Diagnosis</span>
+      <span class="cloud-tag">LLM-based Simulation</span>
+      <span class="cloud-tag">Student Behavior Modeling</span>
+      <span class="cloud-tag">Knowledge Tracing</span>
+      <span class="cloud-tag">NeuralCD</span>
+      <span class="cloud-tag">Educational Data Mining</span>
+    </div>
+  </div>
+
+  <!-- ═══════ 03 RESEARCH ═══════ -->
+  <div class="section-title reveal"><span class="num">03</span> Research</div>
+  <div class="panel reveal">
+    <span class="paper-badge">ACL 2026</span>
+    <h2 class="paper-title">One LLM Does Not Simulate All Students</h2>
+    <p class="paper-subtitle">Ability-Aware Student Simulation via Cognitive Diagnosis Guided LLM Assignment</p>
+    <p class="paper-abstract">
+      Large Language Models have become integral to personalized education systems, yet most methods rely on a single high-capability LLM to represent an entire population of diverse learners. We demonstrate that this "one-size-fits-all" approach induces a systematic <strong style="color:#4fc3f7;">ability-dependent bias</strong>, and propose a framework that dynamically matches students with appropriate LLM backbones through cognitive alignment via Neural Cognitive Diagnosis.
+    </p>
+    <div class="paper-links">
+      <a href="https://openreview.net/forum?id=IfIRg71R61" class="link-btn" target="_blank">◈ PAPER</a>
+      <a href="https://github.com/QHX-BNU/Ability-Aware-Student-Simulation" class="link-btn" target="_blank">◈ CODE</a>
+    </div>
+  </div>
+
+  <!-- ═══════ 04 SKILLS ═══════ -->
+  <div class="section-title reveal"><span class="num">04</span> Skills</div>
+  <div class="panel reveal">
+    <div class="skills-grid">
+      <div class="skill-item">
+        <div class="skill-label"><span>Python</span><span>90%</span></div>
+        <div class="skill-bar"><div class="skill-fill" data-width="90%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-label"><span>PyTorch</span><span>85%</span></div>
+        <div class="skill-bar"><div class="skill-fill" data-width="85%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-label"><span>LLM APIs</span><span>88%</span></div>
+        <div class="skill-bar"><div class="skill-fill" data-width="88%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-label"><span>Data Analysis</span><span>82%</span></div>
+        <div class="skill-bar"><div class="skill-fill" data-width="82%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-label"><span>Machine Learning</span><span>86%</span></div>
+        <div class="skill-bar"><div class="skill-fill" data-width="86%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-label"><span>LLM Agent</span><span>90%</span></div>
+        <div class="skill-bar"><div class="skill-fill" data-width="90%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-label"><span>Prompt Engineering</span><span>88%</span></div>
+        <div class="skill-bar"><div class="skill-fill" data-width="88%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ 05 PROJECTS ═══════ -->
+  <div class="section-title reveal"><span class="num">05</span> Projects</div>
+  <div class="projects-grid">
+    <div class="proj-card reveal">
+      <div class="proj-name">ABILITY-AWARE STUDENT SIM</div>
+      <div class="proj-desc">Official implementation of our ACL 2026 paper. End-to-end pipeline integrating Neural Cognitive Diagnosis with LLM-based student simulation.</div>
+      <div class="proj-meta"><span class="tag">PYTHON</span><span class="tag">PYTORCH</span><span class="stat">★ 1</span></div>
+      <a href="https://github.com/QHX-BNU/Ability-Aware-Student-Simulation" class="proj-link" target="_blank">→ VIEW REPOSITORY</a>
+    </div>
+    <div class="proj-card reveal">
+      <div class="proj-name">EduData</div>
+      <div class="proj-desc">Educational datasets collection with detailed descriptions for quick understanding and research use in AI for education.</div>
+      <div class="proj-meta"><span class="tag">DATASET</span><span class="stat">★ 1</span><span class="stat">⑂ 1</span></div>
+      <a href="https://github.com/QHX-BNU/EduData" class="proj-link" target="_blank">→ VIEW REPOSITORY</a>
+    </div>
+  </div>
+
+  <!-- ═══════ 06 GITHUB ACTIVITY ═══════ -->
+  <div class="section-title reveal"><span class="num">06</span> GitHub Activity</div>
+  <div class="panel reveal">
+    <div class="activity-grid" id="activity-grid">
+      <div class="activity-cell"><div class="act-num">—</div><div class="act-label">REPOSITORIES</div></div>
+      <div class="activity-cell"><div class="act-num">—</div><div class="act-label">STARS</div></div>
+      <div class="activity-cell"><div class="act-num">—</div><div class="act-label">FORKS</div></div>
+      <div class="activity-cell"><div class="act-num">—</div><div class="act-label">CONTRIBUTIONS</div></div>
+    </div>
+    <div class="repo-list" id="repo-list">
+      <div class="repo-row"><div class="repo-info"><span style="color:var(--cyan);opacity:0.4;">Loading repository data...</span></div></div>
+    </div>
+  </div>
+
+  <!-- ═══════ 07 CONNECT ═══════ -->
+  <div class="section-title reveal"><span class="num">07</span> Connect</div>
+  <div class="contact-grid reveal">
+    <div class="contact-cell"><div class="label">EMAIL</div><div class="value"><a href="mailto:huixingq@mail.ustc.edu.cn">huixingq@mail.ustc.edu.cn</a></div></div>
+    <div class="contact-cell"><div class="label">GITHUB</div><div class="value"><a href="https://github.com/QHX-BNU" target="_blank">github.com/QHX-BNU</a></div></div>
+    <div class="contact-cell"><div class="label">LOCATION</div><div class="value">Anhui, China</div></div>
+  </div>
+
+  <!-- ═══════ FOOTER ═══════ -->
+  <div class="footer reveal">▎ SYS :: SIGNAL ACTIVE ▎</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
+<script>
+// ═══ THREE.JS HOLOGRAPHIC SPHERE ═══
+const holoCanvas = document.getElementById('holo-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas: holoCanvas, alpha: true, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.z = 7;
+
+// Outer wireframe icosahedron
+const outerGeo = new THREE.IcosahedronGeometry(2.2, 2);
+const outerMat = new THREE.MeshBasicMaterial({ color: 0x4fc3f7, wireframe: true, transparent: true, opacity: 0.08 });
+const outerSphere = new THREE.Mesh(outerGeo, outerMat);
+scene.add(outerSphere);
+
+// Inner wireframe icosahedron
+const innerGeo = new THREE.IcosahedronGeometry(1.6, 1);
+const innerMat = new THREE.MeshBasicMaterial({ color: 0x4fc3f7, wireframe: true, transparent: true, opacity: 0.12 });
+const innerSphere = new THREE.Mesh(innerGeo, innerMat);
+scene.add(innerSphere);
+
+// Vertex point cloud on outer sphere
+const pointsGeo = new THREE.SphereGeometry(2.2, 32, 32);
+const positions = pointsGeo.attributes.position;
+const dotPositions = [];
+for (let i = 0; i < positions.count; i += 3) {
+  if (Math.random() < 0.06) {
+    dotPositions.push(positions.getX(i), positions.getY(i), positions.getZ(i));
+  }
+}
+const dotGeo = new THREE.BufferGeometry();
+dotGeo.setAttribute('position', new THREE.Float32BufferAttribute(dotPositions, 3));
+const dotMat = new THREE.PointsMaterial({ color: 0x4fc3f7, size: 0.03, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false });
+const dots = new THREE.Points(dotGeo, dotMat);
+scene.add(dots);
+
+// Orbiting ring
+const ringGeo = new THREE.TorusGeometry(2.6, 0.008, 16, 120);
+const ringMat = new THREE.MeshBasicMaterial({ color: 0x4fc3f7, transparent: true, opacity: 0.25 });
+const ring = new THREE.Mesh(ringGeo, ringMat);
+ring.rotation.x = Math.PI * 0.45;
+scene.add(ring);
+
+// Second ring
+const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.9, 0.006, 16, 100), ringMat.clone());
+ring2.material.opacity = 0.15;
+ring2.rotation.x = Math.PI * 0.65;
+ring2.rotation.y = Math.PI * 0.3;
+scene.add(ring2);
+
+// Floating particles around sphere
+const orbitCount = 200;
+const orbitGeo = new THREE.BufferGeometry();
+const orbitPositions = new Float32Array(orbitCount * 3);
+for (let i = 0; i < orbitCount; i++) {
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.random() * Math.PI;
+  const r = 2.5 + Math.random() * 1.8;
+  orbitPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+  orbitPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+  orbitPositions[i * 3 + 2] = r * Math.cos(phi);
+}
+orbitGeo.setAttribute('position', new THREE.Float32BufferAttribute(orbitPositions, 3));
+const orbitMat = new THREE.PointsMaterial({ color: 0x81d4fa, size: 0.015, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false });
+const orbitPoints = new THREE.Points(orbitGeo, orbitMat);
+scene.add(orbitPoints);
+
+// Animation
+function animate3D() {
+  requestAnimationFrame(animate3D);
+  const t = Date.now() * 0.0003;
+  outerSphere.rotation.y += 0.0012;
+  outerSphere.rotation.x = Math.sin(t) * 0.15;
+  innerSphere.rotation.y -= 0.0008;
+  innerSphere.rotation.z += 0.0005;
+  dots.rotation.y += 0.0008;
+  dots.rotation.x = Math.cos(t * 0.7) * 0.1;
+  ring.rotation.z += 0.0006;
+  ring2.rotation.z -= 0.0004;
+  ring2.rotation.x += 0.0003;
+  orbitPoints.rotation.y += 0.0004;
+  orbitPoints.rotation.x += 0.0002;
+  camera.position.x = Math.sin(t * 0.5) * 0.8;
+  camera.position.y = Math.cos(t * 0.4) * 0.4;
+  camera.lookAt(0, 0, 0);
+  renderer.render(scene, camera);
+}
+animate3D();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ═══ SCROLL REVEAL ═══
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+document.querySelectorAll('.reveal').forEach(el => {
+  if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
+});
+
+// ═══ SKILL BARS ANIMATION ═══
+const skillObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.width = entry.target.dataset.width;
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.skill-fill').forEach(bar => skillObserver.observe(bar));
+
+// ═══ GITHUB API (with fallback) ═══
+(async function loadGitHub() {
+  const fallback = {
+    public_repos: 4,
+    repos: [
+      { name: 'Ability-Aware-Student-Simulation', html_url: 'https://github.com/QHX-BNU/Ability-Aware-Student-Simulation', description: 'Code for Paper — ACL 2026', language: 'Python', stargazers_count: 1, forks_count: 0 },
+      { name: 'EduData', html_url: 'https://github.com/QHX-BNU/EduData', description: 'Educational datasets collection for AI research', language: null, stargazers_count: 1, forks_count: 1 },
+      { name: 'AutoGPT', html_url: 'https://github.com/QHX-BNU/AutoGPT', description: 'AutoGPT — fork for research', language: null, stargazers_count: 0, forks_count: 0 },
+      { name: 'claude-code', html_url: 'https://github.com/QHX-BNU/claude-code', description: 'Claude Code Snapshot for Research', language: null, stargazers_count: 0, forks_count: 0 }
+    ]
+  };
+
+  function render(user, repos) {
+    const ownRepos = repos.filter(r => !r.fork);
+    const displayRepos = repos.length ? repos.slice(0, 5) : fallback.repos;
+    const totalStars = ownRepos.reduce((s, r) => s + r.stargazers_count, 0);
+    const totalForks = ownRepos.reduce((s, r) => s + r.forks_count, 0);
+
+    const cells = document.querySelectorAll('#activity-grid .act-num');
+    cells[0].textContent = user.public_repos || fallback.public_repos;
+    cells[1].textContent = totalStars || '1';
+    cells[2].textContent = totalForks || '1';
+    cells[3].textContent = '—';
+
+    const repoList = document.getElementById('repo-list');
+    repoList.innerHTML = displayRepos.map(r => `
+      <div class="repo-row">
+        <span class="repo-icon">◈</span>
+        <div class="repo-info">
+          <a href="${r.html_url}" class="repo-name" target="_blank">${r.name}</a>
+          <div class="repo-desc">${r.description || 'No description'}</div>
+        </div>
+        <div class="repo-stats">
+          ${r.language ? `<span>${r.language}</span>` : ''}
+          <span>★ ${r.stargazers_count}</span>
+          <span>⑂ ${r.forks_count}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  try {
+    const [userRes, reposRes] = await Promise.all([
+      fetch('https://api.github.com/users/QHX-BNU'),
+      fetch('https://api.github.com/users/QHX-BNU/repos?per_page=50&sort=updated')
+    ]);
+    if (!userRes.ok) throw new Error('API unavailable');
+    const user = await userRes.json();
+    const repos = await reposRes.json();
+    render(user, repos);
+  } catch(e) {
+    console.warn('GitHub API unavailable, using cached data');
+    render(fallback, fallback.repos);
+  }
+})();
+</script>
+</body>
+</html>
