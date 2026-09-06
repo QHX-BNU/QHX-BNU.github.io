@@ -1,1899 +1,844 @@
 <!DOCTYPE html>
-<!-- v3.0 - Anime Night Sky Theme -->
-<html lang="en">
+<html lang="en" data-theme="graphite">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Huixing Que ✦ 阙辉兴</title>
-<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg-deep: #0f0c29;
-    --bg-mid: #24243e;
-    --bg-soft: #302b63;
-    --neon-pink: #ff6fb5;
-    --neon-pink-soft: #ffb7d5;
-    --neon-purple: #a18cd1;
-    --neon-purple-deep: #6a4fb3;
-    --neon-cyan: #4facfe;
-    --neon-blue: #00f2fe;
-    --sakura: #ffc0e0;
-    --star-white: #ffffff;
-    --moon-glow: #fff3b0;
-    --text-main: #f3ecff;
-    --text-soft: #c9b8e8;
-    --text-dim: #9b8cc0;
-    --card-bg: rgba(255, 255, 255, 0.06);
-    --card-border: rgba(255, 111, 181, 0.3);
-    --glass-highlight: rgba(255, 255, 255, 0.12);
-    --shadow-neon-pink: rgba(255, 111, 181, 0.35);
-    --shadow-neon-purple: rgba(161, 140, 209, 0.35);
-    --shadow-neon-cyan: rgba(79, 172, 254, 0.35);
-    --transition-gentle: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-soft) 45%, var(--bg-mid) 100%);
-    color: var(--text-main);
-    font-family: 'Nunito', 'Quicksand', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  ::selection {
-    background: rgba(255, 111, 181, 0.4);
-    color: #fff;
-  }
-
-  ::-webkit-scrollbar { width: 10px; }
-  ::-webkit-scrollbar-track { background: var(--bg-deep); }
-  ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, var(--neon-pink), var(--neon-purple));
-    border-radius: 5px;
-    border: 2px solid var(--bg-deep);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, var(--neon-purple), var(--neon-cyan));
-  }
-
-  /* ═══ NIGHT SKY ═══ */
-  .sky {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  .stars-layer {
-    position: absolute;
-    inset: 0;
-  }
-
-  .star {
-    position: absolute;
-    background: var(--star-white);
-    border-radius: 50%;
-    animation: twinkle ease-in-out infinite;
-  }
-
-  @keyframes twinkle {
-    0%, 100% { opacity: 0.2; transform: scale(0.8); }
-    50% { opacity: 1; transform: scale(1.2); }
-  }
-
-  .shooting-star {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    background: var(--star-white);
-    border-radius: 50%;
-    box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.6);
-    opacity: 0;
-    animation: shoot linear infinite;
-  }
-
-  .shooting-star::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 120px;
-    height: 1.5px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), transparent);
-    transform: translateY(-50%);
-  }
-
-  @keyframes shoot {
-    0% { transform: translate(0, 0) rotate(-35deg); opacity: 0; }
-    5% { opacity: 1; }
-    20% { transform: translate(-55vw, 38vw) rotate(-35deg); opacity: 0; }
-    100% { transform: translate(-55vw, 38vw) rotate(-35deg); opacity: 0; }
-  }
-
-  .aurora {
-    position: absolute;
-    width: 700px;
-    height: 350px;
-    border-radius: 50%;
-    filter: blur(90px);
-    opacity: 0.35;
-    animation: auroraDrift 16s ease-in-out infinite alternate;
-  }
-
-  .aurora-1 {
-    top: -120px;
-    left: -150px;
-    background: radial-gradient(circle, var(--neon-purple), transparent 70%);
-  }
-
-  .aurora-2 {
-    top: 10%;
-    right: -200px;
-    background: radial-gradient(circle, var(--neon-pink), transparent 70%);
-    animation-delay: 5s;
-  }
-
-  .aurora-3 {
-    top: 40%;
-    left: 30%;
-    background: radial-gradient(circle, var(--neon-cyan), transparent 70%);
-    animation-delay: 10s;
-    opacity: 0.2;
-  }
-
-  @keyframes auroraDrift {
-    0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(60px, 30px) scale(1.15); }
-    100% { transform: translate(-40px, -20px) scale(0.95); }
-  }
-
-  .moon {
-    position: fixed;
-    top: 6%;
-    right: 10%;
-    width: 90px;
-    height: 90px;
-    background: radial-gradient(circle at 35% 35%, #fffdf0, var(--moon-glow) 60%, #f7e08a);
-    border-radius: 50%;
-    box-shadow: 0 0 50px rgba(255, 243, 176, 0.5), 0 0 120px rgba(255, 243, 176, 0.25);
-    z-index: 1;
-    animation: moonFloat 6s ease-in-out infinite;
-  }
-
-  .moon::before {
-    content: '';
-    position: absolute;
-    top: 22px;
-    left: 30px;
-    width: 14px;
-    height: 14px;
-    background: rgba(210, 190, 120, 0.5);
-    border-radius: 50%;
-  }
-
-  .moon::after {
-    content: '';
-    position: absolute;
-    bottom: 20px;
-    left: 18px;
-    width: 10px;
-    height: 10px;
-    background: rgba(210, 190, 120, 0.45);
-    border-radius: 50%;
-  }
-
-  @keyframes moonFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-
-  /* ═══ SAKURA PETALS ═══ */
-  .floating-elements {
-    position: fixed;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-  }
-
-  .petal {
-    position: absolute;
-    top: -40px;
-    border-radius: 100% 0 100% 0;
-    animation: fallPetal linear infinite;
-    opacity: 0;
-  }
-
-  @keyframes fallPetal {
-    0% { transform: translateY(-5vh) translateX(0) rotate(0deg); opacity: 0; }
-    8% { opacity: 0.9; }
-    85% { opacity: 0.8; }
-    100% { transform: translateY(108vh) translateX(-90px) rotate(540deg); opacity: 0; }
-  }
-
-  /* ═══ SCROLL PROGRESS ═══ */
-  .scroll-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 4px;
-    width: 0%;
-    z-index: 200;
-    background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple), var(--neon-cyan));
-    box-shadow: 0 0 12px var(--shadow-neon-pink);
-  }
-
-  /* ═══ CONTAINER ═══ */
-  .container {
-    position: relative;
-    z-index: 10;
-    max-width: 920px;
-    margin: 0 auto;
-    padding: 40px 24px 80px;
-  }
-
-  /* ═══ HEADER ═══ */
-  .header {
-    text-align: center;
-    padding: 90px 0 50px;
-    position: relative;
-  }
-
-  .header-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    color: var(--neon-pink-soft);
-    margin-bottom: 32px;
-    padding: 9px 24px;
-    background: rgba(255, 111, 181, 0.08);
-    border-radius: 30px;
-    border: 1.5px solid var(--neon-pink);
-    box-shadow: 0 0 20px rgba(255, 111, 181, 0.25), inset 0 0 15px rgba(255, 111, 181, 0.08);
-    transition: all var(--transition-gentle);
-    backdrop-filter: blur(8px);
-  }
-
-  .header-status:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0 30px rgba(255, 111, 181, 0.45), inset 0 0 15px rgba(255, 111, 181, 0.12);
-  }
-
-  .header-status .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--neon-cyan);
-    box-shadow: 0 0 10px var(--neon-cyan);
-    animation: pulse-dot 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse-dot {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.4); opacity: 0.6; }
-  }
-
-  .name-cn {
-    font-family: 'ZCOOL KuaiLe', 'Quicksand', cursive;
-    font-size: clamp(52px, 9vw, 92px);
-    font-weight: 400;
-    letter-spacing: 12px;
-    background: linear-gradient(120deg, var(--neon-pink) 0%, var(--neon-purple) 40%, var(--neon-cyan) 80%, var(--neon-blue) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 0 18px rgba(255, 111, 181, 0.35));
-    line-height: 1.2;
-    animation: nameAppear 1s ease-out;
-    position: relative;
-    text-shadow: none;
-  }
-
-  @keyframes nameAppear {
-    0% { opacity: 0; transform: translateY(30px) scale(0.9); filter: blur(6px); }
-    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-  }
-
-  .name-en {
-    font-family: 'Fredoka', 'Quicksand', sans-serif;
-    font-size: clamp(17px, 2.5vw, 24px);
-    font-weight: 600;
-    letter-spacing: 8px;
-    color: var(--neon-pink-soft);
-    opacity: 0.9;
-    margin-top: 14px;
-    text-transform: uppercase;
-    text-shadow: 0 0 15px rgba(255, 111, 181, 0.4);
-  }
-
-  .header-line {
-    width: 240px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--neon-pink), var(--neon-purple), var(--neon-cyan), transparent);
-    margin: 30px auto;
-    border-radius: 2px;
-    box-shadow: 0 0 12px var(--shadow-neon-pink);
-  }
-
-  .affiliation {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 3px;
-    color: var(--text-soft);
-    margin-top: 8px;
-  }
-
-  .tagline {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 18px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    color: var(--neon-pink-soft);
-    margin-top: 18px;
-    overflow: hidden;
-    white-space: nowrap;
-    border-right: 3px solid var(--neon-pink);
-    animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-    max-width: 100%;
-    display: inline-block;
-    text-shadow: 0 0 12px rgba(255, 111, 181, 0.3);
-  }
-
-  @keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
-  }
-
-  @keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: var(--neon-pink); }
-  }
-
-  /* ═══ SECTION TITLE ═══ */
-  .section-title {
-    font-family: 'Fredoka', 'Quicksand', sans-serif;
-    font-size: 30px;
-    font-weight: 600;
-    letter-spacing: 5px;
-    color: var(--text-main);
-    margin: 64px 0 28px;
-    padding-bottom: 14px;
-    border-bottom: 1.5px solid rgba(255, 111, 181, 0.35);
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    position: relative;
-    text-shadow: 0 0 20px rgba(161, 140, 209, 0.5);
-  }
-
-  .section-title::before {
-    content: '✦';
-    font-size: 22px;
-    color: var(--neon-pink);
-    text-shadow: 0 0 14px var(--neon-pink);
-    transition: transform 0.4s;
-  }
-
-  .section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -1.5px;
-    left: 0;
-    width: 30%;
-    height: 2px;
-    background: linear-gradient(90deg, var(--neon-pink), transparent);
-    box-shadow: 0 0 10px var(--neon-pink);
-  }
-
-  .section-title:hover::before {
-    transform: rotate(180deg) scale(1.25);
-  }
-
-  .section-title .num {
-    font-family: 'Fredoka', sans-serif;
-    font-size: 19px;
-    font-weight: 600;
-    opacity: 0.85;
-    color: var(--neon-cyan);
-    text-shadow: 0 0 12px var(--neon-cyan);
-  }
-
-  /* ═══ GLASS CARD ═══ */
-  .glass-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-radius: 24px;
-    padding: 32px;
-    position: relative;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 var(--glass-highlight);
-    border: 1.5px solid var(--card-border);
-    transition: all var(--transition-gentle);
-    overflow: hidden;
-  }
-
-  .glass-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 14px 50px rgba(0, 0, 0, 0.45), 0 0 30px rgba(255, 111, 181, 0.15), inset 0 1px 0 var(--glass-highlight);
-    border-color: var(--neon-pink);
-  }
-
-  .glass-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple), var(--neon-cyan));
-    border-radius: 24px 24px 0 0;
-    opacity: 0.8;
-  }
-
-  .glass-badge {
-    display: inline-block;
-    font-family: 'Fredoka', 'Quicksand', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 2.5px;
-    padding: 6px 18px;
-    background: linear-gradient(120deg, rgba(255, 111, 181, 0.25), rgba(161, 140, 209, 0.25));
-    color: var(--neon-pink-soft);
-    border: 1px solid var(--neon-pink);
-    border-radius: 22px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 18px rgba(255, 111, 181, 0.2);
-  }
-
-  .glass-title {
-    font-family: 'Fredoka', 'Quicksand', sans-serif;
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--text-main);
-    margin-bottom: 8px;
-    transition: all 0.3s;
-  }
-
-  .glass-card:hover .glass-title {
-    color: var(--neon-pink-soft);
-    text-shadow: 0 0 18px rgba(255, 111, 181, 0.4);
-  }
-
-  .glass-subtitle {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 16px;
-    color: var(--text-dim);
-    margin-bottom: 20px;
-    font-style: italic;
-    letter-spacing: 1px;
-  }
-
-  .glass-abstract {
-    font-size: 15px;
-    line-height: 1.9;
-    color: var(--text-soft);
-    margin-bottom: 24px;
-    padding: 16px 20px;
-    border-left: 3px solid var(--neon-cyan);
-    background: linear-gradient(90deg, rgba(79, 172, 254, 0.08), transparent);
-    border-radius: 0 12px 12px 0;
-  }
-
-  .glass-links {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .link-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    padding: 12px 26px;
-    background: linear-gradient(120deg, rgba(255, 111, 181, 0.9), rgba(161, 140, 209, 0.9));
-    color: #fff;
-    text-decoration: none;
-    border-radius: 26px;
-    box-shadow: 0 4px 20px var(--shadow-neon-pink);
-    transition: all var(--transition-gentle);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-  }
-
-  .link-btn:hover {
-    transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 8px 30px var(--shadow-neon-pink);
-    background: linear-gradient(120deg, var(--neon-pink), var(--neon-purple));
-  }
-
-  /* ═══ EDUCATION TIMELINE ═══ */
-  .edu-timeline {
-    position: relative;
-    padding-left: 30px;
-  }
-
-  .edu-timeline::before {
-    content: '';
-    position: absolute;
-    left: 15px;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: linear-gradient(180deg, var(--neon-pink), var(--neon-purple), var(--neon-cyan));
-    border-radius: 2px;
-    box-shadow: 0 0 12px var(--shadow-neon-purple);
-  }
-
-  .edu-item {
-    position: relative;
-    margin-bottom: 30px;
-    padding: 24px;
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 18px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-    border: 1.5px solid var(--card-border);
-    transition: all var(--transition-gentle);
-  }
-
-  .edu-item:hover {
-    transform: translateX(10px);
-    box-shadow: 0 8px 34px rgba(0, 0, 0, 0.4), 0 0 24px rgba(161, 140, 209, 0.2);
-    border-color: var(--neon-purple);
-  }
-
-  .edu-item::before {
-    content: '';
-    position: absolute;
-    left: -24px;
-    top: 30px;
-    width: 14px;
-    height: 14px;
-    background: var(--neon-pink);
-    border-radius: 50%;
-    border: 3px solid var(--bg-mid);
-    box-shadow: 0 0 0 3px var(--neon-pink), 0 0 14px var(--neon-pink);
-  }
-
-  .edu-date {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--neon-cyan);
-    margin-bottom: 8px;
-    letter-spacing: 2.5px;
-    text-shadow: 0 0 10px var(--neon-cyan);
-  }
-
-  .edu-degree {
-    font-family: 'Fredoka', 'Quicksand', sans-serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--text-main);
-    margin-bottom: 6px;
-  }
-
-  .edu-school {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 16px;
-    color: var(--neon-pink-soft);
-    opacity: 0.9;
-  }
-
-  .edu-dept {
-    font-size: 14px;
-    color: var(--text-dim);
-    margin-top: 4px;
-  }
-
-  /* ═══ TAG CLOUD ═══ */
-  .tag-cloud {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    justify-content: center;
-    padding: 20px 0;
-  }
-
-  .cloud-tag {
-    font-family: 'Quicksand', sans-serif;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    padding: 10px 22px;
-    background: rgba(255, 111, 181, 0.08);
-    border: 1.5px solid var(--card-border);
-    border-radius: 26px;
-    transition: all var(--transition-gentle);
-    cursor: default;
-    animation: tagFloat 4s ease-in-out infinite;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    color: var(--text-soft);
-    backdrop-filter: blur(8px);
-  }
-
-  .cloud-tag:nth-child(1) { animation-delay: 0s; border-color: rgba(255, 111, 181, 0.5); }
-  .cloud-tag:nth-child(2) { animation-delay: 0.3s; border-color: rgba(79, 172, 254, 0.5); }
-  .cloud-tag:nth-child(3) { animation-delay: 0.6s; border-color: rgba(161, 140, 209, 0.5); }
-  .cloud-tag:nth-child(4) { animation-delay: 0.9s; border-color: rgba(0, 242, 254, 0.5); }
-  .cloud-tag:nth-child(5) { animation-delay: 1.2s; border-color: rgba(255, 182, 213, 0.5); }
-  .cloud-tag:nth-child(6) { animation-delay: 1.5s; border-color: rgba(255, 111, 181, 0.5); }
-  .cloud-tag:nth-child(7) { animation-delay: 1.8s; border-color: rgba(79, 172, 254, 0.5); }
-
-  .cloud-tag:hover {
-    transform: translateY(-5px) scale(1.06);
-    box-shadow: 0 8px 28px var(--shadow-neon-pink);
-    border-color: var(--neon-pink);
-    color: var(--neon-pink-soft);
-    background: rgba(255, 111, 181, 0.15);
-  }
-
-  @keyframes tagFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-  }
-
-  /* ═══ PROJECTS ═══ */
-  .projects-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-
-  @media (max-width: 640px) {
-    .projects-grid { grid-template-columns: 1fr; }
-  }
-
-  .proj-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-radius: 22px;
-    padding: 28px;
-    position: relative;
-    box-shadow: 0 8px 36px rgba(0, 0, 0, 0.35), inset 0 1px 0 var(--glass-highlight);
-    border: 1.5px solid var(--card-border);
-    transition: all var(--transition-gentle);
-    overflow: hidden;
-  }
-
-  .proj-card:hover {
-    transform: translateY(-8px) rotate(1deg);
-    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.45), 0 0 26px rgba(79, 172, 254, 0.18), inset 0 1px 0 var(--glass-highlight);
-    border-color: var(--neon-cyan);
-  }
-
-  .proj-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--neon-purple), var(--neon-cyan), var(--neon-pink));
-    border-radius: 22px 22px 0 0;
-    opacity: 0.8;
-  }
-
-  .proj-card .proj-name {
-    font-family: 'Fredoka', 'Quicksand', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    color: var(--text-main);
-    margin-bottom: 12px;
-    transition: all 0.3s;
-  }
-
-  .proj-card:hover .proj-name {
-    color: var(--neon-cyan);
-    text-shadow: 0 0 16px var(--neon-cyan);
-  }
-
-  .proj-card .proj-desc {
-    font-size: 14px;
-    line-height: 1.8;
-    color: var(--text-soft);
-    margin-bottom: 18px;
-  }
-
-  .proj-card .proj-meta {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    font-size: 13px;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    padding: 4px 14px;
-    background: rgba(79, 172, 254, 0.12);
-    color: var(--neon-cyan);
-    border-radius: 16px;
-    border: 1px solid rgba(79, 172, 254, 0.5);
-  }
-
-  .stat {
-    color: var(--text-dim);
-    font-size: 12px;
-    letter-spacing: 1px;
-  }
-
-  .proj-link {
-    display: inline-block;
-    margin-top: 18px;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    color: var(--neon-cyan);
-    text-decoration: none;
-    transition: all 0.3s;
-    padding: 8px 18px;
-    background: rgba(79, 172, 254, 0.08);
-    border-radius: 16px;
-    border: 1px solid rgba(79, 172, 254, 0.45);
-  }
-
-  .proj-link:hover {
-    background: linear-gradient(120deg, var(--neon-cyan), var(--neon-blue));
-    color: #fff;
-    transform: translateX(5px);
-    box-shadow: 0 4px 18px var(--shadow-neon-cyan);
-  }
-
-  /* ═══ ACTIVITY ═══ */
-  .activity-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
-  @media (max-width: 640px) {
-    .activity-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  .activity-cell {
-    background: var(--card-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 18px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    border: 1.5px solid var(--card-border);
-    transition: all var(--transition-gentle);
-  }
-
-  .activity-cell:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 20px rgba(161, 140, 209, 0.2);
-    border-color: var(--neon-purple);
-  }
-
-  .activity-cell .act-num {
-    font-family: 'Fredoka', sans-serif;
-    font-size: 38px;
-    font-weight: 600;
-    color: var(--neon-pink);
-    text-shadow: 0 0 20px var(--shadow-neon-pink);
-  }
-
-  .activity-cell .act-label {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 2.5px;
-    color: var(--text-dim);
-    margin-top: 6px;
-  }
-
-  .repo-list {
-    background: var(--card-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 18px;
-    padding: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    border: 1.5px solid var(--card-border);
-  }
-
-  .repo-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 0;
-    border-bottom: 1.5px dashed rgba(255, 111, 181, 0.2);
-    transition: all 0.3s;
-  }
-
-  .repo-row:last-child {
-    border-bottom: none;
-  }
-
-  .repo-row:hover {
-    padding-left: 10px;
-    background: rgba(255, 111, 181, 0.05);
-    border-radius: 12px;
-  }
-
-  .repo-icon {
-    font-size: 20px;
-    opacity: 0.7;
-    transition: all 0.3s;
-  }
-
-  .repo-row:hover .repo-icon {
-    opacity: 1;
-    transform: scale(1.25);
-  }
-
-  .repo-info {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .repo-name {
-    font-family: 'Fredoka', 'Quicksand', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    color: var(--neon-cyan);
-    text-decoration: none;
-    transition: all 0.3s;
-    text-shadow: 0 0 10px rgba(79, 172, 254, 0.3);
-  }
-
-  .repo-name:hover {
-    color: var(--neon-pink);
-    text-shadow: 0 0 14px var(--neon-pink);
-  }
-
-  .repo-desc {
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-top: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .repo-stats {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    flex-shrink: 0;
-    font-size: 12px;
-    color: var(--text-dim);
-  }
-
-  /* ═══ CONTACT ═══ */
-  .contact-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-
-  @media (max-width: 640px) {
-    .contact-grid { grid-template-columns: 1fr; }
-  }
-
-  .contact-cell {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 22px;
-    padding: 28px;
-    text-align: center;
-    box-shadow: 0 8px 36px rgba(0, 0, 0, 0.35), inset 0 1px 0 var(--glass-highlight);
-    border: 1.5px solid var(--card-border);
-    transition: all var(--transition-gentle);
-  }
-
-  .contact-cell:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.45), 0 0 26px rgba(255, 111, 181, 0.18), inset 0 1px 0 var(--glass-highlight);
-    border-color: var(--neon-pink);
-  }
-
-  .contact-icon {
-    font-size: 34px;
-    margin-bottom: 16px;
-    display: inline-block;
-    transition: all 0.3s;
-    filter: drop-shadow(0 0 12px rgba(255, 111, 181, 0.5));
-  }
-
-  .contact-cell:hover .contact-icon {
-    transform: scale(1.2) rotate(10deg);
-  }
-
-  .contact-cell .label {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    color: var(--text-dim);
-    margin-bottom: 10px;
-  }
-
-  .contact-cell .value {
-    font-size: 14px;
-    color: var(--text-soft);
-    word-break: break-all;
-  }
-
-  .contact-cell .value a {
-    color: var(--neon-cyan);
-    text-decoration: none;
-    transition: all 0.3s;
-    font-weight: 600;
-  }
-
-  .contact-cell .value a:hover {
-    color: var(--neon-pink);
-    text-shadow: 0 0 12px var(--neon-pink);
-  }
-
-  /* ═══ FOOTER ═══ */
-  .footer {
-    text-align: center;
-    margin-top: 60px;
-    padding: 30px 0;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 3px;
-    color: var(--text-dim);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-  }
-
-  .footer-line {
-    flex: 1;
-    max-width: 100px;
-    height: 1.5px;
-    background: linear-gradient(90deg, transparent, var(--neon-purple), transparent);
-    border-radius: 1px;
-  }
-
-  /* ═══ NAV INDICATOR ═══ */
-  .nav-indicator {
-    position: fixed;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .nav-dot {
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.12);
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
-    border: 1.5px solid var(--neon-purple);
-  }
-
-  .nav-dot::before {
-    content: attr(data-section);
-    position: absolute;
-    right: 24px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-family: 'Quicksand', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: var(--neon-pink-soft);
-    opacity: 0;
-    white-space: nowrap;
-    transition: opacity 0.3s;
-    pointer-events: none;
-    background: rgba(15, 12, 41, 0.85);
-    backdrop-filter: blur(6px);
-    padding: 5px 14px;
-    border-radius: 12px;
-    border: 1px solid var(--card-border);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-  }
-
-  .nav-dot:hover::before {
-    opacity: 1;
-  }
-
-  .nav-dot:hover {
-    background: var(--neon-pink);
-    transform: scale(1.3);
-    border-color: var(--neon-pink);
-    box-shadow: 0 0 14px var(--neon-pink);
-  }
-
-  .nav-dot.active {
-    background: var(--neon-pink);
-    border-color: var(--neon-pink);
-    box-shadow: 0 0 0 4px rgba(255, 111, 181, 0.25), 0 0 16px var(--neon-pink);
-  }
-
-  /* ═══ SCROLL TO TOP ═══ */
-  .scroll-top {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    z-index: 100;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(255, 111, 181, 0.9), rgba(161, 140, 209, 0.9));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.3s;
-    box-shadow: 0 4px 20px var(--shadow-neon-pink);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-  }
-
-  .scroll-top.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .scroll-top:hover {
-    transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 8px 30px var(--shadow-neon-pink);
-  }
-
-  .scroll-top svg {
-    width: 20px;
-    height: 20px;
-    fill: #fff;
-  }
-
-  /* ═══ REVEAL ANIMATIONS ═══ */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .reveal:nth-child(1) { transition-delay: 0.1s; }
-  .reveal:nth-child(2) { transition-delay: 0.2s; }
-  .reveal:nth-child(3) { transition-delay: 0.3s; }
-  .reveal:nth-child(4) { transition-delay: 0.4s; }
-  .reveal:nth-child(5) { transition-delay: 0.5s; }
-  .reveal:nth-child(6) { transition-delay: 0.6s; }
-  .reveal:nth-child(7) { transition-delay: 0.7s; }
-  .reveal:nth-child(8) { transition-delay: 0.8s; }
-  .reveal:nth-child(9) { transition-delay: 0.9s; }
-  .reveal:nth-child(10) { transition-delay: 1s; }
-
-  /* ═══ LOADING SCREEN ═══ */
-  .loading-screen {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-soft) 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.6s, visibility 0.6s;
-  }
-
-  .loading-screen.hidden {
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .loading-spinner {
-    width: 64px;
-    height: 64px;
-    border: 4px solid rgba(161, 140, 209, 0.3);
-    border-top-color: var(--neon-pink);
-    border-right-color: var(--neon-cyan);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    box-shadow: 0 0 30px rgba(255, 111, 181, 0.25);
-  }
-
-  .loading-text {
-    font-family: 'ZCOOL KuaiLe', 'Quicksand', cursive;
-    font-size: 20px;
-    letter-spacing: 4px;
-    color: var(--neon-pink-soft);
-    margin-top: 22px;
-    animation: loadingPulse 1.5s ease-in-out infinite;
-    text-shadow: 0 0 16px var(--neon-pink);
-  }
-
-  @keyframes loadingPulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  /* ═══ ABOUT ME ═══ */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    align-items: start;
-  }
-
-  @media (max-width: 768px) {
-    .about-grid { grid-template-columns: 1fr; }
-  }
-
-  .about-avatar {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 111, 181, 0.35), rgba(79, 172, 254, 0.25));
-    border: 3px solid rgba(255, 255, 255, 0.35);
-    box-shadow: 0 8px 36px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 111, 181, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 84px;
-    margin: 0 auto;
-    transition: all var(--transition-gentle);
-    backdrop-filter: blur(8px);
-  }
-
-  .about-avatar:hover {
-    transform: scale(1.06) rotate(5deg);
-    box-shadow: 0 12px 44px rgba(0, 0, 0, 0.5), 0 0 60px rgba(255, 111, 181, 0.35);
-  }
-
-  .about-text h3 {
-    font-family: 'Fredoka', 'Quicksand', sans-serif;
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--text-main);
-    margin-bottom: 16px;
-  }
-
-  .about-text p {
-    font-size: 16px;
-    line-height: 1.9;
-    color: var(--text-soft);
-    margin-bottom: 16px;
-  }
-
-  .about-highlights {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 20px;
-  }
-
-  .highlight-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background: rgba(255, 111, 181, 0.08);
-    border-radius: 22px;
-    border: 1px solid rgba(255, 111, 181, 0.45);
-    font-family: 'Quicksand', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--neon-pink-soft);
-    backdrop-filter: blur(6px);
-  }
-
-  /* ═══ ACHIEVEMENTS ═══ */
-  .achievements-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-  }
-
-  .achievement-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 18px;
-    padding: 24px;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    border: 1.5px solid var(--card-border);
-    transition: all var(--transition-gentle);
-  }
-
-  .achievement-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 22px rgba(255, 111, 181, 0.18);
-    border-color: var(--neon-pink);
-  }
-
-  .achievement-icon {
-    font-size: 48px;
-    margin-bottom: 16px;
-    display: inline-block;
-    transition: all 0.3s;
-    filter: drop-shadow(0 0 14px rgba(255, 111, 181, 0.5));
-  }
-
-  .achievement-card:hover .achievement-icon {
-    transform: scale(1.2) rotate(10deg);
-  }
-
-  .achievement-title {
-    font-family: 'Fredoka', 'Quicksand', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--text-main);
-    margin-bottom: 8px;
-  }
-
-  .achievement-desc {
-    font-size: 14px;
-    color: var(--text-dim);
-    line-height: 1.7;
-  }
-
-  /* ═══ RESEARCH DETAILS ═══ */
-  .research-details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-
-  @media (max-width: 768px) {
-    .research-details { grid-template-columns: 1fr; }
-  }
-
-  .research-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 18px;
-    padding: 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    border: 1.5px solid var(--card-border);
-    transition: all var(--transition-gentle);
-  }
-
-  .research-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 20px rgba(79, 172, 254, 0.18);
-    border-color: var(--neon-cyan);
-  }
-
-  .research-card h4 {
-    font-family: 'Fredoka', 'Quicksand', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--text-main);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .research-card p {
-    font-size: 14px;
-    line-height: 1.8;
-    color: var(--text-soft);
-  }
-
-  /* ═══ SERVICES ═══ */
-  .services-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .service-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 20px;
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 18px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    border: 1.5px solid var(--card-border);
-    transition: all var(--transition-gentle);
-  }
-
-  .service-item:hover {
-    transform: translateX(10px);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 20px rgba(161, 140, 209, 0.18);
-    border-color: var(--neon-purple);
-  }
-
-  .service-icon {
-    font-size: 32px;
-    flex-shrink: 0;
-    transition: all 0.3s;
-    filter: drop-shadow(0 0 10px rgba(255, 111, 181, 0.4));
-  }
-
-  .service-item:hover .service-icon {
-    transform: scale(1.2);
-  }
-
-  .service-content h4 {
-    font-family: 'Fredoka', 'Quicksand', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-main);
-    margin-bottom: 6px;
-  }
-
-  .service-content p {
-    font-size: 14px;
-    color: var(--text-dim);
-    line-height: 1.7;
-  }
-
-  /* ═══ HOBBIES ═══ */
-  .hobbies-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
-  }
-
-  .hobby-item {
-    text-align: center;
-    padding: 24px;
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 18px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    border: 1.5px solid var(--card-border);
-    transition: all var(--transition-gentle);
-  }
-
-  .hobby-item:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 22px rgba(255, 111, 181, 0.18);
-    border-color: var(--neon-pink);
-  }
-
-  .hobby-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
-    display: inline-block;
-    transition: all 0.3s;
-    filter: drop-shadow(0 0 12px rgba(255, 111, 181, 0.4));
-  }
-
-  .hobby-item:hover .hobby-icon {
-    transform: scale(1.2) rotate(10deg);
-  }
-
-  .hobby-name {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-soft);
-  }
-
-  /* ═══ QUOTE ═══ */
-  .quote-card {
-    background: linear-gradient(135deg, rgba(255, 111, 181, 0.12), rgba(79, 172, 254, 0.12));
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-radius: 22px;
-    padding: 32px;
-    text-align: center;
-    border: 1.5px dashed var(--neon-pink);
-    position: relative;
-    box-shadow: 0 8px 36px rgba(0, 0, 0, 0.3);
-  }
-
-  .quote-card::before {
-    content: '"';
-    position: absolute;
-    top: -18px;
-    left: 30px;
-    font-size: 84px;
-    color: var(--neon-pink);
-    opacity: 0.5;
-    font-family: Georgia, serif;
-    text-shadow: 0 0 24px var(--neon-pink);
-  }
-
-  .quote-text {
-    font-family: 'ZCOOL KuaiLe', 'Quicksand', cursive;
-    font-size: 24px;
-    line-height: 1.7;
-    color: var(--text-main);
-    font-style: italic;
-    margin-bottom: 16px;
-    text-shadow: 0 0 16px rgba(255, 111, 181, 0.25);
-  }
-
-  .quote-author {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--text-dim);
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="description" content="Huixing Que — AI for Education, Cognitive Diagnosis, LLM Systems and Agent Engineering." />
+  <title>Huixing Que · 阙辉兴</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0b0d;
+      --bg-2: #111318;
+      --surface: rgba(255,255,255,.055);
+      --surface-strong: rgba(255,255,255,.085);
+      --text: #f4f6f8;
+      --muted: #9aa3ad;
+      --line: rgba(255,255,255,.12);
+      --accent: #79a7ff;
+      --accent-2: #b794f6;
+      --accent-soft: rgba(121,167,255,.14);
+      --shadow: 0 24px 80px rgba(0,0,0,.28);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-display: Inter, ui-sans-serif, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --max: 1080px;
+      --noise-opacity: .035;
+    }
+
+    html[data-theme="aurora"] {
+      --bg: #090817;
+      --bg-2: #11102a;
+      --surface: rgba(255,255,255,.07);
+      --surface-strong: rgba(255,255,255,.11);
+      --text: #f8f4ff;
+      --muted: #b8acd0;
+      --line: rgba(221,196,255,.18);
+      --accent: #69d8ff;
+      --accent-2: #ff8acb;
+      --accent-soft: rgba(255,138,203,.14);
+      --shadow: 0 28px 90px rgba(12,8,38,.42);
+      --radius: 26px;
+      --radius-sm: 16px;
+      --noise-opacity: .04;
+    }
+
+    html[data-theme="paper"] {
+      --bg: #f4f0e8;
+      --bg-2: #ebe4d8;
+      --surface: rgba(255,255,255,.60);
+      --surface-strong: rgba(255,255,255,.82);
+      --text: #211f1a;
+      --muted: #6c675f;
+      --line: rgba(33,31,26,.16);
+      --accent: #275d89;
+      --accent-2: #8a4b2b;
+      --accent-soft: rgba(39,93,137,.09);
+      --shadow: 0 18px 45px rgba(73,61,39,.10);
+      --radius: 8px;
+      --radius-sm: 6px;
+      --font: Inter, ui-sans-serif, system-ui, sans-serif;
+      --font-display: Newsreader, Georgia, serif;
+      --noise-opacity: .018;
+    }
+
+    html[data-theme="terminal"] {
+      --bg: #050806;
+      --bg-2: #08100b;
+      --surface: rgba(0,255,120,.035);
+      --surface-strong: rgba(0,255,120,.065);
+      --text: #d9ffe8;
+      --muted: #71a583;
+      --line: rgba(89,255,150,.16);
+      --accent: #69ff9d;
+      --accent-2: #d1ff62;
+      --accent-soft: rgba(105,255,157,.08);
+      --shadow: none;
+      --radius: 2px;
+      --radius-sm: 2px;
+      --font: "JetBrains Mono", ui-monospace, monospace;
+      --font-display: "JetBrains Mono", ui-monospace, monospace;
+      --noise-opacity: .025;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% -5%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34rem),
+        radial-gradient(circle at 92% 8%, color-mix(in srgb, var(--accent-2) 14%, transparent), transparent 30rem),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.65;
+      transition: background .35s ease, color .35s ease;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: var(--noise-opacity);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+    }
+
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    ::selection { background: var(--accent); color: var(--bg); }
+
+    .shell { width: min(calc(100% - 32px), var(--max)); margin: 0 auto; }
+
+    .topbar {
+      position: sticky;
+      top: 14px;
+      z-index: 50;
+      width: min(calc(100% - 28px), calc(var(--max) + 20px));
+      margin: 14px auto 0;
+      padding: 10px 12px 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: color-mix(in srgb, var(--bg) 72%, transparent);
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius-sm) + 6px);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 10px 40px rgba(0,0,0,.12);
+    }
+
+    .brand {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: max-content;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+
+    .brand-dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 65%, transparent);
+    }
+
+    nav { display: flex; gap: 18px; margin-left: auto; }
+    nav a {
+      text-decoration: none;
+      font-size: 13px;
+      color: var(--muted);
+      transition: color .2s ease;
+    }
+    nav a:hover { color: var(--text); }
+
+    .theme-wrap { position: relative; }
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: var(--surface);
+      font: 600 12px/1 var(--font);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+
+    .theme-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      width: 190px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      display: none;
+    }
+    .theme-menu.open { display: grid; gap: 4px; }
+    .theme-option {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font: 500 12px/1.2 var(--font);
+      text-align: left;
+      padding: 10px 11px;
+      border-radius: max(2px, calc(var(--radius-sm) - 4px));
+      cursor: pointer;
+    }
+    .theme-option:hover, .theme-option.active { background: var(--accent-soft); }
+    .swatches { display: flex; gap: 4px; }
+    .swatches i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+
+    .hero {
+      min-height: 72vh;
+      display: grid;
+      grid-template-columns: 1.35fr .65fr;
+      align-items: center;
+      gap: 54px;
+      padding: 94px 0 66px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      font: 600 11px/1 var(--font-mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 70%, transparent);
+    }
+
+    h1 {
+      margin: 22px 0 20px;
+      font-family: var(--font-display);
+      font-size: clamp(54px, 8vw, 96px);
+      line-height: .92;
+      letter-spacing: -.065em;
+      max-width: 850px;
+    }
+
+    html[data-theme="paper"] h1 { letter-spacing: -.04em; font-weight: 600; }
+    html[data-theme="terminal"] h1 { letter-spacing: -.055em; text-transform: lowercase; }
+
+    .accent-text {
+      color: var(--accent);
+      background: linear-gradient(110deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 20px);
+      line-height: 1.72;
+    }
+
+    .hero-actions { display: flex; gap: 11px; flex-wrap: wrap; margin-top: 28px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0 15px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+      text-decoration: none;
+      font: 650 13px/1 var(--font);
+      background: var(--surface);
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .btn:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+
+    .hero-card {
+      padding: 18px;
+      border-radius: calc(var(--radius) + 4px);
+      border: 1px solid var(--line);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .avatar {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      border-radius: calc(var(--radius) - 4px);
+      border: 1px solid var(--line);
+      filter: saturate(.92) contrast(1.02);
+    }
+    .hero-card-meta { padding: 16px 4px 2px; display: grid; gap: 10px; }
+    .meta-row { display: flex; justify-content: space-between; gap: 18px; font-size: 12px; }
+    .meta-row span:first-child { color: var(--muted); }
+    .meta-row span:last-child { text-align: right; font-weight: 600; }
+
+    .section { padding: 58px 0; scroll-margin-top: 100px; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 22px;
+    }
+    .section-kicker {
+      color: var(--accent);
+      font: 600 11px/1 var(--font-mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 9px;
+    }
+    h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+    .section-note { color: var(--muted); max-width: 470px; font-size: 13px; }
+
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      transition: transform .22s ease, border-color .22s ease, background .22s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+      background: var(--surface-strong);
+    }
+    .span-7 { grid-column: span 7; }
+    .span-5 { grid-column: span 5; }
+    .span-6 { grid-column: span 6; }
+    .span-4 { grid-column: span 4; }
+    .span-8 { grid-column: span 8; }
+
+    .card-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font: 600 11px/1 var(--font-mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .card-label::before {
+      content:"";
+      width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 21px;
+      line-height: 1.25;
+      letter-spacing: -.02em;
+    }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .tag {
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font: 500 11px/1 var(--font-mono);
+      background: color-mix(in srgb, var(--surface) 74%, transparent);
+    }
+
+    .paper-card { position: relative; overflow: hidden; }
+    .paper-card::after {
+      content: "ACL 2026";
+      position: absolute;
+      right: -22px;
+      top: 18px;
+      transform: rotate(38deg);
+      padding: 6px 26px;
+      color: var(--bg);
+      background: var(--accent);
+      font: 700 10px/1 var(--font-mono);
+      letter-spacing: .08em;
+    }
+    .paper-title { font-size: 28px !important; max-width: 680px; }
+    .paper-subtitle { margin-top: 7px !important; color: var(--text) !important; opacity: .74; }
+    .link-row { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 22px; }
+    .inline-link {
+      display: inline-flex; align-items: center; gap: 7px;
+      color: var(--accent); text-decoration: none;
+      font: 600 12px/1 var(--font);
+    }
+    .inline-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+    .metric { display: grid; gap: 7px; }
+    .metric strong {
+      font-family: var(--font-display);
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .metric span { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+
+    .projects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .project-card { display: flex; flex-direction: column; min-height: 250px; }
+    .project-top { display: flex; justify-content: space-between; gap: 18px; align-items: start; }
+    .project-index { color: var(--muted); font: 500 11px/1 var(--font-mono); }
+    .project-card h3 { margin-top: 34px; font-size: 25px; }
+    .project-card .tags { margin-top: auto; padding-top: 24px; }
+    .project-card > a {
+      color: inherit; text-decoration: none; display: block; height: 100%;
+    }
+
+    .timeline { display: grid; gap: 12px; }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 26px;
+      padding: 22px 0;
+      border-top: 1px solid var(--line);
+    }
+    .timeline-item:last-child { border-bottom: 1px solid var(--line); }
+    .timeline-date { color: var(--accent); font: 600 11px/1.6 var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
+    .timeline-item h3 { margin: 0 0 6px; font-size: 18px; }
+    .timeline-item p { margin: 0; color: var(--muted); font-size: 13px; }
+
+    .stack-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .stack-item { min-height: 136px; display: flex; flex-direction: column; justify-content: space-between; }
+    .stack-item strong { font-size: 17px; }
+    .stack-item span { color: var(--muted); font: 500 11px/1.5 var(--font-mono); }
+
+    .contact {
+      margin: 54px 0 90px;
+      padding: clamp(30px, 5vw, 56px);
+      border-radius: calc(var(--radius) + 6px);
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, var(--surface-strong), var(--surface));
+      box-shadow: var(--shadow);
+    }
+    .contact h2 { max-width: 780px; }
+    .contact p { color: var(--muted); max-width: 680px; margin: 18px 0 0; }
+    .contact .hero-actions { margin-top: 26px; }
+
+    footer {
+      padding: 22px 0 34px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    html[data-theme="paper"] body {
+      background-image:
+        linear-gradient(rgba(39,93,137,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(39,93,137,.025) 1px, transparent 1px),
+        radial-gradient(circle at 12% -5%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 34rem),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      background-size: 28px 28px, 28px 28px, auto, auto;
+    }
+    html[data-theme="paper"] .topbar { box-shadow: 0 8px 30px rgba(73,61,39,.08); }
+    html[data-theme="paper"] .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    html[data-theme="paper"] .card-label::before { border-radius: 0; }
+
+    html[data-theme="terminal"] body {
+      background-image:
+        linear-gradient(rgba(105,255,157,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(105,255,157,.025) 1px, transparent 1px),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      background-size: 24px 24px, 24px 24px, auto;
+    }
+    html[data-theme="terminal"] .brand::before { content: ">"; color: var(--accent); }
+    html[data-theme="terminal"] .brand-dot { display:none; }
+    html[data-theme="terminal"] .section-kicker::before { content: "// "; }
+    html[data-theme="terminal"] .eyebrow { text-transform: lowercase; }
+    html[data-theme="terminal"] .btn.primary { background: var(--accent); color: #061009; border-color: var(--accent); }
+    html[data-theme="terminal"] .card:hover { transform: translate(2px,-2px); }
+    html[data-theme="terminal"] .tag { border-radius: 2px; }
+
+    @media (max-width: 860px) {
+      nav { display: none; }
+      .hero { grid-template-columns: 1fr; padding-top: 70px; min-height: auto; }
+      .hero-card { width: min(330px, 100%); }
+      .span-7, .span-5, .span-6, .span-4, .span-8 { grid-column: span 12; }
+      .stack-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 620px) {
+      .shell { width: min(calc(100% - 24px), var(--max)); }
+      .topbar { width: calc(100% - 16px); top: 8px; margin-top: 8px; }
+      .brand span:last-child { display:none; }
+      h1 { font-size: clamp(50px, 18vw, 78px); }
+      .hero { gap: 36px; padding: 62px 0 34px; }
+      .section { padding: 42px 0; }
+      .section-head { align-items: start; flex-direction: column; }
+      .projects { grid-template-columns: 1fr; }
+      .timeline-item { grid-template-columns: 1fr; gap: 8px; }
+      .stack-grid { grid-template-columns: 1fr; }
+      .card { padding: 20px; }
+      .theme-toggle span { display:none; }
+      footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity:1; transform:none; }
+    }
+  </style>
 </head>
 <body>
-
-<div class="loading-screen" id="loading-screen">
-  <div class="loading-spinner"></div>
-  <div class="loading-text">✦ 加载中 Loading ✦</div>
-</div>
-
-<div class="scroll-progress" id="scroll-progress"></div>
-
-<div class="sky">
-  <div class="stars-layer" id="stars-layer"></div>
-  <div class="aurora aurora-1"></div>
-  <div class="aurora aurora-2"></div>
-  <div class="aurora aurora-3"></div>
-  <div class="shooting-star" style="top:12%; left:80%; animation-duration:9s; animation-delay:2s;"></div>
-  <div class="shooting-star" style="top:30%; left:70%; animation-duration:12s; animation-delay:7s;"></div>
-  <div class="shooting-star" style="top:8%; left:55%; animation-duration:15s; animation-delay:13s;"></div>
-</div>
-
-<div class="moon"></div>
-
-<div class="floating-elements" id="floating-elements"></div>
-
-<nav class="nav-indicator">
-  <div class="nav-dot active" data-section="HOME" onclick="scrollToSection('header')"></div>
-  <div class="nav-dot" data-section="ABOUT" onclick="scrollToSection('about')"></div>
-  <div class="nav-dot" data-section="EDUCATION" onclick="scrollToSection('education')"></div>
-  <div class="nav-dot" data-section="RESEARCH" onclick="scrollToSection('research')"></div>
-  <div class="nav-dot" data-section="PROJECTS" onclick="scrollToSection('projects')"></div>
-  <div class="nav-dot" data-section="CONTACT" onclick="scrollToSection('contact')"></div>
-</nav>
-
-<div class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-  <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
-</div>
-
-<div class="container">
-
-  <!-- ═══════ HEADER ═══════ -->
-  <header class="header reveal" id="header">
-    <div class="header-status"><span class="dot"></span> ✦ Welcome to My Anime World ✦</div>
-    <h1 class="name-cn">阙 辉 兴</h1>
-    <p class="name-en">Huixing Que</p>
-    <div class="header-line"></div>
-    <p class="affiliation">University of Science and Technology of China</p>
-    <p class="affiliation" style="margin-top:6px;">Computer Science</p>
-    <p class="tagline" id="tagline">AI for Education · Cognitive Diagnosis · Student Simulation</p>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Back to top">
+      <span class="brand-dot"></span>
+      <span>Huixing Que</span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#projects">Projects</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="theme-wrap">
+      <button class="theme-toggle" id="themeToggle" aria-expanded="false" aria-controls="themeMenu">
+        ◐ <span id="themeLabel">Graphite</span> ▾
+      </button>
+      <div class="theme-menu" id="themeMenu" role="menu" aria-label="Choose visual style">
+        <button class="theme-option active" data-theme-value="graphite">
+          <span>Graphite</span><span class="swatches"><i style="background:#0a0b0d"></i><i style="background:#79a7ff"></i></span>
+        </button>
+        <button class="theme-option" data-theme-value="aurora">
+          <span>Aurora</span><span class="swatches"><i style="background:#090817"></i><i style="background:#ff8acb"></i></span>
+        </button>
+        <button class="theme-option" data-theme-value="paper">
+          <span>Academic Paper</span><span class="swatches"><i style="background:#f4f0e8"></i><i style="background:#275d89"></i></span>
+        </button>
+        <button class="theme-option" data-theme-value="terminal">
+          <span>Terminal</span><span class="swatches"><i style="background:#050806"></i><i style="background:#69ff9d"></i></span>
+        </button>
+      </div>
+    </div>
   </header>
 
-  <!-- ═══════ 01 ABOUT ME ═══════ -->
-  <div class="section-title reveal" id="about"><span class="num">01</span> About Me</div>
-  <div class="glass-card reveal">
-    <div class="about-grid">
-      <div class="about-avatar">👨‍🎓</div>
-      <div class="about-text">
-        <h3>Hello, I'm Huixing Que! ✨</h3>
-        <p>I'm a Master's student in Computer Science at the University of Science and Technology of China, with a Bachelor's degree in Education from Beijing Normal University.</p>
-        <p>My research focuses on the intersection of Artificial Intelligence and Education, particularly in developing intelligent systems that can understand and adapt to individual student needs. I'm passionate about creating AI-powered tools that make education more personalized and effective.</p>
-        <div class="about-highlights">
-          <span class="highlight-item">🎓 Cross-disciplinary Background</span>
-          <span class="highlight-item">🔬 AI + Education Researcher</span>
-          <span class="highlight-item">💡 Innovation Enthusiast</span>
+  <main id="top">
+    <section class="shell hero">
+      <div class="hero-copy reveal">
+        <div class="eyebrow"><span class="status-dot"></span> AI · Education · LLM Systems</div>
+        <h1>Huixing Que<span class="accent-text">.</span><br><span class="accent-text">阙辉兴</span></h1>
+        <p class="lead">
+          Master's student in <strong>Computer Technology</strong> at USTC. I work at the intersection of
+          cognitive diagnosis, student simulation, and LLM/Agent systems—turning research ideas into usable systems.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#research">View research ↘</a>
+          <a class="btn" href="https://github.com/QHX-BNU" target="_blank" rel="noreferrer">GitHub ↗</a>
+          <a class="btn" href="https://aclanthology.org/2026.findings-acl.302/" target="_blank" rel="noreferrer">ACL 2026 ↗</a>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- ═══════ 02 EDUCATION ═══════ -->
-  <div class="section-title reveal" id="education"><span class="num">02</span> Education</div>
-  <div class="edu-timeline reveal">
-    <div class="edu-item">
-      <span class="edu-date">Present</span>
-      <h3 class="edu-degree">M.Sc. in Computer Science</h3>
-      <p class="edu-school">University of Science and Technology of China</p>
-      <p class="edu-dept">School of Computer Science and Technology</p>
-    </div>
-    <div class="edu-item">
-      <span class="edu-date">Graduated</span>
-      <h3 class="edu-degree">B.A. in Education</h3>
-      <p class="edu-school">Beijing Normal University</p>
-      <p class="edu-dept">Faculty of Education</p>
-    </div>
-  </div>
+      <aside class="hero-card reveal">
+        <img class="avatar" src="https://avatars.githubusercontent.com/u/83856752?v=4" alt="Huixing Que" />
+        <div class="hero-card-meta">
+          <div class="meta-row"><span>Focus</span><span>AI for Education</span></div>
+          <div class="meta-row"><span>Research</span><span>Cognitive Diagnosis</span></div>
+          <div class="meta-row"><span>Engineering</span><span>LLM / Agents</span></div>
+          <div class="meta-row"><span>Based at</span><span>USTC</span></div>
+        </div>
+      </aside>
+    </section>
 
-  <!-- ═══════ 03 RESEARCH INTERESTS ═══════ -->
-  <div class="section-title reveal"><span class="num">03</span> Research Interests</div>
-  <div class="glass-card reveal">
-    <div class="tag-cloud">
-      <span class="cloud-tag">AI for Education</span>
-      <span class="cloud-tag">Cognitive Diagnosis</span>
-      <span class="cloud-tag">LLM-based Simulation</span>
-      <span class="cloud-tag">Student Behavior Modeling</span>
-      <span class="cloud-tag">Knowledge Tracing</span>
-      <span class="cloud-tag">NeuralCD</span>
-      <span class="cloud-tag">Educational Data Mining</span>
-    </div>
-  </div>
-
-  <!-- ═══════ 04 RESEARCH ═══════ -->
-  <div class="section-title reveal" id="research"><span class="num">04</span> Research</div>
-  <div class="glass-card reveal">
-    <span class="glass-badge">ACL 2026</span>
-    <h2 class="glass-title">One LLM Does Not Simulate All Students</h2>
-    <p class="glass-subtitle">Ability-Aware Student Simulation via Cognitive Diagnosis Guided LLM Assignment</p>
-    <p class="glass-abstract">
-      Large Language Models have become integral to personalized education systems, yet most methods rely on a single high-capability LLM to represent an entire population of diverse learners. We demonstrate that this "one-size-fits-all" approach induces a systematic <strong style="color: var(--neon-cyan);">ability-dependent bias</strong>, and propose a framework that dynamically matches students with appropriate LLM backbones through cognitive alignment via Neural Cognitive Diagnosis.
-    </p>
-    <div class="glass-links">
-      <a href="https://aclanthology.org/2026.findings-acl.302/" class="link-btn" target="_blank">📄 PAPER</a>
-      <a href="https://github.com/QHX-BNU/Ability-Aware-Student-Simulation" class="link-btn" target="_blank">💻 CODE</a>
-    </div>
-  </div>
-
-  <!-- ═══════ 05 RESEARCH DETAILS ═══════ -->
-  <div class="section-title reveal"><span class="num">05</span> Research Details</div>
-  <div class="research-details reveal">
-    <div class="research-card">
-      <h4>🎯 Core Problem</h4>
-      <p>Current LLM-based student simulators use a single model for all learners, ignoring individual differences in ability levels. This creates systematic bias that affects the validity of educational research and system evaluation.</p>
-    </div>
-    <div class="research-card">
-      <h4>💡 Our Solution</h4>
-      <p>We propose a novel framework that uses Neural Cognitive Diagnosis to assess student abilities, then dynamically assigns appropriate LLMs to simulate different ability levels, creating more realistic and diverse student behaviors.</p>
-    </div>
-    <div class="research-card">
-      <h4>🔬 Methodology</h4>
-      <p>Our approach combines cognitive diagnosis models with LLM assignment strategies. We use NeuralCD to estimate student abilities from response patterns, then select LLMs with matching capability levels for simulation.</p>
-    </div>
-    <div class="research-card">
-      <h4>📊 Key Findings</h4>
-      <p>Experiments show that our ability-aware simulation significantly reduces bias in student response patterns, achieving more realistic and diverse behavioral distributions compared to single-LLM approaches.</p>
-    </div>
-  </div>
-
-  <!-- ═══════ 06 ACHIEVEMENTS ═══════ -->
-  <div class="section-title reveal"><span class="num">06</span> Achievements</div>
-  <div class="achievements-grid reveal">
-    <div class="achievement-card">
-      <div class="achievement-icon">🏆</div>
-      <div class="achievement-title">ACL 2026 Paper</div>
-      <div class="achievement-desc">Published research on ability-aware student simulation at top-tier NLP conference</div>
-    </div>
-    <div class="achievement-card">
-      <div class="achievement-icon">🎓</div>
-      <div class="achievement-title">Cross-disciplinary</div>
-      <div class="achievement-desc">Unique combination of Education and Computer Science backgrounds</div>
-    </div>
-    <div class="achievement-card">
-      <div class="achievement-icon">💻</div>
-      <div class="achievement-title">Open Source</div>
-      <div class="achievement-desc">Contributing to educational AI research through open-source projects</div>
-    </div>
-    <div class="achievement-card">
-      <div class="achievement-icon">📚</div>
-      <div class="achievement-title">Research Focus</div>
-      <div class="achievement-desc">Pioneering work in LLM-based student simulation and cognitive diagnosis</div>
-    </div>
-  </div>
-
-  <!-- ═══════ 07 ACADEMIC SERVICES ═══════ -->
-  <div class="section-title reveal"><span class="num">07</span> Academic Services</div>
-  <div class="services-list reveal">
-    <div class="service-item">
-      <div class="service-icon">📝</div>
-      <div class="service-content">
-        <h4>Conference Reviewer</h4>
-        <p>Served as a reviewer for major AI and Education conferences, helping maintain research quality and standards in the field.</p>
+    <section class="shell section" id="about">
+      <div class="section-head reveal">
+        <div>
+          <div class="section-kicker">01 / Profile</div>
+          <h2>Research mind,<br>builder's instinct.</h2>
+        </div>
+        <p class="section-note">
+          A shorter, stronger homepage: the first screen tells people who you are; the next screens prove it with research and code.
+        </p>
       </div>
-    </div>
-    <div class="service-item">
-      <div class="service-icon">🔬</div>
-      <div class="service-content">
-        <h4>National Undergraduate Research Training and Innovation Program (Research Track)</h4>
-        <p>Led project topic selection, proposal submission, and project completion — national-level approval represents the highest tier of undergraduate research projects at Beijing Normal University. Analyzed the 2017 national eighth-grade student sample data from the National Basic Education Quality Monitoring Center using SPSS and statistical models, with nationally representative samples. Investigated the academic success mechanisms of low-SES students from a strengths-based perspective, finding that "family companionship" has a significantly greater impact on academic achievement than school factors.</p>
+
+      <div class="bento">
+        <article class="card span-7 reveal">
+          <div class="card-label">What I care about</div>
+          <h3>Intelligent systems that understand learner differences.</h3>
+          <p>
+            My core research focuses on AI for Education, especially cognitive diagnosis and ability-aware student simulation.
+            I am also interested in practical LLM systems and Agent tooling, with an emphasis on controllability and reliable workflows.
+          </p>
+          <div class="tags">
+            <span class="tag">AI for Education</span>
+            <span class="tag">Cognitive Diagnosis</span>
+            <span class="tag">Student Simulation</span>
+            <span class="tag">LLM Systems</span>
+            <span class="tag">Agent Tooling</span>
+          </div>
+        </article>
+
+        <article class="card span-5 reveal">
+          <div class="card-label">Cross-disciplinary</div>
+          <h3>Education × Computer Technology</h3>
+          <p>
+            An education background helps me frame human-centered problems; computer technology gives me the modeling and engineering tools to solve them.
+          </p>
+        </article>
+
+        <article class="card span-4 reveal">
+          <div class="metric"><strong id="repoCount">—</strong><span>public repositories</span></div>
+        </article>
+        <article class="card span-4 reveal">
+          <div class="metric"><strong id="starCount">—</strong><span>stars across public repos</span></div>
+        </article>
+        <article class="card span-4 reveal">
+          <div class="metric"><strong id="followerCount">—</strong><span>GitHub followers</span></div>
+        </article>
       </div>
-    </div>
-    <div class="service-item">
-      <div class="service-icon">💡</div>
-      <div class="service-content">
-        <h4>National Undergraduate Innovation and Entrepreneurship Training Program (Entrepreneurship Track)</h4>
-        <p>Participated in project initiation and overall planning — national-level innovation and entrepreneurship projects represent the highest tier of undergraduate entrepreneurship programs at Beijing Normal University. Focused on early-stage incubation of children's educational products, responsible for feasibility analysis, educational scenario scripting, and user journey planning. Designed product prototypes using Axure, drafted technical specifications, and advanced the project from concept to a demonstrable prototype.</p>
+    </section>
+
+    <section class="shell section" id="research">
+      <div class="section-head reveal">
+        <div>
+          <div class="section-kicker">02 / Research</div>
+          <h2>Selected research.</h2>
+        </div>
+        <p class="section-note">Lead with one strong contribution instead of making visitors scan a long academic timeline.</p>
       </div>
-    </div>
-  </div>
 
-  <!-- ═══════ 08 PROJECTS ═══════ -->
-  <div class="section-title reveal" id="projects"><span class="num">08</span> Projects</div>
-  <div class="projects-grid">
-    <div class="proj-card reveal">
-      <div class="proj-name">ABILITY-AWARE STUDENT SIM</div>
-      <div class="proj-desc">Official implementation of our ACL 2026 paper. End-to-end pipeline integrating Neural Cognitive Diagnosis with LLM-based student simulation.</div>
-      <div class="proj-meta"><span class="tag">PYTHON</span><span class="tag">PYTORCH</span><span class="stat">★ 1</span></div>
-      <a href="https://github.com/QHX-BNU/Ability-Aware-Student-Simulation" class="proj-link" target="_blank">→ VIEW REPOSITORY</a>
-    </div>
-    <div class="proj-card reveal">
-      <div class="proj-name">EduData</div>
-      <div class="proj-desc">Educational datasets collection with detailed descriptions for quick understanding and research use in AI for education.</div>
-      <div class="proj-meta"><span class="tag">DATASET</span><span class="stat">★ 1</span><span class="stat">⑂ 1</span></div>
-      <a href="https://github.com/QHX-BNU/EduData" class="proj-link" target="_blank">→ VIEW REPOSITORY</a>
-    </div>
-  </div>
+      <article class="card paper-card reveal">
+        <div class="card-label">ACL 2026 · Findings</div>
+        <h3 class="paper-title">One LLM Does Not Simulate All Students</h3>
+        <p class="paper-subtitle">Ability-Aware Student Simulation via Cognitive Diagnosis Guided LLM Assignment</p>
+        <p style="margin-top:20px; max-width:850px;">
+          We study the systematic bias created when a single high-capability LLM is used to simulate students across different ability levels,
+          and introduce an ability-aware framework that uses cognitive diagnosis to match students with suitable LLM backbones.
+        </p>
+        <div class="link-row">
+          <a class="inline-link" href="https://aclanthology.org/2026.findings-acl.302/" target="_blank" rel="noreferrer">Paper ↗</a>
+          <a class="inline-link" href="https://github.com/QHX-BNU/Ability-Aware-Student-Simulation" target="_blank" rel="noreferrer">Code ↗</a>
+        </div>
+      </article>
+    </section>
 
-  <!-- ═══════ 09 GITHUB ACTIVITY ═══════ -->
-  <div class="section-title reveal"><span class="num">09</span> GitHub Activity</div>
-  <div class="glass-card reveal">
-    <div class="activity-grid" id="activity-grid">
-      <div class="activity-cell"><div class="act-num">—</div><div class="act-label">REPOSITORIES</div></div>
-      <div class="activity-cell"><div class="act-num">—</div><div class="act-label">STARS</div></div>
-      <div class="activity-cell"><div class="act-num">—</div><div class="act-label">FORKS</div></div>
-      <div class="activity-cell"><div class="act-num">—</div><div class="act-label">CONTRIBUTIONS</div></div>
-    </div>
-    <div class="repo-list" id="repo-list">
-      <div class="repo-row"><div class="repo-info"><span style="color:var(--text-dim);opacity:0.6;">Loading repository data...</span></div></div>
-    </div>
-  </div>
+    <section class="shell section" id="projects">
+      <div class="section-head reveal">
+        <div>
+          <div class="section-kicker">03 / Build</div>
+          <h2>Selected projects.</h2>
+        </div>
+        <p class="section-note">A mix of research code, datasets, LLM tooling, and engineering experiments from your public repositories.</p>
+      </div>
 
-  <!-- ═══════ 10 HOBBIES ═══════ -->
-  <div class="section-title reveal"><span class="num">10</span> Hobbies</div>
-  <div class="hobbies-grid reveal">
-    <div class="hobby-item">
-      <div class="hobby-icon">📖</div>
-      <div class="hobby-name">Reading</div>
-    </div>
-    <div class="hobby-item">
-      <div class="hobby-icon">🎵</div>
-      <div class="hobby-name">Music</div>
-    </div>
-    <div class="hobby-item">
-      <div class="hobby-icon">🎮</div>
-      <div class="hobby-name">Gaming</div>
-    </div>
-    <div class="hobby-item">
-      <div class="hobby-icon">🏃</div>
-      <div class="hobby-name">Exercise</div>
-    </div>
-    <div class="hobby-item">
-      <div class="hobby-icon">📷</div>
-      <div class="hobby-name">Photography</div>
-    </div>
-    <div class="hobby-item">
-      <div class="hobby-icon">✈️</div>
-      <div class="hobby-name">Travel</div>
-    </div>
-  </div>
+      <div class="projects">
+        <article class="card project-card reveal">
+          <a href="https://github.com/QHX-BNU/Ability-Aware-Student-Simulation" target="_blank" rel="noreferrer">
+            <div class="project-top"><span class="card-label">Research code</span><span class="project-index">01</span></div>
+            <h3>Ability-Aware Student Simulation</h3>
+            <p>Official implementation of the ACL 2026 work connecting cognitive diagnosis with LLM-based student simulation.</p>
+            <div class="tags"><span class="tag">Python</span><span class="tag">LLM</span><span class="tag">NeuralCD</span></div>
+          </a>
+        </article>
 
-  <!-- ═══════ 11 INSPIRATION ═══════ -->
-  <div class="section-title reveal"><span class="num">11</span> Inspiration</div>
-  <div class="quote-card reveal">
-    <div class="quote-text">"不愤不启，不悱不发。<br>I do not enlighten those who are not desperate to understand, nor prompt those who are not eager to speak."</div>
-    <div class="quote-author">— 孔子 · Confucius</div>
-  </div>
+        <article class="card project-card reveal">
+          <a href="https://github.com/QHX-BNU/EduData" target="_blank" rel="noreferrer">
+            <div class="project-top"><span class="card-label">Data</span><span class="project-index">02</span></div>
+            <h3>EduData</h3>
+            <p>A practical collection of educational datasets and descriptions for fast discovery and research use.</p>
+            <div class="tags"><span class="tag">Dataset</span><span class="tag">Education</span><span class="tag">Research</span></div>
+          </a>
+        </article>
 
-  <!-- ═══════ 12 CONNECT ═══════ -->
-  <div class="section-title reveal" id="contact"><span class="num">12</span> Connect</div>
-  <div class="contact-grid reveal">
-    <div class="contact-cell">
-      <div class="contact-icon">✉️</div>
-      <div class="label">EMAIL</div>
-      <div class="value"><a href="mailto:huixingq@mail.ustc.edu.cn">huixingq@mail.ustc.edu.cn</a></div>
-    </div>
-    <div class="contact-cell">
-      <div class="contact-icon">🐙</div>
-      <div class="label">GITHUB</div>
-      <div class="value"><a href="https://github.com/QHX-BNU" target="_blank">github.com/QHX-BNU</a></div>
-    </div>
-    <div class="contact-cell">
-      <div class="contact-icon">📍</div>
-      <div class="label">LOCATION</div>
-      <div class="value">Anhui, China</div>
-    </div>
-  </div>
+        <article class="card project-card reveal">
+          <a href="https://github.com/QHX-BNU/multi_terminal" target="_blank" rel="noreferrer">
+            <div class="project-top"><span class="card-label">Developer tooling</span><span class="project-index">03</span></div>
+            <h3>multi_terminal</h3>
+            <p>Terminal-oriented tooling that reflects an interest in workflow automation and practical developer experience.</p>
+            <div class="tags"><span class="tag">CLI</span><span class="tag">Tooling</span><span class="tag">Workflow</span></div>
+          </a>
+        </article>
 
-  <!-- ═══════ FOOTER ═══════ -->
-  <div class="footer reveal">
-    <div class="footer-line"></div>
-    <span>Made with 💖 under the Anime Sky ✦</span>
-    <div class="footer-line"></div>
-  </div>
+        <article class="card project-card reveal">
+          <a href="https://github.com/QHX-BNU/dsh-plugins" target="_blank" rel="noreferrer">
+            <div class="project-top"><span class="card-label">Agent ecosystem</span><span class="project-index">04</span></div>
+            <h3>dsh-plugins</h3>
+            <p>Experiments around extensible tooling and plugin-style workflows for modern AI/developer environments.</p>
+            <div class="tags"><span class="tag">Plugins</span><span class="tag">Agents</span><span class="tag">Engineering</span></div>
+          </a>
+        </article>
+      </div>
+    </section>
 
-</div>
+    <section class="shell section" id="education">
+      <div class="section-head reveal">
+        <div>
+          <div class="section-kicker">04 / Background</div>
+          <h2>Education.</h2>
+        </div>
+      </div>
+      <div class="timeline reveal">
+        <div class="timeline-item">
+          <div class="timeline-date">Present</div>
+          <div>
+            <h3>University of Science and Technology of China</h3>
+            <p>Master's · Computer Technology · School of Computer Science and Technology</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Undergraduate</div>
+          <div>
+            <h3>Beijing Normal University</h3>
+            <p>Bachelor's · Education · Faculty of Education</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<script>
-// ═══ LOADING SCREEN ═══
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('loading-screen').classList.add('hidden');
-  }, 900);
-});
+    <section class="shell section" id="stack">
+      <div class="section-head reveal">
+        <div>
+          <div class="section-kicker">05 / Toolkit</div>
+          <h2>Working stack.</h2>
+        </div>
+        <p class="section-note">Keep this honest and compact—signal capability without turning the homepage into a badge wall.</p>
+      </div>
+      <div class="stack-grid">
+        <div class="card stack-item reveal"><strong>Python</strong><span>research · modeling · automation</span></div>
+        <div class="card stack-item reveal"><strong>PyTorch</strong><span>deep learning · cognitive models</span></div>
+        <div class="card stack-item reveal"><strong>LLM / Agents</strong><span>tool use · workflows · evaluation</span></div>
+        <div class="card stack-item reveal"><strong>CLI Tooling</strong><span>developer experience · automation</span></div>
+      </div>
+    </section>
 
-// ═══ SCROLL PROGRESS ═══
-window.addEventListener('scroll', () => {
-  const total = document.documentElement.scrollHeight - window.innerHeight;
-  const progress = total > 0 ? (window.scrollY / total) * 100 : 0;
-  document.getElementById('scroll-progress').style.width = progress + '%';
-}, { passive: true });
+    <section class="shell" id="contact">
+      <div class="contact reveal">
+        <div class="section-kicker">06 / Connect</div>
+        <h2>Research, engineering, or an interesting Agent problem?</h2>
+        <p>I am interested in AI for Education, LLM/Agent systems, and engineering work that turns model capability into reliable user-facing behavior.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="mailto:huixingq@mail.ustc.edu.cn">Email me ↗</a>
+          <a class="btn" href="https://github.com/QHX-BNU" target="_blank" rel="noreferrer">GitHub ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
-// ═══ GENERATE STARS ═══
-function createStars() {
-  const layer = document.getElementById('stars-layer');
-  const starCount = 140;
-  for (let i = 0; i < starCount; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    const size = (Math.random() * 2.2 + 0.6).toFixed(1);
-    star.style.width = size + 'px';
-    star.style.height = size + 'px';
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.animationDuration = (2 + Math.random() * 4).toFixed(1) + 's';
-    star.style.animationDelay = (Math.random() * 4).toFixed(1) + 's';
-    if (Math.random() > 0.85) {
-      star.style.background = 'var(--neon-pink-soft)';
-      star.style.boxShadow = '0 0 6px var(--neon-pink)';
+  <footer class="shell">
+    <span>© <span id="year"></span> Huixing Que</span>
+    <span>Four styles, one profile · switch from the top-right</span>
+  </footer>
+
+  <script>
+    const root = document.documentElement;
+    const menu = document.getElementById('themeMenu');
+    const toggle = document.getElementById('themeToggle');
+    const label = document.getElementById('themeLabel');
+    const options = [...document.querySelectorAll('.theme-option')];
+    const labels = {
+      graphite: 'Graphite',
+      aurora: 'Aurora',
+      paper: 'Academic Paper',
+      terminal: 'Terminal'
+    };
+
+    function setTheme(theme) {
+      root.dataset.theme = theme;
+      label.textContent = labels[theme] || labels.graphite;
+      options.forEach(btn => btn.classList.toggle('active', btn.dataset.themeValue === theme));
+      localStorage.setItem('profile-theme', theme);
     }
-    layer.appendChild(star);
-  }
-}
-createStars();
 
-// ═══ CREATE SAKURA PETALS ═══
-function createPetals() {
-  const container = document.getElementById('floating-elements');
-  const petalCount = 22;
-  const petalColors = ['#ffb7d5', '#ff9ecb', '#ffc0e0', '#ffd6ec', '#ff8fbd'];
+    const savedTheme = localStorage.getItem('profile-theme');
+    if (savedTheme && labels[savedTheme]) setTheme(savedTheme);
 
-  for (let i = 0; i < petalCount; i++) {
-    const petal = document.createElement('div');
-    petal.className = 'petal';
-    const size = 8 + Math.random() * 10;
-    petal.style.width = size + 'px';
-    petal.style.height = (size * 0.85).toFixed(1) + 'px';
-    petal.style.left = Math.random() * 100 + '%';
-    petal.style.background = petalColors[Math.floor(Math.random() * petalColors.length)];
-    petal.style.boxShadow = '0 0 6px rgba(255, 143, 189, 0.35)';
-    petal.style.animationDuration = (9 + Math.random() * 10).toFixed(1) + 's';
-    petal.style.animationDelay = (Math.random() * 12).toFixed(1) + 's';
-    container.appendChild(petal);
-  }
-}
-createPetals();
+    toggle.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const open = menu.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
 
-// ═══ SCROLL REVEAL ═══
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add('visible');
-  });
-}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    options.forEach(btn => btn.addEventListener('click', () => {
+      setTheme(btn.dataset.themeValue);
+      menu.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }));
 
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-document.querySelectorAll('.reveal').forEach(el => {
-  if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
-});
+    document.addEventListener('click', () => {
+      menu.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    });
 
-// ═══ NAVIGATION ═══
-function scrollToSection(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        menu.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
 
-const sections = ['header', 'about', 'education', 'research', 'projects', 'contact'];
-const navDots = document.querySelectorAll('.nav-dot');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .08 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-window.addEventListener('scroll', () => {
-  const scrollPos = window.scrollY + window.innerHeight / 3;
-
-  sections.forEach((sectionId, index) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-
-      if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-        navDots.forEach(dot => dot.classList.remove('active'));
-        navDots[index].classList.add('active');
+    async function loadGitHubStats() {
+      try {
+        const [userRes, reposRes] = await Promise.all([
+          fetch('https://api.github.com/users/QHX-BNU'),
+          fetch('https://api.github.com/users/QHX-BNU/repos?per_page=100&sort=updated')
+        ]);
+        if (!userRes.ok || !reposRes.ok) throw new Error('GitHub API unavailable');
+        const user = await userRes.json();
+        const repos = await reposRes.json();
+        const stars = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
+        document.getElementById('repoCount').textContent = user.public_repos ?? repos.length;
+        document.getElementById('starCount').textContent = stars;
+        document.getElementById('followerCount').textContent = user.followers ?? '—';
+      } catch (error) {
+        console.warn(error);
       }
     }
-  });
+    loadGitHubStats();
 
-  const scrollTopBtn = document.getElementById('scroll-top');
-  if (window.scrollY > 500) {
-    scrollTopBtn.classList.add('visible');
-  } else {
-    scrollTopBtn.classList.remove('visible');
-  }
-});
-
-// ═══ GITHUB API ═══
-(async function loadGitHub() {
-  const fallback = {
-    public_repos: 9,
-    repos: [
-      { name: 'dsh-plugins', html_url: 'https://github.com/QHX-BNU/dsh-plugins', description: 'DSH plugins: code-panel, memory-admin, retract-prompt', language: 'JavaScript', stargazers_count: 0, forks_count: 0 },
-      { name: 'Ability-Aware-Student-Simulation', html_url: 'https://github.com/QHX-BNU/Ability-Aware-Student-Simulation', description: 'Code for Paper — ACL 2026', language: 'Python', stargazers_count: 1, forks_count: 0 },
-      { name: 'EduData', html_url: 'https://github.com/QHX-BNU/EduData', description: 'Educational datasets collection for AI research', language: null, stargazers_count: 1, forks_count: 1 },
-      { name: 'multi_terminal', html_url: 'https://github.com/QHX-BNU/multi_terminal', description: 'Multi terminal tool', language: null, stargazers_count: 0, forks_count: 0 },
-      { name: 'ml-dl-param-finder', html_url: 'https://github.com/QHX-BNU/ml-dl-param-finder', description: 'ML/DL parameter finder', language: null, stargazers_count: 0, forks_count: 0 }
-    ]
-  };
-
-  function render(user, repos) {
-    const ownRepos = repos.filter(r => !r.fork);
-    const displayRepos = repos.length ? repos : fallback.repos;
-    const totalStars = ownRepos.reduce((s, r) => s + r.stargazers_count, 0);
-    const totalForks = ownRepos.reduce((s, r) => s + r.forks_count, 0);
-
-    const cells = document.querySelectorAll('#activity-grid .act-num');
-    cells[0].textContent = user.public_repos || fallback.public_repos;
-    cells[1].textContent = totalStars || '1';
-    cells[2].textContent = totalForks || '1';
-    cells[3].textContent = '—';
-
-    const repoList = document.getElementById('repo-list');
-    repoList.innerHTML = displayRepos.map(r => `
-      <div class="repo-row">
-        <span class="repo-icon">📁</span>
-        <div class="repo-info">
-          <a href="${r.html_url}" class="repo-name" target="_blank">${r.name}</a>
-          <div class="repo-desc">${r.description || 'No description'}</div>
-        </div>
-        <div class="repo-stats">
-          ${r.language ? `<span>${r.language}</span>` : ''}
-          <span>★ ${r.stargazers_count}</span>
-          <span>⑂ ${r.forks_count}</span>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  try {
-    const [userRes, reposRes] = await Promise.all([
-      fetch('https://api.github.com/users/QHX-BNU'),
-      fetch('https://api.github.com/users/QHX-BNU/repos?per_page=50&sort=updated')
-    ]);
-    if (!userRes.ok) throw new Error('API unavailable');
-    const user = await userRes.json();
-    const repos = await reposRes.json();
-    render(user, repos);
-  } catch(e) {
-    console.warn('GitHub API unavailable, using cached data');
-    render(fallback, fallback.repos);
-  }
-})();
-</script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
