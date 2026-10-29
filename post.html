@@ -179,9 +179,24 @@
     .back:hover { gap: 11px; color: var(--text) }
     .article-head { margin: 34px 0 10px }
     .article-meta {
-      display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
       color: var(--faint); font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
     }
+    .cat-label {
+      display: inline-flex; align-items: center; gap: 7px;
+      color: var(--muted); font: 600 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase;
+      text-decoration: none;
+      transition: color .18s var(--ease);
+    }
+    .cat-label:hover { color: var(--text) }
+    .cat-label i { width: 7px; height: 7px; border-radius: 50%; display: block }
+    .status-badge {
+      padding: 4px 9px; border-radius: 999px;
+      border: 1px dashed var(--line-2);
+      color: var(--muted); font: 600 10.5px/1 var(--mono);
+    }
+    a.tag { text-decoration: none; transition: color .18s var(--ease), border-color .18s var(--ease) }
+    a.tag:hover { color: var(--text); border-color: var(--line-2) }
     .article-head h1 {
       margin: 16px 0 0; font-size: clamp(30px, 4.6vw, 46px);
       font-weight: 800; line-height: 1.12; letter-spacing: -.04em;
@@ -289,7 +304,11 @@
     <article class="article">
       <a class="back" href="blog.html"><span aria-hidden="true">←</span> 返回博客</a>
       <header class="article-head">
-        <div class="article-meta"><span id="postDate"></span></div>
+        <div class="article-meta">
+          <span id="postCategory"></span>
+          <span id="postDate"></span>
+          <span id="postStatus"></span>
+        </div>
         <h1 id="postTitle">正在加载…</h1>
         <div class="tags" id="postTags"></div>
       </header>
@@ -405,6 +424,17 @@
       return html;
     }
 
+    /* ---------------- categories ---------------- */
+    const CATEGORIES = {
+      thoughts:     { name: '随想',     color: 'var(--accent-2)' },
+      notes:        { name: '学习笔记', color: 'var(--accent)' },
+      ideas:        { name: '研究思路', color: 'var(--accent-3)' },
+      engineering:  { name: '工程实践', color: 'var(--accent)' },
+      reading:      { name: '阅读笔记', color: 'var(--accent-2)' },
+      retro:        { name: '复盘总结', color: 'var(--accent-3)' }
+    };
+    const STATUS = { draft: '草稿', organizing: '整理中' };
+
     /* ---------------- load post ---------------- */
     function fmtDate(d) {
       const [y, m, day] = d.split('-');
@@ -440,9 +470,17 @@
       } catch (err) { fail('无法读取文章正文 posts/' + slug + '.md'); return; }
 
       document.title = post.title + ' · Blog · Huixing Que';
+      const cat = CATEGORIES[post.category] || { name: post.category || '未分类', color: 'var(--faint)' };
+      document.getElementById('postCategory').innerHTML =
+        `<a class="cat-label" href="blog.html?cat=${post.category || ''}"><i style="background:${cat.color}"></i>${cat.name}</a>`;
       document.getElementById('postDate').textContent = fmtDate(post.date);
+      const statusEl = document.getElementById('postStatus');
+      if (post.status && post.status !== 'published') {
+        statusEl.innerHTML = `<span class="status-badge">${STATUS[post.status] || post.status}</span>`;
+      } else { statusEl.innerHTML = ''; }
       document.getElementById('postTitle').textContent = post.title;
-      document.getElementById('postTags').innerHTML = (post.tags || []).map(t => '<span class="tag">' + t + '</span>').join('');
+      document.getElementById('postTags').innerHTML = (post.tags || [])
+        .map(t => `<a class="tag" href="blog.html?tag=${encodeURIComponent(t)}">${t}</a>`).join('');
       document.getElementById('postBody').innerHTML = renderMarkdown(md);
 
       const prev = posts[idx + 1];

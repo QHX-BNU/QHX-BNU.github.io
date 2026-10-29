@@ -1,8 +1,19 @@
 [
   {
+    "slug": "trace-cluster-systemic-flaws",
+    "title": "能否利用跨天 Trace 聚类识别 Agent 的系统性缺陷？",
+    "date": "2026-10-30",
+    "category": "ideas",
+    "status": "organizing",
+    "tags": ["Agent", "Trace", "Evaluation"],
+    "summary": "一个待验证的假设：单条 Trace 里的小错误可能是噪声，但如果同一种失败模式在多天的 Trace 里反复出现，那它大概率是系统性的。"
+  },
+  {
     "slug": "hello-world",
     "title": "开博第一篇：为什么开始写博客",
     "date": "2026-10-29",
+    "category": "thoughts",
+    "status": "published",
     "tags": ["随笔", "写作"],
     "summary": "把想法写下来才算真正想清楚。这里会记录我在 LLM 系统、Agent 工程和科研路上的笔记与思考。"
   }

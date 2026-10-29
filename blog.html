@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>document.documentElement.classList.add('js');</script>
   <meta name="color-scheme" content="dark light" />
-  <meta name="description" content="Blog of Huixing Que — notes on LLM systems, agents, research and learning." />
+  <meta name="description" content="Blog of Huixing Que — a personal knowledge base of thoughts, learning notes, research ideas, engineering and reading." />
   <meta name="theme-color" content="#07080b" />
   <title>Blog · Huixing Que</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -171,28 +171,93 @@
     /* ============================================================
        Page head
        ============================================================ */
-    .page-head { padding: clamp(84px, 12vh, 140px) 0 clamp(26px, 4vh, 44px) }
+    .page-head { padding: clamp(70px, 10vh, 120px) 0 clamp(20px, 3vh, 34px) }
     .kicker {
       display: flex; align-items: center; gap: 9px; margin-bottom: 14px;
       color: var(--accent); font: 600 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase;
     }
     .kicker::before { content: ""; width: 22px; height: 1px; background: currentColor; opacity: .7 }
     .page-head h1 {
-      margin: 0; font-size: clamp(40px, 6.4vw, 68px); font-weight: 800;
+      margin: 0; font-size: clamp(38px, 6vw, 62px); font-weight: 800;
       line-height: 1.02; letter-spacing: -.045em;
     }
-    .page-head .lead { margin: 18px 0 0; max-width: 620px; color: var(--muted); font-size: clamp(15px, 1.6vw, 17.5px); line-height: 1.8 }
+    .page-head .lead { margin: 18px 0 0; max-width: 660px; color: var(--muted); font-size: clamp(15px, 1.6vw, 17.5px); line-height: 1.8 }
+
+    /* ============================================================
+       Filters
+       ============================================================ */
+    .filters { margin-bottom: 22px }
+    .cat-bar { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 13px }
+    .cat-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 15px;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--glass); color: var(--muted);
+      font: 600 12.5px/1 var(--font);
+      cursor: pointer; text-decoration: none; white-space: nowrap;
+      transition: color .18s var(--ease), background .18s var(--ease), border-color .18s var(--ease);
+    }
+    .cat-btn:hover { color: var(--text); background: var(--glass-2) }
+    .cat-btn.active {
+      color: var(--text); background: var(--glass-2);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+    }
+    .cat-btn .n { color: var(--faint); font: 500 10.5px/1 var(--mono) }
+    .cat-dot { width: 7px; height: 7px; border-radius: 50%; flex: none }
+
+    .tag-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 13px }
+    .tag-bar .label { color: var(--faint); font: 600 10.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; margin-right: 4px }
+    .chip {
+      padding: 5px 11px;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: transparent; color: var(--muted);
+      font: 500 11.5px/1 var(--mono);
+      cursor: pointer; white-space: nowrap;
+      transition: color .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease);
+    }
+    .chip:hover { color: var(--text); border-color: var(--line-2) }
+    .chip.active {
+      color: var(--accent); border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+
+    .list-tools {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      padding: 13px 2px 0; border-top: 1px solid var(--line);
+    }
+    .count { color: var(--faint); font: 500 11px/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase }
+    .view-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 13px;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--glass); color: var(--muted);
+      font: 600 12px/1 var(--font);
+      cursor: pointer;
+      transition: color .18s var(--ease), background .18s var(--ease);
+    }
+    .view-btn:hover { color: var(--text); background: var(--glass-2) }
+    .view-btn.active { color: var(--text); background: var(--glass-2) }
 
     /* ============================================================
        Post list
        ============================================================ */
     .post-list { display: grid; gap: 14px; padding-bottom: clamp(60px, 9vh, 110px) }
     .post-card { display: block; text-decoration: none; color: inherit; padding: 26px }
+    .post-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px }
+    .cat-label {
+      display: inline-flex; align-items: center; gap: 7px;
+      color: var(--faint); font: 600 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase;
+    }
+    .cat-label i { width: 7px; height: 7px; border-radius: 50%; display: block }
     .post-meta {
-      display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+      display: inline-flex; align-items: center; gap: 10px;
       color: var(--faint); font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
     }
-    .post-meta .sep { opacity: .5 }
+    .status-badge {
+      padding: 4px 9px; border-radius: 999px;
+      border: 1px dashed var(--line-2);
+      color: var(--muted); font: 600 10.5px/1 var(--mono);
+    }
     .post-card h2 { margin: 14px 0 10px; font-size: clamp(20px, 2.6vw, 26px); font-weight: 700; line-height: 1.3; letter-spacing: -.03em; transition: color .2s var(--ease) }
     .post-card:hover h2 { color: var(--accent) }
     .post-card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.72 }
@@ -202,6 +267,8 @@
       background: color-mix(in srgb, var(--bg-3) 60%, transparent);
       color: var(--muted); font: 500 11px/1 var(--mono); white-space: nowrap;
     }
+    a.tag { text-decoration: none; transition: color .18s var(--ease), border-color .18s var(--ease) }
+    a.tag:hover { color: var(--text); border-color: var(--line-2) }
     .tags { display: flex; flex-wrap: wrap; gap: 7px }
 
     /* card base (shared) */
@@ -225,9 +292,25 @@
     .card:hover { transform: translateY(-4px); background: var(--glass-2); box-shadow: var(--shadow), inset 0 1px 0 color-mix(in srgb, #fff 9%, transparent) }
     .card:hover::after { opacity: 1 }
 
-    .empty {
-      padding: 60px 26px; text-align: center; color: var(--muted); font-size: 14px;
+    /* ============================================================
+       Archive view
+       ============================================================ */
+    .archive { padding-bottom: clamp(60px, 9vh, 110px) }
+    .archive-year {
+      margin: 38px 0 6px; font-size: 24px; font-weight: 800; letter-spacing: -.04em;
+      display: flex; align-items: baseline; gap: 12px;
     }
+    .archive-year .n { color: var(--faint); font: 600 12px/1 var(--mono) }
+    .archive-item {
+      display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px;
+      padding: 13px 2px; border-bottom: 1px solid var(--line);
+    }
+    .archive-item .d { color: var(--faint); font: 500 11px/1.6 var(--mono); letter-spacing: .04em; flex: none }
+    .archive-item a { font-weight: 600; font-size: 15px; text-decoration: none; letter-spacing: -.01em }
+    .archive-item a:hover { color: var(--accent) }
+    .archive-item .cat-label { margin-left: auto }
+
+    .empty { padding: 60px 26px; text-align: center; color: var(--muted); font-size: 14px }
 
     footer {
       display: flex; justify-content: space-between; gap: 20px;
@@ -245,6 +328,7 @@
       .topbar { top: 8px; margin-top: 8px; width: calc(100% - 16px); padding-left: 14px }
       .theme-toggle .tlabel { display: none }
       .post-card { padding: 22px }
+      .archive-item .cat-label { display: none }
       footer { flex-direction: column; gap: 8px }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -285,16 +369,24 @@
   <main>
     <section class="shell page-head">
       <div class="reveal">
-        <div class="kicker">Blog — 写作</div>
+        <div class="kicker">Blog — 个人知识库</div>
         <h1>Notes &amp; essays<span style="color: var(--accent)">.</span></h1>
-        <p class="lead">关于 LLM 系统、Agent 工程、科研与学习过程的想法和记录。想到什么写什么，写一篇发一篇。</p>
+        <p class="lead">按照<strong style="color:var(--text)">内容的目的</strong>分六类，按照<strong style="color:var(--text)">研究主题</strong>打标签。随想可以演化成学习笔记，学习笔记沉淀出研究思路，最终变成工程实践与复盘 —— 想到什么写什么，写一篇发一篇。</p>
       </div>
     </section>
 
     <section class="shell">
-      <div class="post-list reveal" id="postList" aria-live="polite">
-        <div class="empty">正在加载文章…</div>
+      <div class="filters reveal">
+        <div class="cat-bar" id="catBar" role="tablist" aria-label="按内容性质筛选"></div>
+        <div class="tag-bar" id="tagBar" aria-label="按主题标签筛选"></div>
+        <div class="list-tools">
+          <span class="count" id="postCount"></span>
+          <button class="view-btn" id="archiveToggle" aria-pressed="false">时间归档</button>
+        </div>
       </div>
+
+      <div class="post-list" id="postList" aria-live="polite"></div>
+      <div class="archive" id="archiveView" hidden></div>
     </section>
   </main>
 
@@ -361,10 +453,134 @@
       revealer.observe(el);
     });
 
-    /* ---------------- post list ---------------- */
+    /* ---------------- categories & tags ---------------- */
+    const CATEGORIES = {
+      thoughts:     { name: '随想',     en: 'Thoughts',       color: 'var(--accent-2)' },
+      notes:        { name: '学习笔记', en: 'Learning Notes', color: 'var(--accent)' },
+      ideas:        { name: '研究思路', en: 'Research Ideas', color: 'var(--accent-3)' },
+      engineering:  { name: '工程实践', en: 'Engineering',    color: 'var(--accent)' },
+      reading:      { name: '阅读笔记', en: 'Reading',        color: 'var(--accent-2)' },
+      retro:        { name: '复盘总结', en: 'Retrospectives', color: 'var(--accent-3)' }
+    };
+    const STATUS = { draft: '草稿', organizing: '整理中' };
+
+    let ALL_POSTS = [];
+    const state = { cat: 'all', tag: null, archive: false };
+
     function fmtDate(d) {
       const [y, m, day] = d.split('-');
       return `${y} 年 ${parseInt(m, 10)} 月 ${parseInt(day, 10)} 日`;
+    }
+    function fmtDateShort(d) {
+      const [, m, day] = d.split('-');
+      return `${parseInt(m, 10)}.${String(parseInt(day, 10)).padStart(2, '0')}`;
+    }
+    function catInfo(c) { return CATEGORIES[c] || { name: c || '未分类', color: 'var(--faint)' }; }
+    function catLinkHtml(c) {
+      const info = catInfo(c);
+      return `<span class="cat-label"><i style="background:${info.color}"></i>${info.name}</span>`;
+    }
+    function syncUrl() {
+      const p = new URLSearchParams();
+      if (state.cat !== 'all') p.set('cat', state.cat);
+      if (state.tag) p.set('tag', state.tag);
+      if (state.archive) p.set('view', 'archive');
+      const q = p.toString();
+      history.replaceState(null, '', location.pathname + (q ? '?' + q : ''));
+    }
+
+    function filtered() {
+      return ALL_POSTS.filter(p =>
+        (state.cat === 'all' || p.category === state.cat) &&
+        (!state.tag || (p.tags || []).includes(state.tag))
+      );
+    }
+
+    function renderCatBar() {
+      const bar = document.getElementById('catBar');
+      const counts = {};
+      ALL_POSTS.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
+      let html = `<button class="cat-btn${state.cat === 'all' ? ' active' : ''}" data-cat="all">全部<span class="n">${ALL_POSTS.length}</span></button>`;
+      for (const [key, info] of Object.entries(CATEGORIES)) {
+        if (!counts[key]) continue;
+        html += `<button class="cat-btn${state.cat === key ? ' active' : ''}" data-cat="${key}"><span class="cat-dot" style="background:${info.color}"></span>${info.name}<span class="n">${counts[key]}</span></button>`;
+      }
+      bar.innerHTML = html;
+      bar.querySelectorAll('.cat-btn').forEach(b => b.addEventListener('click', () => {
+        state.cat = b.dataset.cat;
+        render();
+      }));
+    }
+
+    function renderTagBar() {
+      const bar = document.getElementById('tagBar');
+      const counts = {};
+      ALL_POSTS.forEach(p => (p.tags || []).forEach(t => { counts[t] = (counts[t] || 0) + 1; }));
+      const tags = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b));
+      if (!tags.length) { bar.innerHTML = ''; return; }
+      bar.innerHTML = '<span class="label">标签</span>' +
+        tags.map(t => `<button class="chip${state.tag === t ? ' active' : ''}" data-tag="${t}">${t} <span style="opacity:.55">${counts[t]}</span></button>`).join('');
+      bar.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+        state.tag = state.tag === c.dataset.tag ? null : c.dataset.tag;
+        render();
+      }));
+    }
+
+    function renderList() {
+      const list = document.getElementById('postList');
+      const archive = document.getElementById('archiveView');
+      const posts = filtered();
+
+      document.getElementById('postCount').textContent = posts.length + ' 篇文章';
+
+      if (state.archive) {
+        list.hidden = true;
+        archive.hidden = false;
+        if (!posts.length) {
+          archive.innerHTML = '<div class="empty card">当前筛选下没有文章。</div>';
+          return;
+        }
+        const byYear = {};
+        posts.forEach(p => { (byYear[p.date.slice(0, 4)] ||= []).push(p); });
+        archive.innerHTML = Object.keys(byYear).sort((a, b) => b.localeCompare(a)).map(y => `
+          <div class="archive-year">${y}<span class="n">${byYear[y].length} 篇</span></div>
+          ${byYear[y].map(p => `
+            <div class="archive-item">
+              <span class="d">${fmtDateShort(p.date)}</span>
+              <a href="post.html?p=${encodeURIComponent(p.slug)}">${p.title}</a>
+              ${p.status && p.status !== 'published' ? `<span class="status-badge">${STATUS[p.status] || p.status}</span>` : ''}
+              ${catLinkHtml(p.category)}
+            </div>`).join('')}
+        `).join('');
+      } else {
+        list.hidden = false;
+        archive.hidden = true;
+        if (!posts.length) {
+          list.innerHTML = '<div class="empty card">当前筛选下没有文章。</div>';
+          return;
+        }
+        list.innerHTML = posts.map(p => `
+          <a class="card post-card" href="post.html?p=${encodeURIComponent(p.slug)}">
+            <div class="post-top">
+              ${catLinkHtml(p.category)}
+              <span class="post-meta">${fmtDate(p.date)}</span>
+              ${p.status && p.status !== 'published' ? `<span class="status-badge">${STATUS[p.status] || p.status}</span>` : ''}
+            </div>
+            <h2>${p.title}</h2>
+            <p>${p.summary || ''}</p>
+            ${p.tags && p.tags.length ? `<div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
+          </a>`).join('');
+      }
+    }
+
+    function render() {
+      renderCatBar();
+      renderTagBar();
+      renderList();
+      const btn = document.getElementById('archiveToggle');
+      btn.classList.toggle('active', state.archive);
+      btn.setAttribute('aria-pressed', String(state.archive));
+      syncUrl();
     }
 
     async function loadPosts() {
@@ -372,25 +588,32 @@
       try {
         const res = await fetch('posts/posts.json');
         if (!res.ok) throw new Error('posts.json 加载失败');
-        let posts = await res.json();
-        posts.sort((a, b) => (a.date < b.date ? 1 : -1));
-        if (!posts.length) {
+        ALL_POSTS = await res.json();
+        ALL_POSTS.sort((a, b) => (a.date < b.date ? 1 : -1));
+
+        const params = new URLSearchParams(location.search);
+        const cat = params.get('cat');
+        if (cat && (cat === 'all' || CATEGORIES[cat])) state.cat = cat;
+        const tag = params.get('tag');
+        if (tag) state.tag = tag;
+        if (params.get('view') === 'archive') state.archive = true;
+
+        if (!ALL_POSTS.length) {
           list.innerHTML = '<div class="empty card">还没有文章，第一篇正在路上。</div>';
           return;
         }
-        list.innerHTML = posts.map(p => `
-          <a class="card post-card" href="post.html?p=${encodeURIComponent(p.slug)}">
-            <div class="post-meta"><span>${fmtDate(p.date)}</span></div>
-            <h2>${p.title}</h2>
-            <p>${p.summary || ''}</p>
-            ${p.tags && p.tags.length ? `<div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
-          </a>`).join('');
-        list.querySelectorAll('.reveal').forEach(el => revealer.observe(el));
+        render();
       } catch (err) {
         list.innerHTML = '<div class="empty card">文章加载失败，请刷新重试。</div>';
         console.warn('[blog]', err.message);
       }
     }
+
+    document.getElementById('archiveToggle').addEventListener('click', () => {
+      state.archive = !state.archive;
+      render();
+    });
+
     loadPosts();
 
     document.getElementById('year').textContent = new Date().getFullYear();
