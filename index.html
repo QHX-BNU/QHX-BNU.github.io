@@ -569,6 +569,31 @@
     }
     .project:hover .go { transform: translate(3px, -3px); color: var(--accent) }
 
+    /* writing */
+    .writing-cols { display: grid; grid-template-columns: 1.12fr .88fr; gap: 14px }
+    .writing-col { padding: 24px 26px; display: flex; flex-direction: column }
+    .col-head {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+      margin-bottom: 14px; padding-bottom: 13px; border-bottom: 1px solid var(--line);
+    }
+    .col-kicker { color: var(--faint); font: 600 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase }
+    .col-head a { color: var(--accent); font: 600 12px/1 var(--font); text-decoration: none; white-space: nowrap }
+    .col-head a:hover { text-decoration: underline; text-underline-offset: 3px }
+    .w-list { display: grid; gap: 2px }
+    .w-item {
+      display: grid; gap: 6px; padding: 13px 12px; margin: 0 -12px;
+      border-radius: var(--r-sm); text-decoration: none; color: inherit;
+      transition: background .18s var(--ease);
+    }
+    .w-item:hover { background: var(--glass-2) }
+    .w-item:hover .w-title { color: var(--accent) }
+    .w-title { font-weight: 650; font-size: 14.5px; line-height: 1.45; letter-spacing: -.01em; transition: color .18s var(--ease) }
+    .w-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--faint); font: 500 10.5px/1 var(--mono); letter-spacing: .03em }
+    .w-meta .dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; opacity: .55 }
+    .w-empty { color: var(--muted); font-size: 13px; padding: 6px 0 }
+    .w-hint { margin: 14px 0 0; padding-top: 14px; border-top: 1px dashed var(--line); color: var(--faint); font-size: 12px; line-height: 1.75 }
+    .writing-cta { display: flex; justify-content: center; margin-top: 16px }
+
     /* stack */
     .stack-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px }
     .stack-item { min-height: 152px; display: flex; flex-direction: column; justify-content: center; gap: 7px; padding: 22px }
@@ -645,6 +670,7 @@
     @media (max-width: 860px) {
       nav { display: none }
       .projects { grid-template-columns: 1fr }
+      .writing-cols { grid-template-columns: 1fr }
       .section-head { flex-direction: column; align-items: flex-start; gap: 14px }
     }
     @media (max-width: 620px) {
@@ -676,6 +702,7 @@
     <nav aria-label="Primary">
       <a href="#focus">Focus</a>
       <a href="#research">Research</a>
+      <a href="#writing">Writing</a>
       <a href="#projects">Projects</a>
       <a href="#stack">Stack</a>
       <a href="blog.html">Blog</a>
@@ -874,11 +901,48 @@
       </div>
     </section>
 
+    <!-- ================= WRITING ================= -->
+    <section class="shell section" id="writing">
+      <div class="section-head reveal">
+        <div>
+          <div class="kicker">04 — Writing</div>
+          <h2>Writing &amp; notes.</h2>
+        </div>
+        <p class="section-note">A working knowledge base — organized by why it was written, linked by what it is about. Thoughts turn into notes, notes into research ideas, ideas into experiments.</p>
+      </div>
+
+      <div class="writing-cols">
+        <div class="card writing-col reveal">
+          <div class="col-head">
+            <span class="col-kicker">Recently written</span>
+            <a href="blog.html">全部 <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="w-list" id="recentPosts">
+            <div class="w-empty">加载中…</div>
+          </div>
+        </div>
+
+        <div class="card writing-col reveal">
+          <div class="col-head">
+            <span class="col-kicker">Open questions</span>
+            <a href="blog.html?cat=ideas">研究思路 <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="w-list" id="openQuestions">
+            <div class="w-empty">加载中…</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="writing-cta reveal">
+        <a class="btn" href="blog.html">Read the blog <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
     <!-- ================= STACK ================= -->
     <section class="shell section" id="stack">
       <div class="section-head reveal">
         <div>
-          <div class="kicker">04 — Toolkit</div>
+          <div class="kicker">05 — Toolkit</div>
           <h2>Working stack.</h2>
         </div>
         <p class="section-note">The tools I reach for when moving between experiments, systems work, and developer-facing prototypes.</p>
@@ -909,7 +973,7 @@
     <section class="shell section" id="timeline">
       <div class="section-head reveal">
         <div>
-          <div class="kicker">05 — Path</div>
+          <div class="kicker">06 — Path</div>
           <h2>How I got here.</h2>
         </div>
         <p class="section-note">From education research to computer technology — the same question from a different angle.</p>
@@ -942,7 +1006,7 @@
     <!-- ================= CONTACT ================= -->
     <section class="shell" id="contact">
       <div class="contact reveal">
-        <div class="kicker">06 — Connect</div>
+        <div class="kicker">07 — Connect</div>
         <h2>Interested in LLM systems, agents, evaluation, or developer tooling?</h2>
         <p>I enjoy problems where model capability is only the beginning — the harder part is making the surrounding system reliable, controllable, and genuinely useful. Always happy to talk about research, tooling, or collaborations.</p>
         <div class="hero-actions">
@@ -1078,6 +1142,55 @@
       }
       requestAnimationFrame(frame);
     }
+
+    /* ---------------- writing preview ---------------- */
+    const BLOG_CATEGORIES = {
+      thoughts: '随想', notes: '学习笔记', ideas: '研究思路',
+      engineering: '工程实践', reading: '阅读笔记', retro: '复盘总结'
+    };
+    const BLOG_STATUS = { draft: '草稿', organizing: '整理中' };
+
+    function escHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function writingItem(p) {
+      const cat = BLOG_CATEGORIES[p.category] || '未分类';
+      const status = p.status && p.status !== 'published'
+        ? `<i class="dot"></i><span>${BLOG_STATUS[p.status] || p.status}</span>` : '';
+      return `<a class="w-item" href="post.html?p=${encodeURIComponent(p.slug)}">
+          <span class="w-title">${escHtml(p.title)}</span>
+          <span class="w-meta">${cat}<i class="dot"></i>${p.date}${status}</span>
+        </a>`;
+    }
+
+    async function loadWriting() {
+      const recentEl = document.getElementById('recentPosts');
+      const questionsEl = document.getElementById('openQuestions');
+      if (!recentEl || !questionsEl) return;
+      try {
+        const res = await fetch('posts/posts.json');
+        if (!res.ok) throw new Error('posts.json');
+        const posts = (await res.json()).sort((a, b) => (a.date < b.date ? 1 : -1));
+
+        recentEl.innerHTML = posts.length
+          ? posts.slice(0, 3).map(writingItem).join('')
+          : '<div class="w-empty">还没有文章。</div>';
+
+        const questions = posts.filter(p => p.category === 'ideas');
+        let qHtml = questions.length
+          ? questions.slice(0, 3).map(writingItem).join('')
+          : '<div class="w-empty">还没有公开的开放问题。</div>';
+        if (questions.length < 3) {
+          qHtml += '<p class="w-hint">「研究思路」记录的是还没验证的假设、实验设计和可能的失败原因 —— 它们会随着实验推进，演化成工程实践与复盘。</p>';
+        }
+        questionsEl.innerHTML = qHtml;
+      } catch (err) {
+        recentEl.innerHTML = '<div class="w-empty">文章加载失败。</div>';
+        questionsEl.innerHTML = '<div class="w-empty">文章加载失败。</div>';
+      }
+    }
+    loadWriting();
 
     async function loadGitHubStats() {
       try {

@@ -5,6 +5,8 @@
     "date": "2026-10-30",
     "category": "ideas",
     "status": "organizing",
+    "featured": true,
+    "thread": "agent-trace-eval",
     "tags": ["Agent", "Trace", "Evaluation"],
     "summary": "一个待验证的假设：单条 Trace 里的小错误可能是噪声，但如果同一种失败模式在多天的 Trace 里反复出现，那它大概率是系统性的。"
   },

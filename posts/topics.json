@@ -1,0 +1,27 @@
+{
+  "groups": [
+    {
+      "id": "area",
+      "label": "研究领域",
+      "en": "Areas",
+      "tags": ["Agent", "RL", "LLM", "RSI", "AI4Edu"]
+    },
+    {
+      "id": "tech",
+      "label": "技术方向",
+      "en": "Techniques",
+      "tags": ["Harness", "训练", "推理", "评测", "Evaluation", "数据", "系统设计", "Trace"]
+    },
+    {
+      "id": "question",
+      "label": "具体问题",
+      "en": "Questions",
+      "tags": ["Credit Assignment", "Reward Model", "Memory", "Routing", "Verification"]
+    }
+  ],
+  "fallback": {
+    "id": "misc",
+    "label": "其他",
+    "en": "Other"
+  }
+}

@@ -1,0 +1,8 @@
+[
+  {
+    "id": "agent-trace-eval",
+    "title": "Agent Trace 与评测",
+    "desc": "从单条 Trace 里的噪声，到跨天聚类暴露出来的系统性缺陷。",
+    "tags": ["Agent", "Trace", "Evaluation"]
+  }
+]

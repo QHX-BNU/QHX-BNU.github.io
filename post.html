@@ -182,6 +182,7 @@
       display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
       color: var(--faint); font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
     }
+    .article-meta .sep { width: 3px; height: 3px; border-radius: 50%; background: var(--faint); opacity: .6 }
     .cat-label {
       display: inline-flex; align-items: center; gap: 7px;
       color: var(--muted); font: 600 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase;
@@ -238,6 +239,37 @@
     .prose img { display: block; max-width: 100%; margin: 1.6em auto; border: 1px solid var(--line); border-radius: var(--r-md) }
     .prose hr { border: 0; height: 1px; margin: 2.4em 0; background: var(--line) }
 
+    /* ---------------- thread & related ---------------- */
+    .related-section { margin: 0 0 34px }
+    .rs-head {
+      display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px;
+      margin-bottom: 4px;
+    }
+    .rs-kicker { color: var(--faint); font: 600 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase }
+    .rs-title { font-size: 17px; font-weight: 700; letter-spacing: -.02em }
+    .rs-count { margin-left: auto; color: var(--faint); font: 500 11px/1 var(--mono) }
+    .rs-desc { margin: 6px 0 16px; color: var(--muted); font-size: 13.5px; line-height: 1.7 }
+
+    .rs-list { display: grid; gap: 9px }
+    .rs-item {
+      display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px;
+      padding: 15px 18px; text-decoration: none;
+      border: 1px solid var(--line); border-radius: var(--r-md);
+      background: var(--glass);
+      transition: border-color .2s var(--ease), background .2s var(--ease), transform .2s var(--ease);
+    }
+    .rs-item:hover { background: var(--glass-2); border-color: var(--line-2); transform: translateY(-2px) }
+    .rs-item.current {
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+      border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
+    }
+    .rs-item.current:hover { transform: none }
+    .rs-item .t { font-weight: 650; font-size: 14.5px; letter-spacing: -.01em }
+    .rs-item:hover .t { color: var(--accent) }
+    .rs-item.current .t { color: var(--text) }
+    .rs-item .d { margin-left: auto; color: var(--faint); font: 500 11px/1 var(--mono) }
+    .rs-item .why { color: var(--faint); font: 500 11px/1 var(--mono) }
+
     .post-nav { display: grid; gap: 12px; padding-bottom: clamp(60px, 9vh, 100px) }
     .post-nav a {
       display: flex; flex-direction: column; gap: 7px;
@@ -264,6 +296,7 @@
       .topbar { top: 8px; margin-top: 8px; width: calc(100% - 16px); padding-left: 14px }
       .theme-toggle .tlabel { display: none }
       .prose { font-size: 15px }
+      .rs-item .d { margin-left: 0 }
       footer { flex-direction: column; gap: 8px }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -282,8 +315,8 @@
     <nav aria-label="Primary">
       <a href="index.html#focus">Focus</a>
       <a href="index.html#research">Research</a>
+      <a href="index.html#writing">Writing</a>
       <a href="index.html#projects">Projects</a>
-      <a href="index.html#stack">Stack</a>
       <a href="blog.html" class="active">Blog</a>
       <a href="index.html#contact">Contact</a>
     </nav>
@@ -306,7 +339,10 @@
       <header class="article-head">
         <div class="article-meta">
           <span id="postCategory"></span>
+          <span class="sep" aria-hidden="true"></span>
           <span id="postDate"></span>
+          <span class="sep" aria-hidden="true"></span>
+          <span id="postReading"></span>
           <span id="postStatus"></span>
         </div>
         <h1 id="postTitle">正在加载…</h1>
@@ -315,6 +351,26 @@
       <hr class="article-rule" />
       <div class="prose" id="postBody"></div>
       <hr class="article-rule" />
+
+      <section class="related-section" id="threadSection" hidden>
+        <div class="rs-head">
+          <span class="rs-kicker">线索</span>
+          <span class="rs-title" id="threadTitle"></span>
+          <span class="rs-count" id="threadCount"></span>
+        </div>
+        <p class="rs-desc" id="threadDesc"></p>
+        <div class="rs-list" id="threadList"></div>
+      </section>
+
+      <section class="related-section" id="relatedSection" hidden>
+        <div class="rs-head">
+          <span class="rs-kicker">继续阅读</span>
+          <span class="rs-title">相关文章</span>
+        </div>
+        <p class="rs-desc" id="relatedWhy"></p>
+        <div class="rs-list" id="relatedList"></div>
+      </section>
+
       <nav class="post-nav" id="postNav" aria-label="Post navigation"></nav>
     </article>
   </main>
@@ -435,21 +491,43 @@
     };
     const STATUS = { draft: '草稿', organizing: '整理中' };
 
-    /* ---------------- load post ---------------- */
     function fmtDate(d) {
       const [y, m, day] = d.split('-');
       return `${y} 年 ${parseInt(m, 10)} 月 ${parseInt(day, 10)} 日`;
     }
 
+    function readingTime(md) {
+      const text = String(md).replace(/```[\s\S]*?```/g, ' ');
+      const cjk = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+      const words = (text.replace(/[\u4e00-\u9fa5]/g, ' ').match(/[A-Za-z0-9_]+/g) || []).length;
+      const minutes = Math.max(1, Math.round(cjk / 350 + words / 220));
+      return `${minutes} 分钟阅读`;
+    }
+
+    function escHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
     function fail(msg) {
       document.getElementById('postTitle').textContent = '文章加载失败';
-      document.getElementById('postBody').innerHTML = '<p>' + msg + '</p><p><a href="blog.html">← 返回博客列表</a></p>';
+      document.getElementById('postBody').innerHTML = '<p>' + escHtml(msg) + '</p><p><a href="blog.html">← 返回博客列表</a></p>';
       document.getElementById('postNav').innerHTML = '';
+    }
+
+    async function loadOptional(url, fallback) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(url);
+        return await res.json();
+      } catch (err) {
+        return fallback;
+      }
     }
 
     async function loadPost() {
       const slug = new URLSearchParams(location.search).get('p');
       if (!slug) { location.replace('blog.html'); return; }
+
       let posts;
       try {
         const res = await fetch('posts/posts.json');
@@ -457,6 +535,7 @@
         posts = await res.json();
       } catch (err) { fail('无法读取 posts/posts.json'); return; }
 
+      const threads = await loadOptional('posts/threads.json', []);
       posts.sort((a, b) => (a.date < b.date ? 1 : -1));
       const idx = posts.findIndex(p => p.slug === slug);
       if (idx === -1) { fail('没有找到这篇文章'); return; }
@@ -474,23 +553,87 @@
       document.getElementById('postCategory').innerHTML =
         `<a class="cat-label" href="blog.html?cat=${post.category || ''}"><i style="background:${cat.color}"></i>${cat.name}</a>`;
       document.getElementById('postDate').textContent = fmtDate(post.date);
+      document.getElementById('postReading').textContent = readingTime(md);
+
       const statusEl = document.getElementById('postStatus');
       if (post.status && post.status !== 'published') {
         statusEl.innerHTML = `<span class="status-badge">${STATUS[post.status] || post.status}</span>`;
       } else { statusEl.innerHTML = ''; }
+
       document.getElementById('postTitle').textContent = post.title;
       document.getElementById('postTags').innerHTML = (post.tags || [])
-        .map(t => `<a class="tag" href="blog.html?tag=${encodeURIComponent(t)}">${t}</a>`).join('');
+        .map(t => `<a class="tag" href="blog.html?tag=${encodeURIComponent(t)}">${escHtml(t)}</a>`).join('');
       document.getElementById('postBody').innerHTML = renderMarkdown(md);
+
+      renderThread(post, posts, threads);
+      renderRelated(post, posts);
 
       const prev = posts[idx + 1];
       const next = posts[idx - 1];
       document.getElementById('postNav').innerHTML =
-        (prev ? `<a href="post.html?p=${encodeURIComponent(prev.slug)}"><span class="dir">← 较早一篇</span><span class="t">${prev.title}</span></a>` : '') +
-        (next ? `<a href="post.html?p=${encodeURIComponent(next.slug)}"><span class="dir">较新一篇 →</span><span class="t">${next.title}</span></a>` : '');
+        (prev ? `<a href="post.html?p=${encodeURIComponent(prev.slug)}"><span class="dir">← 较早一篇</span><span class="t">${escHtml(prev.title)}</span></a>` : '') +
+        (next ? `<a href="post.html?p=${encodeURIComponent(next.slug)}"><span class="dir">较新一篇 →</span><span class="t">${escHtml(next.title)}</span></a>` : '');
     }
-    loadPost();
 
+    function renderThread(post, posts, threads) {
+      const section = document.getElementById('threadSection');
+      if (!post.thread) { section.hidden = true; return; }
+
+      const info = (threads || []).find(t => t.id === post.thread) || { id: post.thread, title: post.thread, desc: '' };
+      const members = posts.filter(p => p.thread === post.thread);
+      if (!members.length) { section.hidden = true; return; }
+
+      section.hidden = false;
+      document.getElementById('threadTitle').textContent = info.title;
+      document.getElementById('threadDesc').textContent = info.desc || '';
+      document.getElementById('threadCount').textContent = members.length + ' 篇';
+
+      const ordered = members.slice().sort((a, b) => (a.date < b.date ? 1 : -1));
+      document.getElementById('threadList').innerHTML = ordered.map(p => {
+        if (p.slug === post.slug) {
+          return `<div class="rs-item current">
+            <span class="t">${escHtml(p.title)}</span>
+            <span class="why">正在阅读</span>
+            <span class="d">${p.date}</span>
+          </div>`;
+        }
+        return `<a class="rs-item" href="post.html?p=${encodeURIComponent(p.slug)}">
+          <span class="t">${escHtml(p.title)}</span>
+          <span class="d">${p.date}</span>
+        </a>`;
+      }).join('');
+    }
+
+    function renderRelated(post, posts) {
+      const section = document.getElementById('relatedSection');
+      const myTags = post.tags || [];
+      const scored = posts
+        .filter(p => p.slug !== post.slug && p.thread !== post.thread)
+        .map(p => {
+          const shared = (p.tags || []).filter(t => myTags.includes(t));
+          return { p, shared, score: shared.length + (p.category === post.category ? 0.5 : 0) };
+        })
+        .filter(x => x.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3);
+
+      if (!scored.length) { section.hidden = true; return; }
+      section.hidden = false;
+
+      const allShared = [...new Set(scored.flatMap(s => s.shared))];
+      document.getElementById('relatedWhy').textContent = allShared.length
+        ? `同样讨论 ${allShared.join('、')} 的文章。`
+        : '同类目的其他文章。';
+
+      document.getElementById('relatedList').innerHTML = scored.map(s => `
+        <a class="rs-item" href="post.html?p=${encodeURIComponent(s.p.slug)}">
+          <span class="t">${escHtml(s.p.title)}</span>
+          <span class="why">${s.shared.join(' · ')}</span>
+          <span class="d">${s.p.date}</span>
+        </a>`).join('');
+    }
+
+    loadPost();
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>

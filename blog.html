@@ -181,12 +181,37 @@
       margin: 0; font-size: clamp(38px, 6vw, 62px); font-weight: 800;
       line-height: 1.02; letter-spacing: -.045em;
     }
-    .page-head .lead { margin: 18px 0 0; max-width: 660px; color: var(--muted); font-size: clamp(15px, 1.6vw, 17.5px); line-height: 1.8 }
+    .page-head .lead { margin: 18px 0 0; max-width: 680px; color: var(--muted); font-size: clamp(15px, 1.6vw, 17.5px); line-height: 1.8 }
 
     /* ============================================================
        Filters
        ============================================================ */
     .filters { margin-bottom: 22px }
+
+    .search-wrap { position: relative; margin-bottom: 16px }
+    .search-wrap svg {
+      position: absolute; left: 17px; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px; stroke: var(--faint); fill: none; stroke-width: 1.8; pointer-events: none;
+    }
+    .search-input {
+      width: 100%; padding: 14px 46px 14px 44px;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--glass); color: var(--text);
+      font: 500 14px/1 var(--font);
+      outline: none;
+      transition: border-color .2s var(--ease), background .2s var(--ease);
+    }
+    .search-input:focus { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); background: var(--glass-2) }
+    .search-input::placeholder { color: var(--faint) }
+    .search-clear {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      width: 26px; height: 26px; display: none; place-items: center;
+      border: 0; border-radius: 50%; background: var(--glass-2); color: var(--muted);
+      font: 500 14px/1 var(--font); cursor: pointer;
+    }
+    .search-clear:hover { color: var(--text) }
+    .search-wrap.has-value .search-clear { display: grid }
+
     .cat-bar { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 13px }
     .cat-btn {
       display: inline-flex; align-items: center; gap: 8px;
@@ -202,11 +227,16 @@
       color: var(--text); background: var(--glass-2);
       border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
     }
-    .cat-btn .n { color: var(--faint); font: 500 10.5px/1 var(--mono) }
+    .cat-btn .n { color: var(--faint); font: 500 10.5px/1 var(--mono); margin-left: 6px }
     .cat-dot { width: 7px; height: 7px; border-radius: 50%; flex: none }
 
-    .tag-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 13px }
-    .tag-bar .label { color: var(--faint); font: 600 10.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; margin-right: 4px }
+    /* tag groups — 研究领域 / 技术方向 / 具体问题 */
+    .tag-groups { display: grid; gap: 9px; margin-bottom: 13px }
+    .tag-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px }
+    .tag-group .glabel {
+      min-width: 68px; color: var(--muted);
+      font: 600 10.5px/1 var(--mono); letter-spacing: .1em;
+    }
     .chip {
       padding: 5px 11px;
       border: 1px solid var(--line); border-radius: 999px;
@@ -220,12 +250,22 @@
       color: var(--accent); border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
       background: color-mix(in srgb, var(--accent) 10%, transparent);
     }
+    .chip .n { opacity: .55; margin-left: 3px }
+
+    .thread-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 13px }
+    .thread-bar .glabel { min-width: 68px; color: var(--muted); font: 600 10.5px/1 var(--mono); letter-spacing: .1em }
+    .chip.thread {
+      font-family: var(--font); font-size: 12px; font-weight: 600;
+      padding: 6px 12px;
+    }
+    .chip.thread.active { color: var(--accent-2); border-color: color-mix(in srgb, var(--accent-2) 55%, var(--line)); background: color-mix(in srgb, var(--accent-2) 10%, transparent) }
 
     .list-tools {
       display: flex; align-items: center; justify-content: space-between; gap: 14px;
       padding: 13px 2px 0; border-top: 1px solid var(--line);
     }
     .count { color: var(--faint); font: 500 11px/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase }
+    .tool-right { display: flex; gap: 6px }
     .view-btn {
       display: inline-flex; align-items: center; gap: 7px;
       padding: 7px 13px;
@@ -236,7 +276,10 @@
       transition: color .18s var(--ease), background .18s var(--ease);
     }
     .view-btn:hover { color: var(--text); background: var(--glass-2) }
-    .view-btn.active { color: var(--text); background: var(--glass-2) }
+    .view-btn.active {
+      color: var(--text); background: var(--glass-2);
+      border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+    }
 
     /* ============================================================
        Post list
@@ -271,6 +314,15 @@
     a.tag:hover { color: var(--text); border-color: var(--line-2) }
     .tags { display: flex; flex-wrap: wrap; gap: 7px }
 
+    .thread-note {
+      display: flex; align-items: center; gap: 7px;
+      margin-top: 14px; padding-top: 13px; border-top: 1px dashed var(--line);
+      color: var(--faint); font: 500 11px/1 var(--mono);
+    }
+    .thread-note b { color: var(--accent-2); font-weight: 600 }
+
+    mark { background: color-mix(in srgb, var(--accent) 26%, transparent); color: inherit; border-radius: 3px; padding: 0 2px }
+
     /* card base (shared) */
     .card {
       position: relative; padding: 26px;
@@ -300,6 +352,7 @@
       margin: 38px 0 6px; font-size: 24px; font-weight: 800; letter-spacing: -.04em;
       display: flex; align-items: baseline; gap: 12px;
     }
+    .archive-year:first-child { margin-top: 8px }
     .archive-year .n { color: var(--faint); font: 600 12px/1 var(--mono) }
     .archive-item {
       display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px;
@@ -311,6 +364,13 @@
     .archive-item .cat-label { margin-left: auto }
 
     .empty { padding: 60px 26px; text-align: center; color: var(--muted); font-size: 14px }
+    .empty .hint { display: block; margin-top: 10px; color: var(--faint); font-size: 12.5px }
+    .empty button {
+      margin-top: 16px; padding: 9px 16px;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--glass-2); color: var(--text);
+      font: 600 12.5px/1 var(--font); cursor: pointer;
+    }
 
     footer {
       display: flex; justify-content: space-between; gap: 20px;
@@ -329,6 +389,8 @@
       .theme-toggle .tlabel { display: none }
       .post-card { padding: 22px }
       .archive-item .cat-label { display: none }
+      .tag-group { flex-direction: column; align-items: flex-start; gap: 7px }
+      .tag-group .glabel { min-width: 0 }
       footer { flex-direction: column; gap: 8px }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -348,8 +410,8 @@
     <nav aria-label="Primary">
       <a href="index.html#focus">Focus</a>
       <a href="index.html#research">Research</a>
+      <a href="index.html#writing">Writing</a>
       <a href="index.html#projects">Projects</a>
-      <a href="index.html#stack">Stack</a>
       <a href="blog.html" class="active">Blog</a>
       <a href="index.html#contact">Contact</a>
     </nav>
@@ -371,22 +433,33 @@
       <div class="reveal">
         <div class="kicker">Blog — 个人知识库</div>
         <h1>Notes &amp; essays<span style="color: var(--accent)">.</span></h1>
-        <p class="lead">按照<strong style="color:var(--text)">内容的目的</strong>分六类，按照<strong style="color:var(--text)">研究主题</strong>打标签。随想可以演化成学习笔记，学习笔记沉淀出研究思路，最终变成工程实践与复盘 —— 想到什么写什么，写一篇发一篇。</p>
+        <p class="lead">按<strong style="color:var(--text)">内容的目的</strong>分成六类，按<strong style="color:var(--text)">研究主题</strong>打标签；同一主题下的文章用<strong style="color:var(--text)">线索</strong>串起来。随想可以演化成学习笔记，学习笔记沉淀出研究思路，最终变成工程实践与复盘 —— 想到什么写什么，写一篇发一篇。</p>
       </div>
     </section>
 
     <section class="shell">
       <div class="filters reveal">
+        <div class="search-wrap" id="searchWrap">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input class="search-input" id="searchInput" type="search" placeholder="搜索标题、摘要或标签…" autocomplete="off" aria-label="搜索文章" />
+          <button class="search-clear" id="searchClear" type="button" aria-label="清除搜索">×</button>
+        </div>
+
         <div class="cat-bar" id="catBar" role="tablist" aria-label="按内容性质筛选"></div>
-        <div class="tag-bar" id="tagBar" aria-label="按主题标签筛选"></div>
+        <div class="tag-groups" id="tagGroups" aria-label="按主题标签筛选"></div>
+        <div class="thread-bar" id="threadBar" aria-label="按线索筛选" hidden></div>
+
         <div class="list-tools">
           <span class="count" id="postCount"></span>
-          <button class="view-btn" id="archiveToggle" aria-pressed="false">时间归档</button>
+          <div class="tool-right">
+            <button class="view-btn active" id="listView" aria-pressed="true">列表</button>
+            <button class="view-btn" id="archiveView" aria-pressed="false">时间归档</button>
+          </div>
         </div>
       </div>
 
       <div class="post-list" id="postList" aria-live="polite"></div>
-      <div class="archive" id="archiveView" hidden></div>
+      <div class="archive" id="archiveBox" hidden></div>
     </section>
   </main>
 
@@ -453,7 +526,7 @@
       revealer.observe(el);
     });
 
-    /* ---------------- categories & tags ---------------- */
+    /* ---------------- data model ---------------- */
     const CATEGORIES = {
       thoughts:     { name: '随想',     en: 'Thoughts',       color: 'var(--accent-2)' },
       notes:        { name: '学习笔记', en: 'Learning Notes', color: 'var(--accent)' },
@@ -465,8 +538,13 @@
     const STATUS = { draft: '草稿', organizing: '整理中' };
 
     let ALL_POSTS = [];
-    const state = { cat: 'all', tag: null, archive: false };
+    let THREADS = [];
+    let TAG_GROUPS = [];
+    let FALLBACK_LABEL = '其他';
 
+    const state = { cat: 'all', tag: null, thread: null, q: '', view: 'list' };
+
+    /* ---------------- helpers ---------------- */
     function fmtDate(d) {
       const [y, m, day] = d.split('-');
       return `${y} 年 ${parseInt(m, 10)} 月 ${parseInt(day, 10)} 日`;
@@ -480,22 +558,48 @@
       const info = catInfo(c);
       return `<span class="cat-label"><i style="background:${info.color}"></i>${info.name}</span>`;
     }
+    function threadInfo(id) { return THREADS.find(t => t.id === id) || null; }
+
+    function escHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function highlight(text, q) {
+      const safe = escHtml(text);
+      if (!q) return safe;
+      const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+      return safe.replace(re, '<mark>$1</mark>');
+    }
+
     function syncUrl() {
       const p = new URLSearchParams();
       if (state.cat !== 'all') p.set('cat', state.cat);
       if (state.tag) p.set('tag', state.tag);
-      if (state.archive) p.set('view', 'archive');
+      if (state.thread) p.set('thread', state.thread);
+      if (state.q) p.set('q', state.q);
+      if (state.view === 'archive') p.set('view', 'archive');
       const q = p.toString();
-      history.replaceState(null, '', location.pathname + (q ? '?' + q : ''));
+      history.replaceState(null, '', location.pathname + (q ? '?' + q : '') + location.hash);
     }
 
     function filtered() {
-      return ALL_POSTS.filter(p =>
-        (state.cat === 'all' || p.category === state.cat) &&
-        (!state.tag || (p.tags || []).includes(state.tag))
-      );
+      const q = state.q.trim().toLowerCase();
+      return ALL_POSTS.filter(p => {
+        if (state.cat !== 'all' && p.category !== state.cat) return false;
+        if (state.tag && !(p.tags || []).includes(state.tag)) return false;
+        if (state.thread && p.thread !== state.thread) return false;
+        if (!q) return true;
+        const haystack = [p.title, p.summary, (p.tags || []).join(' ')].join(' ').toLowerCase();
+        return haystack.includes(q);
+      });
     }
 
+    function tagCounts() {
+      const counts = {};
+      ALL_POSTS.forEach(p => (p.tags || []).forEach(t => { counts[t] = (counts[t] || 0) + 1; }));
+      return counts;
+    }
+
+    /* ---------------- renderers ---------------- */
     function renderCatBar() {
       const bar = document.getElementById('catBar');
       const counts = {};
@@ -503,7 +607,7 @@
       let html = `<button class="cat-btn${state.cat === 'all' ? ' active' : ''}" data-cat="all">全部<span class="n">${ALL_POSTS.length}</span></button>`;
       for (const [key, info] of Object.entries(CATEGORIES)) {
         if (!counts[key]) continue;
-        html += `<button class="cat-btn${state.cat === key ? ' active' : ''}" data-cat="${key}"><span class="cat-dot" style="background:${info.color}"></span>${info.name}<span class="n">${counts[key]}</span></button>`;
+        html += `<button class="cat-btn${state.cat === key ? ' active' : ''}" data-cat="${key}" title="${info.en}"><span class="cat-dot" style="background:${info.color}"></span>${info.name}<span class="n">${counts[key]}</span></button>`;
       }
       bar.innerHTML = html;
       bar.querySelectorAll('.cat-btn').forEach(b => b.addEventListener('click', () => {
@@ -512,75 +616,149 @@
       }));
     }
 
-    function renderTagBar() {
-      const bar = document.getElementById('tagBar');
-      const counts = {};
-      ALL_POSTS.forEach(p => (p.tags || []).forEach(t => { counts[t] = (counts[t] || 0) + 1; }));
-      const tags = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b));
-      if (!tags.length) { bar.innerHTML = ''; return; }
-      bar.innerHTML = '<span class="label">标签</span>' +
-        tags.map(t => `<button class="chip${state.tag === t ? ' active' : ''}" data-tag="${t}">${t} <span style="opacity:.55">${counts[t]}</span></button>`).join('');
-      bar.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+    function renderTagGroups() {
+      const wrap = document.getElementById('tagGroups');
+      const counts = tagCounts();
+      const used = new Set(Object.keys(counts));
+      const sections = [];
+
+      TAG_GROUPS.forEach(g => {
+        const tags = g.tags.filter(t => used.has(t));
+        tags.forEach(t => used.delete(t));
+        if (tags.length) sections.push({ label: g.label, tags });
+      });
+      if (used.size) sections.push({ label: FALLBACK_LABEL, tags: [...used] });
+
+      if (!sections.length) { wrap.innerHTML = ''; return; }
+
+      wrap.innerHTML = sections.map(sec => `
+        <div class="tag-group">
+          <span class="glabel">${escHtml(sec.label)}</span>
+          ${sec.tags.map(t => {
+            const active = state.tag === t;
+            return `<button class="chip${active ? ' active' : ''}" data-tag="${escHtml(t)}">${escHtml(t)}<span class="n">${counts[t]}</span></button>`;
+          }).join('')}
+        </div>`).join('');
+
+      wrap.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
         state.tag = state.tag === c.dataset.tag ? null : c.dataset.tag;
         render();
       }));
     }
 
+    function renderThreads() {
+      const bar = document.getElementById('threadBar');
+      const counts = {};
+      ALL_POSTS.forEach(p => { if (p.thread) counts[p.thread] = (counts[p.thread] || 0) + 1; });
+      const used = THREADS.filter(t => counts[t.id]);
+      if (!used.length) { bar.hidden = true; return; }
+      bar.hidden = false;
+      bar.innerHTML = '<span class="glabel">线索</span>' + used.map(t =>
+        `<button class="chip thread${state.thread === t.id ? ' active' : ''}" data-thread="${escHtml(t.id)}" title="${escHtml(t.desc || '')}">${escHtml(t.title)}<span class="n">${counts[t.id]}</span></button>`
+      ).join('');
+      bar.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+        state.thread = state.thread === c.dataset.thread ? null : c.dataset.thread;
+        render();
+      }));
+    }
+
+    function postCardHtml(p) {
+      const th = threadInfo(p.thread);
+      return `<a class="card post-card" href="post.html?p=${encodeURIComponent(p.slug)}">
+        <div class="post-top">
+          ${catLinkHtml(p.category)}
+          <span class="post-meta">${fmtDate(p.date)}</span>
+          ${p.status && p.status !== 'published' ? `<span class="status-badge">${STATUS[p.status] || p.status}</span>` : ''}
+        </div>
+        <h2>${highlight(p.title, state.q)}</h2>
+        <p>${highlight(p.summary || '', state.q)}</p>
+        ${(p.tags && p.tags.length) ? `<div class="tags">${p.tags.map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</div>` : ''}
+        ${th ? `<div class="thread-note">线索 · <b>${escHtml(th.title)}</b></div>` : ''}
+      </a>`;
+    }
+
     function renderList() {
       const list = document.getElementById('postList');
-      const archive = document.getElementById('archiveView');
+      const archiveBox = document.getElementById('archiveBox');
       const posts = filtered();
 
       document.getElementById('postCount').textContent = posts.length + ' 篇文章';
 
-      if (state.archive) {
+      if (state.view === 'archive') {
         list.hidden = true;
-        archive.hidden = false;
+        archiveBox.hidden = false;
         if (!posts.length) {
-          archive.innerHTML = '<div class="empty card">当前筛选下没有文章。</div>';
+          archiveBox.innerHTML = emptyHtml(posts);
+          bindEmptyReset(archiveBox);
           return;
         }
         const byYear = {};
-        posts.forEach(p => { (byYear[p.date.slice(0, 4)] ||= []).push(p); });
-        archive.innerHTML = Object.keys(byYear).sort((a, b) => b.localeCompare(a)).map(y => `
+        posts.forEach(p => { (byYear[p.date.slice(0, 4)] || (byYear[p.date.slice(0, 4)] = [])).push(p); });
+        archiveBox.innerHTML = Object.keys(byYear).sort((a, b) => b.localeCompare(a)).map(y => `
           <div class="archive-year">${y}<span class="n">${byYear[y].length} 篇</span></div>
           ${byYear[y].map(p => `
             <div class="archive-item">
               <span class="d">${fmtDateShort(p.date)}</span>
-              <a href="post.html?p=${encodeURIComponent(p.slug)}">${p.title}</a>
+              <a href="post.html?p=${encodeURIComponent(p.slug)}">${highlight(p.title, state.q)}</a>
               ${p.status && p.status !== 'published' ? `<span class="status-badge">${STATUS[p.status] || p.status}</span>` : ''}
               ${catLinkHtml(p.category)}
             </div>`).join('')}
         `).join('');
       } else {
         list.hidden = false;
-        archive.hidden = true;
+        archiveBox.hidden = true;
         if (!posts.length) {
-          list.innerHTML = '<div class="empty card">当前筛选下没有文章。</div>';
+          list.innerHTML = emptyHtml(posts);
+          bindEmptyReset(list);
           return;
         }
-        list.innerHTML = posts.map(p => `
-          <a class="card post-card" href="post.html?p=${encodeURIComponent(p.slug)}">
-            <div class="post-top">
-              ${catLinkHtml(p.category)}
-              <span class="post-meta">${fmtDate(p.date)}</span>
-              ${p.status && p.status !== 'published' ? `<span class="status-badge">${STATUS[p.status] || p.status}</span>` : ''}
-            </div>
-            <h2>${p.title}</h2>
-            <p>${p.summary || ''}</p>
-            ${p.tags && p.tags.length ? `<div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
-          </a>`).join('');
+        list.innerHTML = posts.map(postCardHtml).join('');
       }
+    }
+
+    function emptyHtml(posts) {
+      if (!ALL_POSTS.length) {
+        return '<div class="empty card">还没有文章，第一篇正在路上。</div>';
+      }
+      return `<div class="empty card">没有匹配的文章。
+        <span class="hint">试试换个关键词，或者清空筛选条件。</span>
+        <button type="button" id="resetFilters">清空筛选</button>
+      </div>`;
+    }
+    function bindEmptyReset(container) {
+      const btn = container.querySelector('#resetFilters');
+      if (btn) btn.addEventListener('click', () => {
+        state.cat = 'all'; state.tag = null; state.thread = null; state.q = '';
+        const input = document.getElementById('searchInput');
+        input.value = '';
+        document.getElementById('searchWrap').classList.remove('has-value');
+        render();
+      });
     }
 
     function render() {
       renderCatBar();
-      renderTagBar();
+      renderTagGroups();
+      renderThreads();
       renderList();
-      const btn = document.getElementById('archiveToggle');
-      btn.classList.toggle('active', state.archive);
-      btn.setAttribute('aria-pressed', String(state.archive));
+      const isArchive = state.view === 'archive';
+      document.getElementById('listView').classList.toggle('active', !isArchive);
+      document.getElementById('listView').setAttribute('aria-pressed', String(!isArchive));
+      document.getElementById('archiveView').classList.toggle('active', isArchive);
+      document.getElementById('archiveView').setAttribute('aria-pressed', String(isArchive));
       syncUrl();
+    }
+
+    /* ---------------- loading ---------------- */
+    async function loadJSON(url, fallback) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(url);
+        return await res.json();
+      } catch (err) {
+        console.warn('[blog] optional file missing:', url);
+        return fallback;
+      }
     }
 
     async function loadPosts() {
@@ -591,12 +769,29 @@
         ALL_POSTS = await res.json();
         ALL_POSTS.sort((a, b) => (a.date < b.date ? 1 : -1));
 
+        const [threads, topics] = await Promise.all([
+          loadJSON('posts/threads.json', []),
+          loadJSON('posts/topics.json', { groups: [], fallback: { label: '其他' } })
+        ]);
+        THREADS = Array.isArray(threads) ? threads : [];
+        TAG_GROUPS = Array.isArray(topics.groups) ? topics.groups : [];
+        FALLBACK_LABEL = (topics.fallback && topics.fallback.label) || '其他';
+
         const params = new URLSearchParams(location.search);
         const cat = params.get('cat');
         if (cat && (cat === 'all' || CATEGORIES[cat])) state.cat = cat;
         const tag = params.get('tag');
         if (tag) state.tag = tag;
-        if (params.get('view') === 'archive') state.archive = true;
+        const thread = params.get('thread');
+        if (thread) state.thread = thread;
+        const q = params.get('q');
+        if (q) {
+          state.q = q;
+          const input = document.getElementById('searchInput');
+          input.value = q;
+          document.getElementById('searchWrap').classList.add('has-value');
+        }
+        if (params.get('view') === 'archive') state.view = 'archive';
 
         if (!ALL_POSTS.length) {
           list.innerHTML = '<div class="empty card">还没有文章，第一篇正在路上。</div>';
@@ -609,13 +804,33 @@
       }
     }
 
-    document.getElementById('archiveToggle').addEventListener('click', () => {
-      state.archive = !state.archive;
+    /* ---------------- search & view controls ---------------- */
+    const searchInput = document.getElementById('searchInput');
+    const searchWrap = document.getElementById('searchWrap');
+    let searchTimer = null;
+
+    searchInput.addEventListener('input', () => {
+      searchWrap.classList.toggle('has-value', !!searchInput.value);
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        state.q = searchInput.value;
+        render();
+      }, 140);
+    });
+    searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { searchInput.value = ''; state.q = ''; searchWrap.classList.remove('has-value'); render(); }
+    });
+    document.getElementById('searchClear').addEventListener('click', () => {
+      searchInput.value = ''; state.q = '';
+      searchWrap.classList.remove('has-value');
+      searchInput.focus();
       render();
     });
 
-    loadPosts();
+    document.getElementById('listView').addEventListener('click', () => { state.view = 'list'; render(); });
+    document.getElementById('archiveView').addEventListener('click', () => { state.view = 'archive'; render(); });
 
+    loadPosts();
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
