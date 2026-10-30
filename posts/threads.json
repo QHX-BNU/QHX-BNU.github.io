@@ -3,6 +3,20 @@
     "id": "agent-trace-eval",
     "title": "Agent Trace 与评测",
     "desc": "从单条 Trace 里的噪声，到跨天聚类暴露出来的系统性缺陷。",
-    "tags": ["Agent", "Trace", "Evaluation"]
+    "tags": [
+      "Agent",
+      "Trace",
+      "Evaluation"
+    ]
+  },
+  {
+    "id": "llm-foundations",
+    "title": "LLM 基础组件",
+    "desc": "从优化器的更新几何到残差连接的信息流，理解大模型训练与架构的两个基础杠杆。",
+    "tags": [
+      "LLM",
+      "训练",
+      "系统设计"
+    ]
   }
 ]

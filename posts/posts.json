@@ -1,5 +1,35 @@
 [
   {
+    "slug": "from-adam-adamw-to-muon",
+    "title": "从 Adam、AdamW 到 Muon：优化器到底在优化什么",
+    "date": "2026-10-31",
+    "category": "notes",
+    "status": "published",
+    "thread": "llm-foundations",
+    "tags": [
+      "LLM",
+      "训练",
+      "优化器",
+      "Muon"
+    ],
+    "summary": "从 SGD、Momentum、Adam 的逐参数自适应，到 AdamW 的解耦权重衰减，再到 Muon 对二维动量矩阵做近似正交化：沿着优化器状态、更新几何和显存代价，理解三代优化器的取舍。"
+  },
+  {
+    "slug": "from-resnet-hyper-connections-to-mhc",
+    "title": "从 ResNet、Hyper-Connections 到 mHC：残差连接为何不断加宽又被约束",
+    "date": "2026-10-31",
+    "category": "notes",
+    "status": "published",
+    "thread": "llm-foundations",
+    "tags": [
+      "LLM",
+      "系统设计",
+      "残差连接",
+      "mHC"
+    ],
+    "summary": "从 ResNet 的恒等 shortcut，到 Hyper-Connections 的多残差流学习式混合，再到 mHC 用双随机矩阵和 Sinkhorn 投影约束深层传播：理解表达能力与数值稳定性之间的反复权衡。"
+  },
+  {
     "slug": "gae-from-td-residual-to-advantage",
     "title": "从 TD 残差到 GAE：优势估计的两条主线",
     "date": "2026-10-31",
