@@ -636,5 +636,99 @@
     loadPost();
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
+
+  <canvas id="fxField" style="position:fixed;inset:0;z-index:-1;pointer-events:none" aria-hidden="true"></canvas>
+  <script>
+    (function () {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+      /* 3D card tilt — delegation so dynamically rendered cards work too */
+      if (finePointer && !reduced) {
+        document.addEventListener('pointerover', e => {
+          const card = e.target.closest && e.target.closest('.card');
+          if (card) { card.style.transition = 'transform .16s ease-out'; card.style.willChange = 'transform'; }
+        });
+        document.addEventListener('pointermove', e => {
+          const card = e.target.closest && e.target.closest('.card');
+          if (!card) return;
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - .5;
+          const py = (e.clientY - r.top) / r.height - .5;
+          card.style.transform = `perspective(950px) rotateX(${(-py * 7).toFixed(2)}deg) rotateY(${(px * 9).toFixed(2)}deg) translateY(-4px)`;
+        }, { passive: true });
+        document.addEventListener('pointerout', e => {
+          const card = e.target.closest && e.target.closest('.card');
+          if (!card || (e.relatedTarget && card.contains(e.relatedTarget))) return;
+          card.style.transition = 'transform .55s cubic-bezier(.22,.61,.36,1)';
+          card.style.transform = '';
+        });
+      }
+
+      /* ambient depth field + grid parallax */
+      const canvas = document.getElementById('fxField');
+      if (!canvas || reduced) return;
+      const ctx = canvas.getContext('2d');
+      const rootEl = document.documentElement;
+      let colors = ['#6ea8fe', '#b98cf5', '#5eead4'];
+      function refreshColors() {
+        const cs = getComputedStyle(rootEl);
+        colors = ['--accent', '--accent-2', '--accent-3'].map(k => cs.getPropertyValue(k).trim() || '#6ea8fe');
+      }
+      refreshColors();
+      new MutationObserver(refreshColors).observe(rootEl, { attributes: true, attributeFilter: ['data-theme'] });
+
+      let w = 0, h = 0, dpr = 1;
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = canvas.width = Math.floor(innerWidth * dpr);
+        h = canvas.height = Math.floor(innerHeight * dpr);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const parts = [];
+      for (let i = 0; i < 64; i++) {
+        parts.push({ x: Math.random() * 2 - 1, y: Math.random() * 2 - 1, z: Math.random() * .9 + .1, s: Math.random() * .7 + .3, c: i % 3 });
+      }
+
+      let mx = 0, my = 0, tx = 0, ty = 0;
+      if (finePointer) {
+        window.addEventListener('pointermove', e => {
+          mx = (e.clientX / innerWidth - .5) * 2;
+          my = (e.clientY / innerHeight - .5) * 2;
+        }, { passive: true });
+      }
+
+      const grid = document.querySelector('.grid-layer');
+      let last = performance.now();
+      function frame(now) {
+        const dt = Math.min((now - last) / 1000, .05);
+        last = now;
+        tx += (mx - tx) * .04;
+        ty += (my - ty) * .04;
+        if (grid) grid.style.transform = `translate3d(${(-tx * 14).toFixed(1)}px, ${(-ty * 10).toFixed(1)}px, 0)`;
+
+        ctx.clearRect(0, 0, w, h);
+        for (const p of parts) {
+          p.z -= dt * .028 * p.s;
+          if (p.z < .09) { p.z = 1; p.x = Math.random() * 2 - 1; p.y = Math.random() * 2 - 1; }
+          const inv = 1 / p.z;
+          const sx = w * .5 + p.x * inv * w * .22 + tx * 46 * (1 - p.z) * dpr;
+          const sy = h * .5 + p.y * inv * h * .22 + ty * 34 * (1 - p.z) * dpr;
+          if (sx < -20 || sx > w + 20 || sy < -20 || sy > h + 20) continue;
+          const r = Math.min(3, .5 + (1 - p.z) * 2.2) * dpr * p.s;
+          ctx.globalAlpha = Math.min(.55, .1 + (1 - p.z) * .45);
+          ctx.fillStyle = colors[p.c];
+          ctx.beginPath();
+          ctx.arc(sx, sy, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(frame);
+      }
+      frame(performance.now());
+    })();
+  </script>
 </body>
 </html>
