@@ -282,65 +282,13 @@
     .post-nav .t { font-weight: 700; letter-spacing: -.02em; font-size: 15.5px }
 
     /* ============================================================
-       Comments (via GitHub PR)
+       Comments (giscus · GitHub Discussions)
        ============================================================ */
     .comments { margin: 46px 0 40px }
     .comments-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px }
     .comments-head h2 { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -.04em }
-    .comments-head .n { color: var(--faint); font: 600 12px/1 var(--mono) }
     .comments-note { margin: 0 0 20px; color: var(--faint); font-size: 12.5px; line-height: 1.8 }
-    .comments-empty { padding: 26px 0; color: var(--faint); font-size: 13px }
-    .comment { padding: 20px 0 14px; border-top: 1px solid var(--line) }
-    .comment-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px }
-    .comment-avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); background: var(--glass-2) }
-    .comment-author { font-weight: 700; font-size: 13.5px }
-    .comment-date { color: var(--faint); font: 500 11px/1 var(--mono) }
-    .comment-body { font-size: 14px; line-height: 1.8; color: var(--text-soft) }
-    .comment-body p { margin: 0 0 .6em }
-    .comment-body p:last-child { margin-bottom: 0 }
-    .comment-body code { font-family: var(--mono); font-size: .88em; padding: 1px 6px; border-radius: 6px; background: var(--glass-2) }
-    .comment-body pre { padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-3); overflow-x: auto }
-    .comment-body pre code { padding: 0; background: none }
-    .comment-body a { color: var(--accent) }
-    .comment-reply-btn {
-      margin-top: 8px; padding: 3px 0; border: 0; background: none;
-      color: var(--faint); font: 600 11.5px/1 var(--font); cursor: pointer;
-      transition: color .18s var(--ease);
-    }
-    .comment-reply-btn:hover { color: var(--accent) }
-    .comment-replies { margin-left: 14px; padding-left: 20px; border-left: 2px solid var(--line) }
-    .comment-form {
-      margin-top: 28px; padding: 24px;
-      border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--glass);
-    }
-    .comment-form h3 { margin: 0 0 14px; font-size: 15.5px; letter-spacing: -.02em }
-    .comment-form input, .comment-form textarea {
-      width: 100%; padding: 11px 14px;
-      border: 1px solid var(--line); border-radius: 12px;
-      background: color-mix(in srgb, var(--bg-3) 70%, transparent);
-      color: var(--text); font: 500 13.5px/1.6 var(--font); outline: none;
-      transition: border-color .18s var(--ease);
-    }
-    .comment-form input:focus, .comment-form textarea:focus { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)) }
-    .comment-form textarea { min-height: 110px; resize: vertical; margin-top: 10px }
-    .comment-form .row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 16px }
-    .comment-submit {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 11px 18px; border: 0; border-radius: 999px;
-      background: linear-gradient(120deg, var(--accent), var(--accent-2));
-      color: var(--accent-ink); font: 600 13px/1 var(--font); cursor: pointer; white-space: nowrap;
-      transition: filter .18s var(--ease);
-    }
-    .comment-submit:hover { filter: brightness(1.07) }
-    html[data-theme="paper"] .comment-submit { color: #fff }
-    .comment-hint { flex: 1; min-width: 220px; color: var(--faint); font-size: 11.5px; line-height: 1.7 }
-    .replying-to { display: none; margin-top: 14px; align-items: center; gap: 12px; font-size: 12px; color: var(--muted) }
-    .replying-to.show { display: flex }
-    .replying-to button {
-      padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px;
-      background: transparent; color: var(--muted); font: 600 11px/1 var(--font); cursor: pointer;
-    }
-    .replying-to button:hover { color: var(--text) }
+    .giscus { min-height: 160px }
 
     .empty { padding: 80px 26px; text-align: center; color: var(--muted); font-size: 14px }
 
@@ -433,24 +381,9 @@
       </section>
 
       <section class="comments" id="comments">
-        <div class="comments-head">
-          <h2>评论</h2><span class="n" id="commentCount"></span>
-        </div>
-        <p class="comments-note">评论通过 GitHub Pull Request 提交：每条评论是仓库里的一个 JSON 文件，合并后显示在这里，可回复、可追溯。</p>
-        <div id="commentList"><div class="comments-empty">正在加载评论…</div></div>
-        <form class="comment-form" id="commentForm" onsubmit="return false">
-          <h3>写下你的评论</h3>
-          <input id="commentAuthor" type="text" placeholder="GitHub 用户名（用于署名和头像，可留空）" autocomplete="off" />
-          <textarea id="commentText" placeholder="支持 Markdown：代码、链接、列表、引用…"></textarea>
-          <div class="replying-to" id="replyingTo">
-            <span>正在回复 <b id="replyingName"></b></span>
-            <button type="button" id="cancelReply">取消回复</button>
-          </div>
-          <div class="row">
-            <button class="comment-submit" id="commentSubmit" type="button">通过 PR 提交评论 <span aria-hidden="true">↗</span></button>
-            <span class="comment-hint" id="commentHint">将跳转到 GitHub 新建文件页面，点击 Propose new file 即创建 PR，博主合并后评论公开显示。</span>
-          </div>
-        </form>
+        <div class="comments-head"><h2>评论</h2></div>
+        <p class="comments-note">用 GitHub 账号登录后直接发表评论，支持回复与表情回应。评论同步保存在仓库的 Discussions 中。</p>
+        <div class="giscus" id="giscusHost"></div>
       </section>
 
       <nav class="post-nav" id="postNav" aria-label="Post navigation"></nav>
@@ -484,6 +417,7 @@
       const meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.setAttribute('content', getComputedStyle(root).getPropertyValue('--bg').trim() || '#07080b');
       if (persist) { try { localStorage.setItem('profile-theme', theme); } catch (e) {} }
+      if (typeof syncGiscusTheme === 'function') syncGiscusTheme();
     }
 
     const urlTheme = new URLSearchParams(location.search).get('theme');
@@ -646,7 +580,7 @@
       document.getElementById('postTags').innerHTML = (post.tags || [])
         .map(t => `<a class="tag" href="blog.html?tag=${encodeURIComponent(t)}">${escHtml(t)}</a>`).join('');
       document.getElementById('postBody').innerHTML = renderMarkdown(md);
-      loadComments(slug);
+      mountGiscus(slug);
 
       renderThread(post, posts, threads);
       renderRelated(post, posts);
@@ -716,133 +650,50 @@
         </a>`).join('');
     }
 
-    /* ---------------- comments via GitHub PR ---------------- */
-    const REPO = 'QHX-BNU/QHX-BNU.github.io';
-    let currentSlug = null;
-    let replyTo = null;
+    /* ---------------- comments (giscus) ---------------- */
+    const GISCUS = {
+      repo: 'QHX-BNU/QHX-BNU.github.io',
+      repoId: 'R_kgDOSPqMlA',
+      category: 'Announcements',
+      categoryId: 'DIC_kwDOSPqMlM4DJ-5h'
+    };
 
-    function fmtCommentDate(iso) {
-      const d = new Date(iso);
-      return isNaN(d) ? String(iso || '') : d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+    function giscusTheme() {
+      return document.documentElement.dataset.theme === 'paper' ? 'light' : 'dark';
     }
 
-    async function loadComments(slug) {
-      currentSlug = slug;
-      const list = document.getElementById('commentList');
-      let files;
-      try {
-        const res = await fetch(`https://api.github.com/repos/${REPO}/contents/comments/${encodeURIComponent(slug)}`);
-        if (res.status === 404) {
-          list.innerHTML = '<div class="comments-empty">还没有评论，来抢沙发。</div>';
-          return;
-        }
-        if (!res.ok) throw new Error('comments api ' + res.status);
-        files = await res.json();
-      } catch (err) {
-        list.innerHTML = '<div class="comments-empty">评论加载失败，请刷新重试。</div>';
-        console.warn('[comments]', err.message);
-        return;
-      }
-
-      const jsonFiles = files.filter(f => f.name.endsWith('.json'));
-      if (!jsonFiles.length) {
-        list.innerHTML = '<div class="comments-empty">还没有评论，来抢沙发。</div>';
-        return;
-      }
-
-      const comments = (await Promise.all(jsonFiles.map(async f => {
-        try {
-          const r = await fetch(f.download_url);
-          if (!r.ok) throw new Error('comment file');
-          const data = await r.json();
-          return {
-            id: f.name,
-            author: String(data.author || 'guest'),
-            date: String(data.date || ''),
-            reply_to: data.reply_to ? String(data.reply_to) : null,
-            text: String(data.text || '')
-          };
-        } catch (err) { return null; }
-      }))).filter(Boolean);
-
-      comments.sort((a, b) => (a.id < b.id ? -1 : 1));
-      renderComments(comments);
+    function syncGiscusTheme() {
+      const frame = document.querySelector('iframe.giscus-frame');
+      if (!frame) return;
+      frame.contentWindow.postMessage({ giscus: { setConfig: { theme: giscusTheme() } } }, 'https://giscus.app');
     }
 
-    function commentHtml(c) {
-      const avatar = 'https://github.com/' + encodeURIComponent(c.author) + '.png?size=56';
-      return `<div class="comment" id="c-${escHtml(c.id)}">
-        <div class="comment-head">
-          <img class="comment-avatar" src="${avatar}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
-          <span class="comment-author">${escHtml(c.author)}</span>
-          <span class="comment-date">${escHtml(fmtCommentDate(c.date))}</span>
-        </div>
-        <div class="comment-body">${renderMarkdown(c.text)}</div>
-        <button class="comment-reply-btn" type="button" data-reply="${escHtml(c.id)}" data-author="${escHtml(c.author)}">回复</button>
-      </div>`;
-    }
-
-    function renderComments(comments) {
-      const byId = new Map(comments.map(c => [c.id, c]));
-      const roots = [];
-      const children = {};
-      comments.forEach(c => {
-        let root = c;
-        const seen = new Set();
-        while (root.reply_to && byId.has(root.reply_to) && !seen.has(root.id)) {
-          seen.add(root.id);
-          root = byId.get(root.reply_to);
-        }
-        if (root === c) roots.push(c);
-        else (children[root.id] || (children[root.id] = [])).push(c);
-      });
-
-      document.getElementById('commentList').innerHTML = roots.map(c =>
-        commentHtml(c) +
-        (children[c.id] ? `<div class="comment-replies">${children[c.id].map(commentHtml).join('')}</div>` : '')
-      ).join('');
-      document.getElementById('commentCount').textContent = comments.length + ' 条';
-
-      document.querySelectorAll('[data-reply]').forEach(b => b.addEventListener('click', () => {
-        startReply(b.dataset.reply, b.dataset.author);
-      }));
-    }
-
-    function startReply(id, author) {
-      replyTo = id;
-      document.getElementById('replyingName').textContent = author + ' 的评论';
-      document.getElementById('replyingTo').classList.add('show');
-      document.getElementById('commentText').focus();
-    }
-
-    document.getElementById('cancelReply').addEventListener('click', () => {
-      replyTo = null;
-      document.getElementById('replyingTo').classList.remove('show');
-    });
-
-    document.getElementById('commentSubmit').addEventListener('click', () => {
-      const text = document.getElementById('commentText').value.trim();
-      if (!text) { document.getElementById('commentText').focus(); return; }
-      if (!currentSlug) return;
-
-      const rawAuthor = document.getElementById('commentAuthor').value.trim();
-      const author = rawAuthor.replace(/[^a-zA-Z0-9-]/g, '') || 'guest';
-      const now = new Date();
-      const stamp = now.toISOString().replace(/[:.]/g, '-');
-      const filename = `${stamp}-${author}.json`;
-      const payload = {
-        author,
-        date: now.toISOString(),
-        reply_to: replyTo,
-        text
+    function mountGiscus(slug) {
+      const host = document.getElementById('giscusHost');
+      if (!host || host.dataset.mounted) return;
+      host.dataset.mounted = '1';
+      const s = document.createElement('script');
+      s.src = 'https://giscus.app/client.js';
+      s.async = true;
+      s.crossOrigin = 'anonymous';
+      const cfg = {
+        'data-repo': GISCUS.repo,
+        'data-repo-id': GISCUS.repoId,
+        'data-category': GISCUS.category,
+        'data-category-id': GISCUS.categoryId,
+        'data-mapping': 'specific',
+        'data-term': slug,
+        'data-strict': '1',
+        'data-reactions-enabled': '1',
+        'data-emit-metadata': '0',
+        'data-input-position': 'top',
+        'data-theme': giscusTheme(),
+        'data-lang': 'zh-CN',
+        'data-loading': 'lazy'
       };
-      const value = JSON.stringify(payload, null, 2) + '\n';
-      const url = `https://github.com/${REPO}/new/main/comments/${encodeURIComponent(currentSlug)}`
-        + `?filename=${encodeURIComponent(filename)}&value=${encodeURIComponent(value)}`;
-      window.open(url, '_blank', 'noopener');
-      document.getElementById('commentHint').textContent =
-        '已在 GitHub 打开新标签页：登录后点击 Propose new file 创建 PR，博主合并后评论即显示在下方。';
-    });
+      Object.entries(cfg).forEach(([k, v]) => s.setAttribute(k, v));
+      host.appendChild(s);
+    }
 
     loadPost();
     document.getElementById('year').textContent = new Date().getFullYear();
