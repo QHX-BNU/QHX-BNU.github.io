@@ -10,18 +10,19 @@
 
 强化学习优化的不是某一次轨迹的得分，而是策略的期望累积回报。设策略为 `π_θ`，轨迹为 `τ`，目标是
 
-```text
-J_γ(θ) = E_{τ∼p_θ}[ Σ_{t=0}^{T-1} γ^t r_t ]
+```math
+J_\gamma(\theta)=\mathbb{E}_{\tau\sim p_\theta}\left[\sum_{t=0}^{T-1}\gamma^t r_t\right]
 ```
 
 其中 `γ` 既决定不同延迟奖励的权重，也定义了后面价值函数所对应的折扣目标。为了评价「在某个状态下采取某个动作到底好不好」，定义
 
-```text
-G_t^γ = Σ_{l=0}^{T-t-1} γ^l r_{t+l}
-
-V^π(s) = E_π[ G_t^γ | s_t = s ]
-Q^π(s,a) = E_π[ G_t^γ | s_t = s, a_t = a ]
-A^π(s,a) = Q^π(s,a) - V^π(s)
+```math
+\begin{aligned}
+G_t^\gamma &= \sum_{l=0}^{T-t-1}\gamma^l r_{t+l}\\
+V^\pi(s) &= \mathbb{E}_\pi[G_t^\gamma\mid s_t=s]\\
+Q^\pi(s,a) &= \mathbb{E}_\pi[G_t^\gamma\mid s_t=s,a_t=a]\\
+A^\pi(s,a) &= Q^\pi(s,a)-V^\pi(s)
+\end{aligned}
 ```
 
 可以这样理解：
@@ -32,15 +33,17 @@ A^π(s,a) = Q^π(s,a) - V^π(s)
 
 优势不是「即时奖励」，也不是「相对最优动作差多少」。它比较的是**同一个状态下，这个动作与当前策略的平均表现**。因此，在当前策略下对动作取期望，优势的期望为零：
 
-```text
-E_{a∼π(·|s)}[ A^π(s,a) ] = 0
+```math
+\mathbb{E}_{a\sim\pi(\cdot\mid s)}[A^\pi(s,a)]=0
 ```
 
 策略梯度的核心，就是用「动作概率的对数梯度」乘以一个评价信号：
 
-```text
-∇J_γ(θ)
-= E[ Σ_t γ^t ∇log π_θ(a_t|s_t) · (G_t^γ - b(s_t)) ]
+```math
+\begin{aligned}
+\nabla J_\gamma(\theta)
+&=\mathbb{E}\left[\sum_t\gamma^t\nabla\log\pi_\theta(a_t\mid s_t)\,(G_t^\gamma-b(s_t))\right]
+\end{aligned}
 ```
 
 这里的 `b(s_t)` 是 baseline。为什么可以减掉它？这就是理解 GAE 之前必须先过的一关。
@@ -49,23 +52,24 @@ E_{a∼π(·|s)}[ A^π(s,a) ] = 0
 
 对固定状态 `s`，策略的 score 有一个重要性质：
 
-```text
-E_{a∼π_θ(·|s)}[ ∇log π_θ(a|s) ] = 0
+```math
+\mathbb{E}_{a\sim\pi_\theta(\cdot\mid s)}[\nabla\log\pi_\theta(a\mid s)]=0
 ```
 
 因为
 
-```text
-Σ_a π_θ(a|s) ∇log π_θ(a|s)
-= ∇ Σ_a π_θ(a|s)
-= ∇1
-= 0
+```math
+\begin{aligned}
+\sum_a\pi_\theta(a\mid s)\nabla\log\pi_\theta(a\mid s)
+&=\nabla\sum_a\pi_\theta(a\mid s)\\
+&=\nabla 1=0
+\end{aligned}
 ```
 
 所以，只要 `b(s)` 在给定状态后不依赖当前采样动作，就有
 
-```text
-E[ ∇log π_θ(a|s) · b(s) | s ] = 0
+```math
+\mathbb{E}[\nabla\log\pi_\theta(a\mid s)\,b(s)\mid s]=0
 ```
 
 减去 baseline 不会改变梯度的期望，却可能改变它的方差。这和「对一组奖励减同一个常数，奖励方差不变」并不矛盾：策略梯度用的是 `score × 奖励` 这个乘积，而不是单独的奖励。`score` 会随动作变化，奖励也往往与动作相关，两者存在统计关联，减去 `b(s) · score` 就可能抵消一部分波动。
@@ -93,14 +97,14 @@ E[ ∇log π_θ(a|s) · b(s) | s ] = 0
 
 蒙特卡洛方法直接用完整回报 `G_t` 估计优势：
 
-```text
-Â_t = G_t^γ - V(s_t)
+```math
+\hat A_t=G_t^\gamma-V(s_t)
 ```
 
 它保留了完整实际奖励，但一条轨迹后面的随机因素太多，梯度噪声可能很大。另一个极端是只用一步实际转移，然后用价值函数预测未来：
 
-```text
-δ_t = r_t + γ V(s_{t+1}) - V(s_t)
+```math
+\delta_t=r_t+\gamma V(s_{t+1})-V(s_t)
 ```
 
 `δ_t` 叫 TD 残差，可以读成：
@@ -109,22 +113,24 @@ E[ ∇log π_θ(a|s) · b(s) | s ] = 0
 
 如果 `V` 正好等于真实价值 `V^π`，由 Bellman 等式，
 
-```text
-E[ δ_t | s_t, a_t ]
-= Q^π(s_t,a_t) - V^π(s_t)
-= A^π(s_t,a_t)
+```math
+\begin{aligned}
+\mathbb{E}[\delta_t\mid s_t,a_t]
+&=Q^\pi(s_t,a_t)-V^\pi(s_t)\\
+&=A^\pi(s_t,a_t)
+\end{aligned}
 ```
 
 也就是说，**价值函数精确时，一步 TD 残差已经可以无偏估计当前动作的优势**。它不是「必须等到最后才知道结果」；价值函数已经把这个动作的未来影响压缩进了 `V(s_{t+1})`。
 
 现实中的 `V` 通常不精确。此时只看一步会过度依赖当前预测；多看几步实际奖励，可以修正价值误差。于是有了 k 步优势估计：
 
-```text
-Â_t^(k)
-= Σ_{l=0}^{k-1} γ^l δ_{t+l}^V
-= Σ_{l=0}^{k-1} γ^l r_{t+l}
-  + γ^k V(s_{t+k})
-  - V(s_t)
+```math
+\begin{aligned}
+\hat A_t^{(k)}
+&=\sum_{l=0}^{k-1}\gamma^l\delta_{t+l}^V\\
+&=\sum_{l=0}^{k-1}\gamma^l r_{t+l}+\gamma^k V(s_{t+k})-V(s_t)
+\end{aligned}
 ```
 
 第二行来自望远镜消去：中间那些 `γV` 项会相互抵消。`k=1` 时它退化成 TD 残差；`k` 接近完整回合时，它接近「蒙特卡洛回报减 baseline」。不同的 `k` 就是在「更相信实际采样」与「更早相信价值预测」之间移动。
@@ -133,29 +139,31 @@ E[ δ_t | s_t, a_t ]
 
 GAE 不固定选择一个 `k`，而是把所有 k 步估计按几何权重混合：
 
-```text
-Â_t^GAE(γ,λ)
-= (1-λ) Σ_{k=1}^{∞} λ^{k-1} Â_t^(k)
+```math
+\hat A_t^{\mathrm{GAE}(\gamma,\lambda)}
+=(1-\lambda)\sum_{k=1}^{\infty}\lambda^{k-1}\hat A_t^{(k)}
 ```
 
 其中 `0 ≤ λ < 1`。把 k 步估计展开后，某个残差 `δ_{t+l}` 会出现在所有 `k ≥ l+1` 的估计里，它的总系数是
 
-```text
-(1-λ) γ^l Σ_{k=l+1}^{∞} λ^{k-1}
-= (γλ)^l
+```math
+\begin{aligned}
+&(1-\lambda)\gamma^l\sum_{k=l+1}^{\infty}\lambda^{k-1}\\
+&=(\gamma\lambda)^l
+\end{aligned}
 ```
 
 因此得到最常见的 GAE 形式：
 
-```text
-Â_t^GAE(γ,λ)
-= Σ_{l=0}^{∞} (γλ)^l δ_{t+l}^V
+```math
+\hat A_t^{\mathrm{GAE}(\gamma,\lambda)}
+=\sum_{l=0}^{\infty}(\gamma\lambda)^l\delta_{t+l}^V
 ```
 
 实际实现只需要从后往前递推：
 
-```text
-Â_t = δ_t + γλ Â_{t+1}
+```math
+\hat A_t=\delta_t+\gamma\lambda\hat A_{t+1}
 ```
 
 真正终止时令 `Â_T = 0`。如果有时间上限截断而不是环境终止，需要单独处理 bootstrap；不能把「截断」与「终止」混为一谈。
@@ -164,15 +172,17 @@ GAE 不固定选择一个 `k`，而是把所有 k 步估计按几何权重混合
 
 把归一化权重写成
 
-```text
-w_k = (1-λ) λ^{k-1}
+```math
+w_k=(1-\lambda)\lambda^{k-1}
 ```
 
 它可以看成一个几何分布：以概率 `1-λ` 停止增加实际步数，以概率 `λ` 再多看一步。若随机步长为 `K`，则
 
-```text
-E[K] = 1 / (1-λ)
-P(K ≥ k) = λ^{k-1}
+```math
+\begin{aligned}
+\mathbb{E}[K]&=\frac{1}{1-\lambda}\\
+\Pr(K\ge k)&=\lambda^{k-1}
+\end{aligned}
 ```
 
 例如 `λ=0.95` 时，一步估计的单项权重只有 `0.05`，但平均会混合 `20` 步，而且 `k≥20` 的尾部总权重约为 `0.377`。所以：
@@ -183,10 +193,12 @@ P(K ≥ k) = λ^{k-1}
 
 如果距离真正终止还有 `N=T-t` 步，有限回合的混合不能简单截断成 `(1-λ)Σ_{k=1}^{N} λ^{k-1}`，否则权重之和不足 1。最后一项要接住剩余的全部权重：
 
-```text
-Â_t^GAE
-= (1-λ) Σ_{k=1}^{N-1} λ^{k-1} Â_t^(k)
-  + λ^{N-1} Â_t^(N)
+```math
+\begin{aligned}
+\hat A_t^{\mathrm{GAE}}
+&=(1-\lambda)\sum_{k=1}^{N-1}\lambda^{k-1}\hat A_t^{(k)}
++\lambda^{N-1}\hat A_t^{(N)}
+\end{aligned}
 ```
 
 这是实现和推导时很容易漏掉的一个细节。`λ=1` 可以直接由残差和定义，也可以理解为有限混合在边界上的极限；但不能把无限和中的 `(1-λ)` 单独代成零。
@@ -195,37 +207,41 @@ P(K ≥ k) = λ^{k-1}
 
 这是我觉得最有解释力的一步。定义塑形奖励
 
-```text
-r̃_t = r_t + γ V(s_{t+1}) - V(s_t)
+```math
+\tilde r_t=r_t+\gamma V(s_{t+1})-V(s_t)
 ```
 
 它恰好就是 TD 残差：
 
-```text
-r̃_t = δ_t^V
+```math
+\tilde r_t=\delta_t^V
 ```
 
 于是 GAE 可以改写成
 
-```text
-Â_t^GAE(γ,λ)
-= Σ_{l=0}^{T-t-1} (γλ)^l r̃_{t+l}
+```math
+\hat A_t^{\mathrm{GAE}(\gamma,\lambda)}
+=\sum_{l=0}^{T-t-1}(\gamma\lambda)^l\tilde r_{t+l}
 ```
 
 右边是什么？就是**沿一条实际轨迹，对塑形奖励 `r̃` 做 `γλ` 折扣后得到的蒙特卡洛回报**。
 
 所以，GAE 并不只有在 `λ=1` 时才是蒙特卡洛估计。对任意 `λ`，它都可以被解释为「先对奖励做价值塑形，再用 `γλ` 做折扣的轨迹回报」。`λ=1` 的特殊之处，是这时还有进一步的化简：
 
-```text
-Σ_{l=0}^{N-1} γ^l r̃_{t+l}
-= G_t^γ - V(s_t) + γ^N V(s_T)
+```math
+\begin{aligned}
+\sum_{l=0}^{N-1}\gamma^l\tilde r_{t+l}
+&=G_t^\gamma-V(s_t)+\gamma^N V(s_T)
+\end{aligned}
 ```
 
 在真正终止且 `V(s_T)=0` 时，
 
-```text
-Â_t^GAE(γ,1)
-= G_t^γ - V(s_t)
+```math
+\begin{aligned}
+\hat A_t^{\mathrm{GAE}(\gamma,1)}
+&=G_t^\gamma-V(s_t)
+\end{aligned}
 ```
 
 也就是「原始奖励的完整折扣回报减去 baseline」。
@@ -234,21 +250,21 @@ r̃_t = δ_t^V
 
 如果 `V=V^π` 且动作按当前策略采样，那么当前状态的残差期望是优势：
 
-```text
-E[ δ_t | s_t, a_t ] = A^π(s_t,a_t)
+```math
+\mathbb{E}[\delta_t\mid s_t,a_t]=A^\pi(s_t,a_t)
 ```
 
 而对所有后续时刻 `l≥1`，后续动作重新按策略采样，由迭代期望可得
 
-```text
-E[ δ_{t+l} | s_t, a_t ] = 0
+```math
+\mathbb{E}[\delta_{t+l}\mid s_t,a_t]=0
 ```
 
 因此，在有限回合中（或无穷和满足可积条件时），只要价值函数精确，无论 `λ` 取多少，
 
-```text
-E[ Σ_l (γλ)^l δ_{t+l} | s_t, a_t ]
-= A^π(s_t,a_t)
+```math
+\mathbb{E}\left[\sum_l(\gamma\lambda)^l\delta_{t+l}\mid s_t,a_t\right]
+=A^\pi(s_t,a_t)
 ```
 
 直观上：**精确的价值函数已经把当前动作的长期影响压缩进了当前残差；后面的残差在条件均值上不再补充当前动作的优势。** 这就是「塑形后可以更积极地折扣远处信号」的原因。它不是说环境奖励被提前发放了，也不是说每条轨迹上的后续残差都真的为零，而是在条件期望层面成立。
@@ -266,8 +282,8 @@ E[ Σ_l (γλ)^l δ_{t+l} | s_t, a_t ]
 
 即使两个设置的乘积 `γλ` 相同，GAE 通常也不同，因为 TD 残差本身依赖 `γ`：
 
-```text
-δ_t = r_t + γ V(s_{t+1}) - V(s_t)
+```math
+\delta_t=r_t+\gamma V(s_{t+1})-V(s_t)
 ```
 
 例如 `(γ,λ)=(0.99,0.95)` 与 `(0.95,0.99)` 的乘积一样，但它们对应的原始折扣回报和价值目标并不一样，不能互换。
@@ -284,43 +300,43 @@ E[ Σ_l (γλ)^l δ_{t+l} | s_t, a_t ]
 
 考虑三步轨迹，令 `γ=1`，奖励为
 
-```text
-(r_0, r_1, r_2) = (0, 0, 1)
+```math
+(r_0,r_1,r_2)=(0,0,1)
 ```
 
 近似价值为
 
-```text
-(V(s_0), V(s_1), V(s_2), V(s_3)) = (0.4, 0.6, 0.8, 0)
+```math
+(V(s_0),V(s_1),V(s_2),V(s_3))=(0.4,0.6,0.8,0)
 ```
 
 先算 TD 残差：
 
-```text
-δ_0 = 0 + 0.6 - 0.4 = 0.2
-δ_1 = 0 + 0.8 - 0.6 = 0.2
-δ_2 = 1 - 0.8     = 0.2
+```math
+\begin{aligned}
+\delta_0 &= 0+0.6-0.4=0.2\\
+\delta_1 &= 0+0.8-0.6=0.2\\
+\delta_2 &= 1-0.8=0.2
+\end{aligned}
 ```
 
 虽然真实奖励只在最后出现，价值预测的逐步修正让每一步都产生了 0.2 的残差。于是
 
-```text
-Â_0^GAE = 0.2 + 0.2λ + 0.2λ²
+```math
+\hat A_0^{\mathrm{GAE}}=0.2+0.2\lambda+0.2\lambda^2
 ```
 
 取不同的 `λ`：
 
-```text
-λ = 0.0   Â_0 = 0.200   只取当前 TD 残差
-λ = 0.5   Â_0 = 0.350
-λ = 0.9   Â_0 = 0.542
-λ = 1.0   Â_0 = 0.600   完整回报 1.0 减去 baseline 0.4
-```
+- `λ = 0.0`：`Â_0 = 0.200`，只取当前 TD 残差
+- `λ = 0.5`：`Â_0 = 0.350`
+- `λ = 0.9`：`Â_0 = 0.542`
+- `λ = 1.0`：`Â_0 = 0.600`，完整回报 1.0 减去 baseline 0.4
 
 `λ=0.9` 时，有限步长混合的权重是 `(0.1, 0.09, 0.81)`，所以
 
-```text
-0.1×0.2 + 0.09×0.4 + 0.81×0.6 = 0.542
+```math
+0.1\times0.2+0.09\times0.4+0.81\times0.6=0.542
 ```
 
 这和「对塑形奖励 `(0.2,0.2,0.2)` 做 0.9 折扣的回报」完全一致。这个例子说明了 GAE 如何把稀疏终局奖励变成更局部的评价修正，但它不能证明这些价值预测正确，也不能证明 `λ=0.9` 就是最优参数。
@@ -331,17 +347,23 @@ E[ Σ_l (γλ)^l δ_{t+l} | s_t, a_t ]
 
 但不能把这件事说成「λ 越小，方差一定越小」。条件方差的完整形式包含不同时刻残差之间的协方差：
 
-```text
-Var(Â_t | s_t,a_t)
-= Σ_{l,m} (γλ)^{l+m} Cov(δ_{t+l}, δ_{t+m} | s_t,a_t)
+```math
+\begin{aligned}
+\operatorname{Var}(\hat A_t\mid s_t,a_t)
+&=\sum_{l,m}(\gamma\lambda)^{l+m}
+\operatorname{Cov}(\delta_{t+l},\delta_{t+m}\mid s_t,a_t)
+\end{aligned}
 ```
 
 只有在额外条件下，例如 on-policy、价值精确、残差具有鞅差性质时，才能得到更简洁的结论：
 
-```text
-Var(Â_t | s_t,a_t)
-= Var(δ_t | s_t,a_t)
-  + Σ_{l≥1} (γλ)^{2l} E[(δ_{t+l})² | s_t,a_t]
+```math
+\begin{aligned}
+\operatorname{Var}(\hat A_t\mid s_t,a_t)
+&=\operatorname{Var}(\delta_t\mid s_t,a_t)\\
+&\quad+\sum_{l\ge1}(\gamma\lambda)^{2l}
+\mathbb{E}[(\delta_{t+l})^2\mid s_t,a_t]
+\end{aligned}
 ```
 
 即便有了这个结论，它也仍然只是条件优势方差，不能直接等同于完整轨迹梯度方差或最终训练表现。
@@ -360,14 +382,15 @@ PPO 回答的是另一个问题：
 
 PPO-Clip 的常用目标可以写成
 
-```text
-ρ_t(θ) = π_θ(a_t|s_t) / π_old(a_t|s_t)
-
-L^CLIP(θ)
-= E_old[ min(
-    ρ_t(θ) Â_t,
-    clip(ρ_t(θ), 1-ε, 1+ε) Â_t
-  ) ]
+```math
+\begin{aligned}
+\rho_t(\theta)&=\frac{\pi_\theta(a_t\mid s_t)}{\pi_{\mathrm{old}}(a_t\mid s_t)}\\
+L^{\mathrm{CLIP}}(\theta)
+&=\mathbb{E}_{\mathrm{old}}\left[\min\left(
+\rho_t(\theta)\hat A_t,\,
+\operatorname{clip}(\rho_t(\theta),1-\epsilon,1+\epsilon)\hat A_t
+\right)\right]
+\end{aligned}
 ```
 
 当优势为正时，提高动作概率通常有利，但概率比超过上界后，这个样本不再因为继续提高概率而获得额外收益；当优势为负时，降低动作概率通常有利，但低于下界后也不再获得额外收益。
@@ -393,8 +416,8 @@ GAE 和 PPO 也不是绑定的。PPO 的目标本身不要求优势一定来自 
 
 对问题 `q` 采样 `G` 份回答 `o_1,...,o_G`，得到奖励 `R_1,...,R_G`，组均值为 `R̄`，组标准差为 `s_R`。结果监督版本的优势是
 
-```text
-Â_{i,t} = (R_i - R̄) / s_R
+```math
+\hat A_{i,t}=\frac{R_i-\bar R}{s_R}
 ```
 
 并且这个标量会赋给第 `i` 份回答的所有 token。它仍然使用 PPO 风格的裁剪目标，并通常加入相对参考策略的 KL 正则。
@@ -409,8 +432,8 @@ GAE 和 PPO 也不是绑定的。PPO 的目标本身不要求优势一定来自 
 
 如果奖励可以写成「题目难度偏移 + 回答质量差异」：
 
-```text
-R(q,o) = c(q) + u(q,o)
+```math
+R(q,o)=c(q)+u(q,o)
 ```
 
 那么组内中心化会把与题目相关的 `c(q)` 消掉，只保留同一问题下不同回答之间的差异。这样可以避免拿简单题的高分回答和困难题的低分回答直接比较。
@@ -426,16 +449,16 @@ R(q,o) = c(q) + u(q,o)
 
 第一，组均值包含当前样本自己。若只做中心化、暂时忽略标准差、长度权重、裁剪和 KL，固定 `G` 时会得到一个 `(G-1)/G` 的常数缩放。它不一定破坏学习，但不能直接套用「baseline 与当前动作独立」的无偏证明。使用 leave-one-out baseline 会更干净：
 
-```text
-b_{-i} = (1/(G-1)) Σ_{j≠i} R_j
+```math
+b_{-i}=\frac{1}{G-1}\sum_{j\ne i}R_j
 ```
 
 第二，除以组标准差不只是「降方差」。标准差是随机量，又依赖当前回答；在大组近似下，它相当于按问题的奖励离散程度重新加权，会改变不同问题、不同结果样本的更新幅度。它不是对原始期望梯度的简单无偏变换。
 
 第三，全对或全错的组没有相对优势。若单次成功概率为 `p`，组内同时出现成功与失败的概率是
 
-```text
-P_mixed = 1 - p^G - (1-p)^G
+```math
+P_{\mathrm{mixed}}=1-p^G-(1-p)^G
 ```
 
 例如 `G=8` 时，`p=0.01` 只有约 `7.73%` 的组有有效相对信号，而 `p=0.5` 时约为 `99.22%`。所以增加组大小会增加比较机会，但也会消耗更多生成预算。

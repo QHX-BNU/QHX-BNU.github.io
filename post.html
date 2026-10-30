@@ -10,6 +10,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link id="katex-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" crossorigin="anonymous" onerror="this.onerror=null;this.href='https://unpkg.com/katex@0.16.22/dist/katex.min.css'">
+  <script>
+    (() => {
+      const sources = [
+        'https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js',
+        'https://fastly.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js',
+        'https://unpkg.com/katex@0.16.22/dist/katex.min.js'
+      ];
+      let index = 0;
+      const load = () => {
+        if (index >= sources.length) return;
+        const script = document.createElement('script');
+        script.src = sources[index++];
+        script.async = true;
+        script.onerror = load;
+        document.head.appendChild(script);
+      };
+      load();
+    })();
+  </script>
   <style>
     /* ============================================================
        Design tokens (shared with index.html)
@@ -223,6 +243,19 @@
       font-family: var(--mono); font-size: .86em;
       padding: 2px 7px; border-radius: 7px;
       background: var(--glass-2); border: 1px solid var(--line);
+    }
+    .prose .math-block {
+      margin: 0 0 1.4em; padding: 14px 18px;
+      border: 1px solid var(--line); border-radius: var(--r-md);
+      background: color-mix(in srgb, var(--accent) 4%, var(--bg-3) 94%);
+      overflow-x: auto; overflow-y: hidden; text-align: center;
+      color: var(--text);
+    }
+    .prose .math-block .katex-display { margin: .15em 0 }
+    .prose .math-block .katex { font-size: 1.06em }
+    .prose .math-block.math-fallback {
+      text-align: left; white-space: pre-wrap;
+      font: 13px/1.7 var(--mono); color: var(--text-soft);
     }
     .prose pre {
       position: relative; margin: 0 0 1.4em; padding: 20px 22px;
@@ -462,7 +495,11 @@
           i++;
           while (i < lines.length && !/^```/.test(lines[i])) { buf.push(lines[i]); i++; }
           i++;
-          html += '<pre' + (lang ? ' data-lang="' + esc(lang) + '"' : '') + '><code>' + esc(buf.join('\n')) + '</code></pre>';
+          if (lang === 'math') {
+            html += '<div class="math-block">' + esc(buf.join('\n')) + '</div>';
+          } else {
+            html += '<pre' + (lang ? ' data-lang="' + esc(lang) + '"' : '') + '><code>' + esc(buf.join('\n')) + '</code></pre>';
+          }
           continue;
         }
         if (/^###\s+/.test(line)) { html += '<h3>' + inline(line.replace(/^###\s+/, '')) + '</h3>'; i++; continue; }
@@ -494,6 +531,38 @@
         html += '<p>' + buf.map(l => inline(l)).join('<br>') + '</p>';
       }
       return html;
+    }
+
+    function renderMathBlocks(container) {
+      const blocks = Array.from(container.querySelectorAll('.math-block'));
+      if (!blocks.length) return;
+
+      let attempts = 0;
+      const typeset = () => {
+        if (window.katex) {
+          blocks.forEach(el => {
+            const tex = el.textContent;
+            try {
+              window.katex.render(tex, el, {
+                displayMode: true,
+                throwOnError: false,
+                strict: 'ignore'
+              });
+              el.classList.add('math-rendered');
+            } catch (err) {
+              el.textContent = tex;
+              el.classList.add('math-fallback');
+            }
+          });
+          return;
+        }
+        if (attempts++ < 60) {
+          setTimeout(typeset, 100);
+        } else {
+          blocks.forEach(el => el.classList.add('math-fallback'));
+        }
+      };
+      typeset();
     }
 
     /* ---------------- categories ---------------- */
@@ -580,6 +649,7 @@
       document.getElementById('postTags').innerHTML = (post.tags || [])
         .map(t => `<a class="tag" href="blog.html?tag=${encodeURIComponent(t)}">${escHtml(t)}</a>`).join('');
       document.getElementById('postBody').innerHTML = renderMarkdown(md);
+      renderMathBlocks(document.getElementById('postBody'));
       mountGiscus(slug);
 
       renderThread(post, posts, threads);

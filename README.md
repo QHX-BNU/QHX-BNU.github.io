@@ -96,3 +96,17 @@
 ## Markdown 支持范围
 
 标题（`#`～`###`）、加粗、斜体、行内代码、围栏代码块、有序/无序列表、引用、链接、图片、分割线。
+
+## 数学公式（KaTeX）
+
+块级公式用 `math` 围栏，不要写成 `text`，否则上下标会按原始字符显示：
+
+````markdown
+```math
+\hat A_t^{\mathrm{GAE}(\gamma,\lambda)}
+=\sum_{l=0}^{\infty}(\gamma\lambda)^l\delta_{t+l}^V
+```
+````
+
+支持 `aligned`、`\frac`、`\sum`、`\mathbb`、`\operatorname` 等常见 LaTeX 写法。公式由 KaTeX 在文章页渲染；如果 CDN 加载失败，会回退显示原始 TeX，便于排查而不是静默丢失。
+
