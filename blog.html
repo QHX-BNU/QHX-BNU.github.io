@@ -169,24 +169,88 @@
     .swatches i { width: 9px; height: 9px; border-radius: 50%; display: block; border: 1px solid var(--line) }
 
     /* ============================================================
-       Page head
+       Hero
        ============================================================ */
-    .page-head { padding: clamp(70px, 10vh, 120px) 0 clamp(20px, 3vh, 34px) }
+    .hero { padding: clamp(76px, 12vh, 132px) 0 clamp(28px, 4vh, 44px) }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 7px 14px 7px 11px;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--glass); color: var(--text-soft);
+      font: 600 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase;
+    }
+    .pulse { position: relative; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-3) }
+    .pulse::before {
+      content: ""; position: absolute; inset: -4px; border-radius: 50%;
+      border: 1px solid var(--accent-3);
+      animation: ping 2.4s var(--ease) infinite;
+    }
+    @keyframes ping { 0% { transform: scale(.6); opacity: .9 } 70%,100% { transform: scale(1.9); opacity: 0 } }
+    .hero h1 {
+      margin: 26px 0 22px;
+      font-size: clamp(46px, 7.4vw, 84px); font-weight: 800;
+      line-height: .96; letter-spacing: -.055em;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(104deg, var(--accent) 6%, var(--accent-2) 52%, var(--accent-3) 96%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+    }
+    .hero .lead { margin: 0; max-width: 700px; color: var(--muted); font-size: clamp(15px, 1.7vw, 18px); line-height: 1.85 }
+    .hero .lead strong { color: var(--text); font-weight: 600 }
+    .hero .lead em { font-family: var(--serif); font-style: italic; font-size: 1.05em; color: var(--text-soft) }
+
+    /* ============================================================
+       Section head & category grid
+       ============================================================ */
+    .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; margin: 18px 0 24px }
     .kicker {
-      display: flex; align-items: center; gap: 9px; margin-bottom: 14px;
+      display: flex; align-items: center; gap: 9px; margin-bottom: 12px;
       color: var(--accent); font: 600 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase;
     }
     .kicker::before { content: ""; width: 22px; height: 1px; background: currentColor; opacity: .7 }
-    .page-head h1 {
-      margin: 0; font-size: clamp(38px, 6vw, 62px); font-weight: 800;
-      line-height: 1.02; letter-spacing: -.045em;
+    .section-head h2 { margin: 0; font-size: clamp(26px, 3.6vw, 36px); font-weight: 800; line-height: 1.06; letter-spacing: -.045em }
+    .section-note { max-width: 400px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7 }
+
+    .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px }
+    .cat-card {
+      text-align: left; cursor: pointer; font: inherit; color: inherit;
+      display: flex; flex-direction: column; padding: 24px;
     }
-    .page-head .lead { margin: 18px 0 0; max-width: 680px; color: var(--muted); font-size: clamp(15px, 1.6vw, 17.5px); line-height: 1.8 }
+    .cat-card .en {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--faint); font: 600 10.5px/1 var(--mono); letter-spacing: .13em; text-transform: uppercase;
+    }
+    .cat-card .en i { width: 7px; height: 7px; border-radius: 50%; display: block }
+    html[data-theme="terminal"] .cat-card .en i { border-radius: 1px }
+    .cat-card .top { display: flex; align-items: center; justify-content: space-between; gap: 12px }
+    .cat-card .num { color: var(--faint); font: 500 11px/1 var(--mono) }
+    .cat-card h3 { margin: 16px 0 9px; font-size: 20px; font-weight: 700; letter-spacing: -.025em; display: flex; align-items: baseline; gap: 10px; transition: color .2s var(--ease) }
+    .cat-card h3 .n { color: var(--faint); font: 600 12px/1 var(--mono) }
+    .cat-card p { margin: 0; color: var(--muted); font-size: 12.5px; line-height: 1.75 }
+    .cat-card .kw { margin-top: auto; padding-top: 18px; color: var(--faint); font: 500 10.5px/1.6 var(--mono); letter-spacing: .08em }
+    .cat-card.active {
+      border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+      background: var(--glass-2);
+      box-shadow: var(--shadow), inset 0 1px 0 color-mix(in srgb, #fff 9%, transparent);
+    }
+    .cat-card.active::after { opacity: 1 }
+    .cat-card.active h3 { color: var(--accent) }
+
+    /* evolution path */
+    .path {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
+      margin-top: 22px; padding: 16px 4px 0;
+      color: var(--faint); font: 500 11px/1.9 var(--mono); letter-spacing: .05em;
+    }
+    .path .lbl { text-transform: uppercase; letter-spacing: .14em; margin-right: 4px }
+    .path b { color: var(--muted); font-weight: 600 }
+    .path .arrow { color: var(--accent); opacity: .75 }
 
     /* ============================================================
        Filters
        ============================================================ */
-    .filters { margin-bottom: 22px }
+    .filters { margin: 40px 0 22px }
 
     .search-wrap { position: relative; margin-bottom: 16px }
     .search-wrap svg {
@@ -211,24 +275,6 @@
     }
     .search-clear:hover { color: var(--text) }
     .search-wrap.has-value .search-clear { display: grid }
-
-    .cat-bar { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 13px }
-    .cat-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 15px;
-      border: 1px solid var(--line); border-radius: 999px;
-      background: var(--glass); color: var(--muted);
-      font: 600 12.5px/1 var(--font);
-      cursor: pointer; text-decoration: none; white-space: nowrap;
-      transition: color .18s var(--ease), background .18s var(--ease), border-color .18s var(--ease);
-    }
-    .cat-btn:hover { color: var(--text); background: var(--glass-2) }
-    .cat-btn.active {
-      color: var(--text); background: var(--glass-2);
-      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
-    }
-    .cat-btn .n { color: var(--faint); font: 500 10.5px/1 var(--mono); margin-left: 6px }
-    .cat-dot { width: 7px; height: 7px; border-radius: 50%; flex: none }
 
     /* tag groups — 研究领域 / 技术方向 / 具体问题 */
     .tag-groups { display: grid; gap: 9px; margin-bottom: 13px }
@@ -305,6 +351,12 @@
     .post-card:hover h2 { color: var(--accent) }
     .post-card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.72 }
     .post-card .tags { margin-top: 18px }
+    .post-card .go {
+      position: absolute; top: 24px; right: 26px;
+      color: var(--faint);
+      transition: transform .28s var(--ease), color .28s var(--ease);
+    }
+    .post-card:hover .go { transform: translate(3px, -3px); color: var(--accent) }
     .tag {
       padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px;
       background: color-mix(in srgb, var(--bg-3) 60%, transparent);
@@ -382,11 +434,17 @@
     html.js .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s var(--ease), transform .7s var(--ease) }
     html.js .reveal.in { opacity: 1; transform: none }
 
+    @media (max-width: 980px) {
+      .cat-grid { grid-template-columns: repeat(2, 1fr) }
+      .section-head { flex-direction: column; align-items: flex-start; gap: 12px }
+    }
     @media (max-width: 860px) { nav { display: none } }
     @media (max-width: 620px) {
       .shell { width: calc(100% - 28px) }
       .topbar { top: 8px; margin-top: 8px; width: calc(100% - 16px); padding-left: 14px }
       .theme-toggle .tlabel { display: none }
+      .hero h1 { font-size: clamp(42px, 12vw, 60px) }
+      .cat-grid { grid-template-columns: 1fr }
       .post-card { padding: 22px }
       .archive-item .cat-label { display: none }
       .tag-group { flex-direction: column; align-items: flex-start; gap: 7px }
@@ -429,23 +487,56 @@
   </header>
 
   <main>
-    <section class="shell page-head">
+    <!-- ================= HERO ================= -->
+    <section class="shell hero">
       <div class="reveal">
-        <div class="kicker">Blog — 个人知识库</div>
-        <h1>Notes &amp; essays<span style="color: var(--accent)">.</span></h1>
-        <p class="lead">按<strong style="color:var(--text)">内容的目的</strong>分成六类，按<strong style="color:var(--text)">研究主题</strong>打标签；同一主题下的文章用<strong style="color:var(--text)">线索</strong>串起来。随想可以演化成学习笔记，学习笔记沉淀出研究思路，最终变成工程实践与复盘 —— 想到什么写什么，写一篇发一篇。</p>
+        <div class="eyebrow"><span class="pulse"></span> Knowledge Base · LLM · Agents · Research</div>
+        <h1>Notes<span class="grad"> &amp; essays.</span></h1>
+        <p class="lead">
+          按照<strong>内容的目的</strong>分类，按照<strong>研究主题</strong>打标签，同一主题的文章用<strong>线索</strong>串起来。
+          从随手记下的疑问，到推导清楚的知识，再到待验证的研究假设 —— <em>把想法写下来，把知识沉淀下来。</em>
+        </p>
       </div>
     </section>
 
+    <!-- ================= CATEGORIES ================= -->
+    <section class="shell" id="categories">
+      <div class="section-head reveal">
+        <div>
+          <div class="kicker">01 — By purpose</div>
+          <h2>六种内容，六种目的。</h2>
+        </div>
+        <p class="section-note">分类回答“这篇文章是什么性质”。点击卡片即可筛选，再点一次回到全部。</p>
+      </div>
+      <div class="cat-grid" id="catGrid"></div>
+      <div class="path reveal">
+        <span class="lbl">演化路径</span>
+        <b>随想</b><span class="arrow">→</span>
+        <b>学习 / 阅读笔记</b><span class="arrow">→</span>
+        <b>研究思路</b><span class="arrow">→</span>
+        <b>工程实践</b><span class="arrow">→</span>
+        <b>复盘总结</b>
+        <span>· 可选路径，不必每篇都走完</span>
+      </div>
+    </section>
+
+    <!-- ================= POSTS ================= -->
     <section class="shell">
-      <div class="filters reveal">
+      <div class="section-head reveal" style="margin-top:44px">
+        <div>
+          <div class="kicker">02 — Writing</div>
+          <h2>每一篇都是工作记忆。</h2>
+        </div>
+        <p class="section-note">支持标题、摘要与标签搜索；用标签和线索缩小范围，或切换到时间归档按年份检索。</p>
+      </div>
+
+      <div class="filters reveal" style="margin-top:0">
         <div class="search-wrap" id="searchWrap">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
           <input class="search-input" id="searchInput" type="search" placeholder="搜索标题、摘要或标签…" autocomplete="off" aria-label="搜索文章" />
           <button class="search-clear" id="searchClear" type="button" aria-label="清除搜索">×</button>
         </div>
 
-        <div class="cat-bar" id="catBar" role="tablist" aria-label="按内容性质筛选"></div>
         <div class="tag-groups" id="tagGroups" aria-label="按主题标签筛选"></div>
         <div class="thread-bar" id="threadBar" aria-label="按线索筛选" hidden></div>
 
@@ -528,12 +619,36 @@
 
     /* ---------------- data model ---------------- */
     const CATEGORIES = {
-      thoughts:     { name: '随想',     en: 'Thoughts',       color: 'var(--accent-2)' },
-      notes:        { name: '学习笔记', en: 'Learning Notes', color: 'var(--accent)' },
-      ideas:        { name: '研究思路', en: 'Research Ideas', color: 'var(--accent-3)' },
-      engineering:  { name: '工程实践', en: 'Engineering',    color: 'var(--accent)' },
-      reading:      { name: '阅读笔记', en: 'Reading',        color: 'var(--accent-2)' },
-      retro:        { name: '复盘总结', en: 'Retrospectives', color: 'var(--accent-3)' }
+      thoughts: {
+        name: '随想', en: 'Thoughts', color: 'var(--accent-2)',
+        desc: '灵感、观点、疑问和不成熟的想法。不要求严谨完整，也不要求得出结论。',
+        kw: '自由 · 即时 · 低写作成本'
+      },
+      notes: {
+        name: '学习笔记', en: 'Learning Notes', color: 'var(--accent)',
+        desc: '公式推导、原理解释、技术教程和易混淆概念，把学过的知识真正理解并沉淀下来。',
+        kw: '知识 · 理解 · 可复习'
+      },
+      ideas: {
+        name: '研究思路', en: 'Research Ideas', color: 'var(--accent-3)',
+        desc: '提出问题、形成假设、设计方法。允许未经验证，也专门记录尚未解决的问题。',
+        kw: '问题 · 假设 · 未完成'
+      },
+      engineering: {
+        name: '工程实践', en: 'Engineering', color: 'var(--accent)',
+        desc: '实现、实验、系统设计。记录真正做了什么、踩了什么坑、为什么这样取舍。',
+        kw: '实现 · 代码 · 经验'
+      },
+      reading: {
+        name: '阅读笔记', en: 'Reading', color: 'var(--accent-2)',
+        desc: '论文、书籍、博客的理解和批判：作者提出了什么，证据是否充分，我有什么不同看法。',
+        kw: '文献 · 证据 · 批判'
+      },
+      retro: {
+        name: '复盘总结', en: 'Retrospectives', color: 'var(--accent-3)',
+        desc: '从已完成的项目、实验和经历中提炼经验，回头看成败原因与认知变化。',
+        kw: '结果 · 反思 · 改进'
+      }
     };
     const STATUS = { draft: '草稿', organizing: '整理中' };
 
@@ -600,20 +715,24 @@
     }
 
     /* ---------------- renderers ---------------- */
-    function renderCatBar() {
-      const bar = document.getElementById('catBar');
+    function renderCatGrid() {
+      const grid = document.getElementById('catGrid');
       const counts = {};
       ALL_POSTS.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
-      let html = `<button class="cat-btn${state.cat === 'all' ? ' active' : ''}" data-cat="all">全部<span class="n">${ALL_POSTS.length}</span></button>`;
-      for (const [key, info] of Object.entries(CATEGORIES)) {
-        if (!counts[key]) continue;
-        html += `<button class="cat-btn${state.cat === key ? ' active' : ''}" data-cat="${key}" title="${info.en}"><span class="cat-dot" style="background:${info.color}"></span>${info.name}<span class="n">${counts[key]}</span></button>`;
-      }
-      bar.innerHTML = html;
-      bar.querySelectorAll('.cat-btn').forEach(b => b.addEventListener('click', () => {
-        state.cat = b.dataset.cat;
-        render();
-      }));
+      grid.innerHTML = Object.entries(CATEGORIES).map(([key, info], i) => `
+        <button class="card cat-card reveal${state.cat === key ? ' active' : ''}" data-cat="${key}" aria-pressed="${state.cat === key}">
+          <div class="top"><span class="en"><i style="background:${info.color}"></i>${info.en}</span><span class="num">0${i + 1}</span></div>
+          <h3>${info.name}<span class="n">${counts[key] || 0} 篇</span></h3>
+          <p>${info.desc}</p>
+          <div class="kw">${info.kw}</div>
+        </button>`).join('');
+      grid.querySelectorAll('.cat-card').forEach(c => {
+        c.addEventListener('click', () => {
+          state.cat = state.cat === c.dataset.cat ? 'all' : c.dataset.cat;
+          render();
+        });
+        revealer.observe(c);
+      });
     }
 
     function renderTagGroups() {
@@ -665,6 +784,7 @@
     function postCardHtml(p) {
       const th = threadInfo(p.thread);
       return `<a class="card post-card" href="post.html?p=${encodeURIComponent(p.slug)}">
+        <span class="go" aria-hidden="true">↗</span>
         <div class="post-top">
           ${catLinkHtml(p.category)}
           <span class="post-meta">${fmtDate(p.date)}</span>
@@ -737,7 +857,7 @@
     }
 
     function render() {
-      renderCatBar();
+      renderCatGrid();
       renderTagGroups();
       renderThreads();
       renderList();
