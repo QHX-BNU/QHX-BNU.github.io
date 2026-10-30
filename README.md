@@ -83,6 +83,26 @@
 - `post.html?p=<slug>` — 打开某篇文章
 - 任何页面加 `?theme=paper` 可指定配色（midnight / aurora / paper / terminal）
 
+## 评论（通过 GitHub PR）
+
+每条评论是 `comments/<slug>/` 下的一个 JSON 文件，**合并 PR 即审核通过**，只有合并进 `main` 的评论才会显示。
+
+文件格式：
+
+```json
+{
+  "author": "github-username",
+  "date": "2026-10-30T09:00:00Z",
+  "reply_to": null,
+  "text": "评论内容，支持 Markdown"
+}
+```
+
+- `reply_to` 填另一条评论的文件名即为回复，文章页按层级展示
+- 读者在文章页填写评论后，会跳转到 GitHub 新建文件页面（已预填 JSON），点击 Propose new file 即创建 PR
+- 博主回复读者：直接在 `comments/<slug>/` 下提交一个带 `reply_to` 的 JSON 文件即可（走 PR 或直接提交都行）
+- 删除评论 = 删除对应 JSON 文件
+
 ## Markdown 支持范围
 
 标题（`#`～`###`）、加粗、斜体、行内代码、围栏代码块、有序/无序列表、引用、链接、图片、分割线。
