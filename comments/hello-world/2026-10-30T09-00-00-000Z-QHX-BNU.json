@@ -1,6 +1,0 @@
-{
-  "author": "QHX-BNU",
-  "date": "2026-10-30T09:00:00Z",
-  "reply_to": null,
-  "text": "评论功能上线：每条评论都是一个 GitHub PR，合并后才会显示在这里。这条就是示例 —— 支持 **Markdown**，比如 `inline code` 和[链接](https://github.com/QHX-BNU/QHX-BNU.github.io)。"
-}
