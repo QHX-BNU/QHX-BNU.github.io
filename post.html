@@ -253,6 +253,11 @@
     }
     .prose .math-block .katex-display { margin: .15em 0 }
     .prose .math-block .katex { font-size: 1.06em }
+    .prose .math-inline { white-space: nowrap }
+    .prose .math-inline .katex { font-size: 1.02em }
+    .prose .math-inline.math-fallback {
+      font: .9em/1.4 var(--mono); color: var(--text);
+    }
     .prose .math-block.math-fallback {
       text-align: left; white-space: pre-wrap;
       font: 13px/1.7 var(--mono); color: var(--text-soft);
@@ -479,12 +484,23 @@
     /* ---------------- tiny markdown renderer ---------------- */
     function renderMarkdown(src) {
       const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      const inline = s => esc(s)
-        .replace(/`([^`]+)`/g, '<code>$1</code>')
-        .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, '<img alt="$1" src="$2" loading="lazy">')
-        .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>')
-        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      const mathSpans = [];
+      const protectMath = s => String(s).replace(/\$([^$\n]+?)\$/g, (_, tex) => {
+        const token = '@@MATHSPAN' + mathSpans.length + '@@';
+        mathSpans.push(tex);
+        return token;
+      });
+      const inline = s => {
+        let out = esc(protectMath(s))
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, '<img alt="$1" src="$2" loading="lazy">')
+          .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>')
+          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+        out = out.replace(/@@MATHSPAN(\d+)@@/g, (_, index) =>
+          '<span class="math-inline">' + esc(mathSpans[Number(index)]) + '</span>');
+        return out;
+      };
       const lines = String(src).replace(/\r\n?/g, '\n').split('\n');
       let html = '', i = 0;
       while (i < lines.length) {
@@ -534,7 +550,7 @@
     }
 
     function renderMathBlocks(container) {
-      const blocks = Array.from(container.querySelectorAll('.math-block'));
+      const blocks = Array.from(container.querySelectorAll('.math-block, .math-inline'));
       if (!blocks.length) return;
 
       let attempts = 0;
@@ -544,7 +560,7 @@
             const tex = el.textContent;
             try {
               window.katex.render(tex, el, {
-                displayMode: true,
+                displayMode: el.classList.contains('math-block'),
                 throwOnError: false,
                 strict: 'ignore'
               });
