@@ -1,5 +1,19 @@
 [
   {
+    "slug": "gae-from-td-residual-to-advantage",
+    "title": "从 TD 残差到 GAE：优势估计的两条主线",
+    "date": "2026-10-31",
+    "category": "notes",
+    "status": "published",
+    "tags": [
+      "RL",
+      "LLM",
+      "训练",
+      "Credit Assignment"
+    ],
+    "summary": "GAE 不只是「调 λ 的 TD」：它既是多步优势的几何混合，也是对价值塑形奖励做 γλ 折扣的蒙特卡洛回报。从策略梯度、baseline、TD 残差一路推到 PPO 与 GRPO。"
+  },
+  {
     "slug": "trace-cluster-systemic-flaws",
     "title": "能否利用跨天 Trace 聚类识别 Agent 的系统性缺陷？",
     "date": "2026-10-30",
@@ -7,7 +21,11 @@
     "status": "organizing",
     "featured": true,
     "thread": "agent-trace-eval",
-    "tags": ["Agent", "Trace", "Evaluation"],
+    "tags": [
+      "Agent",
+      "Trace",
+      "Evaluation"
+    ],
     "summary": "一个待验证的假设：单条 Trace 里的小错误可能是噪声，但如果同一种失败模式在多天的 Trace 里反复出现，那它大概率是系统性的。"
   },
   {
@@ -16,7 +34,10 @@
     "date": "2026-10-29",
     "category": "thoughts",
     "status": "published",
-    "tags": ["随笔", "写作"],
+    "tags": [
+      "随笔",
+      "写作"
+    ],
     "summary": "把想法写下来才算真正想清楚。这里会记录我在 LLM 系统、Agent 工程和科研路上的笔记与思考。"
   }
 ]
