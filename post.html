@@ -220,9 +220,93 @@
     .swatches i { width: 9px; height: 9px; border-radius: 50%; display: block; border: 1px solid var(--line) }
 
     /* ============================================================
+       Notebook page-turn
+       ============================================================ */
+    html[data-theme="paper"] { --page-1: #fffdf7; --page-2: #f0ebe0; }
+    html[data-theme="midnight"] { --page-1: #141821; --page-2: #0b0d13; }
+    html[data-theme="aurora"] { --page-1: #1a1238; --page-2: #0e0b23; }
+    html[data-theme="terminal"] { --page-1: #0b1c11; --page-2: #06100a; }
+
+    /* themed scrollbar */
+    html { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, var(--bg-3)) var(--bg-2); }
+    ::-webkit-scrollbar { width: 11px; height: 11px }
+    ::-webkit-scrollbar-track { background: var(--bg-2) }
+    ::-webkit-scrollbar-thumb {
+      background: color-mix(in srgb, var(--accent) 50%, var(--bg-3));
+      border-radius: 999px; border: 3px solid var(--bg-2);
+    }
+    ::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--accent) 72%, var(--bg-3)) }
+
+    .page-turn {
+      position: fixed; inset: 0; z-index: 200;
+      perspective: 1900px; pointer-events: auto;
+    }
+    .page-turn.pt-done { display: none }
+    .pt-page {
+      position: absolute; inset: 0;
+      transform-origin: left center;
+      transform: rotateY(0deg);
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
+      background:
+        linear-gradient(90deg, color-mix(in srgb, var(--accent) 7%, transparent), transparent 14%),
+        linear-gradient(160deg, var(--page-1), var(--page-2));
+      box-shadow: 0 0 90px rgba(0,0,0,.4);
+      display: grid; place-items: center;
+    }
+    .pt-page::before {
+      content: ""; position: absolute; top: 0; bottom: 0; left: clamp(28px, 6vw, 72px); width: 1px;
+      background: color-mix(in srgb, var(--accent-2) 32%, transparent);
+    }
+    .pt-page::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent 58%, color-mix(in srgb, #000 16%, transparent) 90%, color-mix(in srgb, #000 30%, transparent));
+      opacity: .55;
+    }
+    .pt-mark {
+      position: relative; z-index: 1;
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(20px, 3vw, 30px);
+      color: color-mix(in srgb, var(--text) 42%, transparent);
+      letter-spacing: .02em;
+    }
+    .page-turn.pt-enter .pt-page { animation: ptOpen .95s cubic-bezier(.42,.05,.2,1) forwards }
+    @keyframes ptOpen {
+      0%   { transform: rotateY(0deg) }
+      100% { transform: rotateY(-179deg) }
+    }
+    .page-turn.pt-exit .pt-page { transform-origin: right center; animation: ptClose .56s cubic-bezier(.42,.05,.2,1) forwards }
+    @keyframes ptClose {
+      0%   { transform: rotateY(179deg) }
+      100% { transform: rotateY(0deg) }
+    }
+    body.pt-entering .article { animation: artIn .95s var(--ease) both }
+    @keyframes artIn {
+      from { opacity: 0; transform: translateY(16px) }
+      to   { opacity: 1; transform: none }
+    }
+
+    /* ============================================================
        Article
        ============================================================ */
-    .article { width: min(calc(100% - 40px), 780px); margin: 0 auto; padding: clamp(64px, 10vh, 110px) 0 30px }
+    .article {
+      position: relative;
+      width: min(calc(100% - 40px), 780px); margin: 0 auto;
+      padding: clamp(64px, 10vh, 110px) 0 30px 30px;
+    }
+    /* notebook binding spine */
+    .article::before {
+      content: ""; position: absolute; left: 6px; top: clamp(70px, 11vh, 118px); bottom: 40px; width: 2px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 70%, transparent), color-mix(in srgb, var(--accent-2) 55%, transparent));
+      opacity: .55;
+    }
+    .article::after {
+      content: ""; position: absolute; left: 2px; top: clamp(80px, 12vh, 130px);
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--bg); border: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      box-shadow: 0 60px 0 -2px var(--bg), 0 60px 0 0 color-mix(in srgb, var(--accent) 40%, transparent),
+                  0 120px 0 -2px var(--bg), 0 120px 0 0 color-mix(in srgb, var(--accent) 40%, transparent);
+    }
     .back {
       display: inline-flex; align-items: center; gap: 7px;
       color: var(--muted); font: 600 13px/1 var(--font); text-decoration: none;
@@ -371,7 +455,9 @@
     @media (max-width: 860px) { nav { display: flex } }
     @media (max-width: 620px) {
       .shell { width: calc(100% - 28px) }
-      .article { width: calc(100% - 28px) }
+      .article { width: calc(100% - 28px); padding-left: 20px }
+      .article::before { left: 2px }
+      .article::after { left: -1px }
       .topbar { top: 8px; margin-top: 8px; width: calc(100% - 16px); padding-left: 14px }
       .theme-toggle .tlabel { display: none }
       .prose { font-size: 15px }
@@ -381,10 +467,15 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto }
       *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important }
+      .page-turn { display: none !important }
+      .article { opacity: 1 !important; transform: none !important }
     }
   </style>
 </head>
 <body>
+  <div class="page-turn" id="pageTurn" aria-hidden="true">
+    <div class="pt-page"><span class="pt-mark">Notes &amp; essays</span></div>
+  </div>
   <div class="aura" aria-hidden="true"></div>
   <div class="grid-layer" aria-hidden="true"></div>
   <div class="noise" aria-hidden="true"></div>
@@ -833,7 +924,51 @@
       host.appendChild(s);
     }
 
-    loadPost();
+    /* ---------------- notebook page-turn ---------------- */
+    const pageTurn = document.getElementById('pageTurn');
+    const ptReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let ptTurning = false;
+
+    function playEnter() {
+      if (!pageTurn) return;
+      if (ptReduced) { pageTurn.classList.add('pt-done'); return; }
+      document.body.classList.add('pt-entering');
+      pageTurn.classList.add('pt-enter');
+      const page = pageTurn.querySelector('.pt-page');
+      let finished = false;
+      const done = () => {
+        if (finished) return;
+        finished = true;
+        pageTurn.classList.add('pt-done');
+        document.body.classList.remove('pt-entering');
+      };
+      page.addEventListener('animationend', done, { once: true });
+      setTimeout(done, 1500);
+    }
+
+    function playExit(url) {
+      if (ptTurning) return;
+      if (ptReduced || !pageTurn) { location.href = url; return; }
+      ptTurning = true;
+      pageTurn.classList.remove('pt-done', 'pt-enter');
+      void pageTurn.offsetWidth;
+      pageTurn.classList.add('pt-exit');
+      const page = pageTurn.querySelector('.pt-page');
+      let finished = false;
+      const go = () => { if (finished) return; finished = true; location.href = url; };
+      page.addEventListener('animationend', go, { once: true });
+      setTimeout(go, 900);
+    }
+
+    document.addEventListener('click', e => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest && e.target.closest('a[href^="post.html?p="]');
+      if (!a) return;
+      e.preventDefault();
+      playExit(a.href);
+    });
+
+    loadPost().finally(playEnter);
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
