@@ -240,6 +240,14 @@
     .page-turn { position: fixed; inset: 0; z-index: 200; pointer-events: auto; overflow: hidden }
     .page-turn.pt-done { display: none }
     .pt-scene { position: absolute; inset: 0; perspective: 2400px; perspective-origin: 50% 45% }
+    .pt-static { position: absolute; inset: 0; background: linear-gradient(155deg, var(--page-1), var(--page-2)) }
+    .pt-static::before {
+      content: ""; position: absolute; inset: 0;
+      background: repeating-linear-gradient(180deg, transparent 0 27px, color-mix(in srgb, var(--accent) 9%, transparent) 27px 28px);
+      opacity: .55;
+    }
+    .pt-static::after { content: ""; position: absolute; top: 0; bottom: 0; left: 20px; width: 1px; background: color-mix(in srgb, var(--accent-2) 42%, transparent) }
+    html:not(.js) .page-turn { display: none }
     .pt-shadow {
       position: absolute; top: 0; bottom: 0; left: 0; width: 46%;
       background: linear-gradient(90deg, transparent, rgba(0,0,0,.22) 42%, rgba(0,0,0,.42) 50%, rgba(0,0,0,.22) 58%, transparent);
@@ -458,6 +466,7 @@
   <div class="page-turn" id="pageTurn" aria-hidden="true">
     <div class="pt-scene">
       <div class="pt-shadow" id="ptShadow"></div>
+      <div class="pt-static" id="ptStatic"></div>
       <div class="pt-curl" id="ptCurl"></div>
     </div>
   </div>
@@ -975,6 +984,14 @@
       }
       requestAnimationFrame(step);
       setTimeout(finish, duration + 450);
+    }
+
+    /* opaque cover from the first frame — hides the loading state during fetch */
+    const ptStatic = document.getElementById('ptStatic');
+    if (!ptReduced) {
+      buildCurl();
+      renderCurl(0);
+      if (ptStatic) ptStatic.style.display = 'none';
     }
 
     function playEnter() {
