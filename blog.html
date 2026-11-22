@@ -138,6 +138,38 @@
     }
     nav a:hover { color: var(--text); background: var(--glass) }
     nav a.active { color: var(--text); background: var(--glass-2) }
+
+    /* profile dropdown nav */
+    .nav-group { position: relative }
+    .nav-parent {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 12px; border: 0; border-radius: 999px;
+      background: transparent; color: var(--muted);
+      font: 500 13px/1 var(--font); cursor: pointer;
+      transition: color .2s var(--ease), background .2s var(--ease);
+    }
+    .nav-parent:hover { color: var(--text); background: var(--glass) }
+    .nav-parent.active { color: var(--text); background: var(--glass-2) }
+    .nav-parent .chev { color: var(--faint); font-size: 10px; transition: transform .2s var(--ease) }
+    .nav-parent[aria-expanded="true"] .chev { transform: rotate(180deg) }
+    .nav-menu {
+      position: absolute; right: 0; top: calc(100% + 10px);
+      min-width: 172px; padding: 7px;
+      display: none; gap: 2px;
+      border: 1px solid var(--line); border-radius: var(--r-md);
+      background: color-mix(in srgb, var(--bg-3) 94%, transparent);
+      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+      box-shadow: var(--shadow);
+    }
+    .nav-menu.open { display: grid; animation: pop .18s var(--ease) }
+    .nav-menu a {
+      padding: 8px 12px; border-radius: calc(var(--r-md) - 4px);
+      font-size: 12.5px; font-weight: 500; color: var(--text-soft);
+      text-decoration: none; transition: background .16s var(--ease), color .16s var(--ease);
+    }
+    .nav-menu a:hover { background: var(--glass-2); color: var(--text) }
+    .nav-menu a.active { color: var(--accent); background: var(--glass-2) }
+
     .theme-wrap { position: relative }
     .theme-toggle {
       display: inline-flex; align-items: center; gap: 9px;
@@ -438,7 +470,7 @@
       .cat-grid { grid-template-columns: repeat(2, 1fr) }
       .section-head { flex-direction: column; align-items: flex-start; gap: 12px }
     }
-    @media (max-width: 860px) { nav { display: none } }
+    @media (max-width: 860px) { nav { display: flex } }
     @media (max-width: 620px) {
       .shell { width: calc(100% - 28px) }
       .topbar { top: 8px; margin-top: 8px; width: calc(100% - 16px); padding-left: 14px }
@@ -466,12 +498,18 @@
   <header class="topbar">
     <a class="brand" href="index.html"><span class="brand-dot"></span><span>Huixing Que</span></a>
     <nav aria-label="Primary">
-      <a href="index.html#focus">Focus</a>
-      <a href="index.html#research">Research</a>
-      <a href="index.html#writing">Writing</a>
-      <a href="index.html#projects">Projects</a>
-      <a href="blog.html" class="active">Blog</a>
-      <a href="index.html#contact">Contact</a>
+      <div class="nav-group">
+        <button class="nav-parent" id="profileToggle" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="profileMenu">Profile<span class="chev">▾</span></button>
+        <div class="nav-menu" id="profileMenu" role="menu" aria-label="Profile sections">
+          <a href="index.html#focus" role="menuitem">Focus</a>
+          <a href="index.html#research" role="menuitem">Research</a>
+          <a href="index.html#projects" role="menuitem">Projects</a>
+          <a href="index.html#stack" role="menuitem">Stack</a>
+          <a href="index.html#timeline" role="menuitem">Vita</a>
+          <a href="index.html#contact" role="menuitem">Contact</a>
+        </div>
+      </div>
+      <a href="blog.html" class="nav-blog active">Blog</a>
     </nav>
     <div class="theme-wrap">
       <button class="theme-toggle" id="themeToggle" aria-expanded="false" aria-controls="themeMenu" aria-haspopup="true">
@@ -604,6 +642,21 @@
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') { menu.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); }
     });
+
+    /* ---------------- profile dropdown nav ---------------- */
+    const profileToggle = document.getElementById('profileToggle');
+    const profileMenu = document.getElementById('profileMenu');
+    if (profileToggle && profileMenu) {
+      const closeProfile = () => { profileMenu.classList.remove('open'); profileToggle.setAttribute('aria-expanded', 'false'); };
+      profileToggle.addEventListener('click', e => {
+        e.stopPropagation();
+        const open = profileMenu.classList.toggle('open');
+        profileToggle.setAttribute('aria-expanded', String(open));
+      });
+      profileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeProfile));
+      document.addEventListener('click', closeProfile);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProfile(); });
+    }
 
     /* ---------------- reveal on scroll ---------------- */
     const revealer = new IntersectionObserver((entries) => {
