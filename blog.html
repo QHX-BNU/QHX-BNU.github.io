@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="midnight">
+<html lang="zh-CN" data-theme="paper">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>document.documentElement.classList.add('js');</script>
   <meta name="color-scheme" content="dark light" />
   <meta name="description" content="Blog of Huixing Que — a personal knowledge base of thoughts, learning notes, research ideas, engineering and reading." />
-  <meta name="theme-color" content="#07080b" />
+  <meta name="theme-color" content="#f7f5f0" />
   <title>Blog · Huixing Que</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -475,12 +475,12 @@
     </nav>
     <div class="theme-wrap">
       <button class="theme-toggle" id="themeToggle" aria-expanded="false" aria-controls="themeMenu" aria-haspopup="true">
-        <span id="themeLabel">Midnight</span><span class="chev">▾</span>
+        <span id="themeLabel">Paper</span><span class="chev">▾</span>
       </button>
       <div class="theme-menu" id="themeMenu" role="menu" aria-label="Choose visual style">
-        <button class="theme-option active" role="menuitem" data-theme-value="midnight"><span>Midnight</span><span class="swatches"><i style="background:#07080b"></i><i style="background:#6ea8fe"></i></span></button>
+        <button class="theme-option" role="menuitem" data-theme-value="midnight"><span>Midnight</span><span class="swatches"><i style="background:#07080b"></i><i style="background:#6ea8fe"></i></span></button>
         <button class="theme-option" role="menuitem" data-theme-value="aurora"><span>Aurora</span><span class="swatches"><i style="background:#080618"></i><i style="background:#ff8fd4"></i></span></button>
-        <button class="theme-option" role="menuitem" data-theme-value="paper"><span>Paper</span><span class="swatches"><i style="background:#f7f5f0"></i><i style="background:#1f5c8b"></i></span></button>
+        <button class="theme-option active" role="menuitem" data-theme-value="paper"><span>Paper</span><span class="swatches"><i style="background:#f7f5f0"></i><i style="background:#1f5c8b"></i></span></button>
         <button class="theme-option" role="menuitem" data-theme-value="terminal"><span>Terminal</span><span class="swatches"><i style="background:#040705"></i><i style="background:#69ff9d"></i></span></button>
       </div>
     </div>
@@ -570,7 +570,7 @@
     const LABELS = { midnight: 'Midnight', aurora: 'Aurora', paper: 'Paper', terminal: 'Terminal' };
 
     function setTheme(theme, persist) {
-      if (!THEMES.includes(theme)) theme = 'midnight';
+      if (!THEMES.includes(theme)) theme = 'paper';
       root.dataset.theme = theme;
       label.textContent = LABELS[theme];
       options.forEach(o => {
@@ -579,7 +579,7 @@
         o.setAttribute('aria-checked', String(on));
       });
       const meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) meta.setAttribute('content', getComputedStyle(root).getPropertyValue('--bg').trim() || '#07080b');
+      if (meta) meta.setAttribute('content', getComputedStyle(root).getPropertyValue('--bg').trim() || '#f7f5f0');
       if (persist) { try { localStorage.setItem('profile-theme', theme); } catch (e) {} }
     }
 
@@ -588,8 +588,7 @@
     try { saved = localStorage.getItem('profile-theme'); } catch (e) {}
     if (urlTheme && THEMES.includes(urlTheme)) setTheme(urlTheme, false);
     else if (saved && THEMES.includes(saved)) setTheme(saved, false);
-    else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) setTheme('paper', false);
-    else setTheme('midnight', false);
+    else setTheme('paper', false);
 
     toggle.addEventListener('click', e => {
       e.stopPropagation();
