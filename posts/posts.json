@@ -1,5 +1,49 @@
 [
   {
+    "slug": "from-adam-adamw-to-muon",
+    "title": "从 Adam、AdamW 到 Muon：优化器到底在优化什么",
+    "date": "2026-10-31",
+    "category": "notes",
+    "status": "published",
+    "thread": "llm-foundations",
+    "tags": [
+      "LLM",
+      "训练",
+      "优化器",
+      "Muon"
+    ],
+    "summary": "从 SGD、Momentum、Adam 的逐参数自适应，到 AdamW 的解耦权重衰减，再到 Muon 对二维动量矩阵做近似正交化：沿着优化器状态、更新几何和显存代价，理解三代优化器的取舍。"
+  },
+  {
+    "slug": "from-resnet-hyper-connections-to-mhc",
+    "title": "从 ResNet、Hyper-Connections 到 mHC：残差连接为何不断加宽又被约束",
+    "date": "2026-10-31",
+    "category": "notes",
+    "status": "published",
+    "thread": "llm-foundations",
+    "tags": [
+      "LLM",
+      "系统设计",
+      "残差连接",
+      "mHC"
+    ],
+    "summary": "从 ResNet 的恒等 shortcut，到 Hyper-Connections 的多残差流学习式混合，再到 mHC 用双随机矩阵和 Sinkhorn 投影约束深层传播：理解表达能力与数值稳定性之间的反复权衡。"
+  },
+  {
+    "slug": "gae-from-td-residual-to-advantage",
+    "title": "从 TD 残差到 GAE：优势估计的两条主线",
+    "date": "2026-10-31",
+    "category": "notes",
+    "status": "published",
+    "tags": [
+      "RL",
+      "LLM",
+      "训练",
+      "Credit Assignment"
+    ],
+    "summary": "GAE 不只是「调 λ 的 TD」：它既是多步优势的几何混合，也是对价值塑形奖励做 γλ 折扣的蒙特卡洛回报。从策略梯度、baseline、TD 残差一路推到 PPO 与 GRPO。"
+  },
+  {
     "slug": "trace-cluster-systemic-flaws",
     "title": "能否利用跨天 Trace 聚类识别 Agent 的系统性缺陷？",
     "date": "2026-10-30",
@@ -7,7 +51,11 @@
     "status": "organizing",
     "featured": true,
     "thread": "agent-trace-eval",
-    "tags": ["Agent", "Trace", "Evaluation"],
+    "tags": [
+      "Agent",
+      "Trace",
+      "Evaluation"
+    ],
     "summary": "一个待验证的假设：单条 Trace 里的小错误可能是噪声，但如果同一种失败模式在多天的 Trace 里反复出现，那它大概率是系统性的。"
   },
   {
@@ -16,7 +64,10 @@
     "date": "2026-10-29",
     "category": "thoughts",
     "status": "published",
-    "tags": ["随笔", "写作"],
+    "tags": [
+      "随笔",
+      "写作"
+    ],
     "summary": "把想法写下来才算真正想清楚。这里会记录我在 LLM 系统、Agent 工程和科研路上的笔记与思考。"
   }
 ]
