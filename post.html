@@ -237,49 +237,31 @@
     }
     ::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--accent) 72%, var(--bg-3)) }
 
-    .page-turn {
-      position: fixed; inset: 0; z-index: 200;
-      perspective: 1900px; pointer-events: auto;
-    }
+    .page-turn { position: fixed; inset: 0; z-index: 200; pointer-events: auto; overflow: hidden }
     .page-turn.pt-done { display: none }
-    .pt-page {
-      position: absolute; inset: 0;
-      transform-origin: left center;
-      transform: rotateY(0deg);
-      backface-visibility: hidden; -webkit-backface-visibility: hidden;
-      background:
-        linear-gradient(90deg, color-mix(in srgb, var(--accent) 7%, transparent), transparent 14%),
-        linear-gradient(160deg, var(--page-1), var(--page-2));
-      box-shadow: 0 0 90px rgba(0,0,0,.4);
-      display: grid; place-items: center;
+    .pt-scene { position: absolute; inset: 0; perspective: 2400px; perspective-origin: 50% 45% }
+    .pt-shadow {
+      position: absolute; top: 0; bottom: 0; left: 0; width: 46%;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,.22) 42%, rgba(0,0,0,.42) 50%, rgba(0,0,0,.22) 58%, transparent);
+      filter: blur(7px); opacity: 0; pointer-events: none;
     }
-    .pt-page::before {
-      content: ""; position: absolute; top: 0; bottom: 0; left: clamp(28px, 6vw, 72px); width: 1px;
-      background: color-mix(in srgb, var(--accent-2) 32%, transparent);
-    }
-    .pt-page::after {
+    .pt-curl { position: absolute; top: 0; bottom: 0; left: 0; width: 100%; transform-style: preserve-3d; transform-origin: left center }
+    .pt-seg { position: absolute; top: 0; bottom: 0; transform-style: preserve-3d; transform-origin: left center }
+    .pt-seg > .pt-seg { left: 100% }
+    .pt-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden }
+    .pt-front { background: linear-gradient(155deg, var(--page-1), var(--page-2)) }
+    .pt-back { transform: rotateY(180deg); background: linear-gradient(155deg, var(--page-2), var(--page-1)) }
+    .pt-face::before {
       content: ""; position: absolute; inset: 0;
-      background: linear-gradient(90deg, transparent 58%, color-mix(in srgb, #000 16%, transparent) 90%, color-mix(in srgb, #000 30%, transparent));
+      background: repeating-linear-gradient(180deg, transparent 0 27px, color-mix(in srgb, var(--accent) 9%, transparent) 27px 28px);
       opacity: .55;
     }
-    .pt-mark {
-      position: relative; z-index: 1;
-      font-family: var(--serif); font-style: italic;
-      font-size: clamp(20px, 3vw, 30px);
-      color: color-mix(in srgb, var(--text) 42%, transparent);
-      letter-spacing: .02em;
+    .pt-seg:first-child > .pt-front::after {
+      content: ""; position: absolute; top: 0; bottom: 0; left: 20px; width: 1px;
+      background: color-mix(in srgb, var(--accent-2) 42%, transparent);
     }
-    .page-turn.pt-enter .pt-page { animation: ptOpen .95s cubic-bezier(.42,.05,.2,1) forwards }
-    @keyframes ptOpen {
-      0%   { transform: rotateY(0deg) }
-      100% { transform: rotateY(-179deg) }
-    }
-    .page-turn.pt-exit .pt-page { transform-origin: right center; animation: ptClose .56s cubic-bezier(.42,.05,.2,1) forwards }
-    @keyframes ptClose {
-      0%   { transform: rotateY(179deg) }
-      100% { transform: rotateY(0deg) }
-    }
-    body.pt-entering .article { animation: artIn .95s var(--ease) both }
+    .pt-shade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none }
+    body.pt-entering .article { animation: artIn 1s var(--ease) both }
     @keyframes artIn {
       from { opacity: 0; transform: translateY(16px) }
       to   { opacity: 1; transform: none }
@@ -474,7 +456,10 @@
 </head>
 <body>
   <div class="page-turn" id="pageTurn" aria-hidden="true">
-    <div class="pt-page"><span class="pt-mark">Notes &amp; essays</span></div>
+    <div class="pt-scene">
+      <div class="pt-shadow" id="ptShadow"></div>
+      <div class="pt-curl" id="ptCurl"></div>
+    </div>
   </div>
   <div class="aura" aria-hidden="true"></div>
   <div class="grid-layer" aria-hidden="true"></div>
@@ -924,40 +909,94 @@
       host.appendChild(s);
     }
 
-    /* ---------------- notebook page-turn ---------------- */
+    /* ---------------- notebook page-turn (segmented 3D curl) ---------------- */
     const pageTurn = document.getElementById('pageTurn');
+    const ptCurl = document.getElementById('ptCurl');
+    const ptShadow = document.getElementById('ptShadow');
     const ptReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const PT_N = 16;
     let ptTurning = false;
+    let ptSegs = [];
+
+    function buildCurl() {
+      const scene = pageTurn.querySelector('.pt-scene');
+      const W = scene.clientWidth || window.innerWidth;
+      const segW = W / PT_N;
+      ptCurl.innerHTML = '';
+      ptSegs = [];
+      let parent = ptCurl;
+      for (let i = 0; i < PT_N; i++) {
+        const seg = document.createElement('div');
+        seg.className = 'pt-seg';
+        seg.style.width = segW + 'px';
+        if (i === 0) seg.style.left = '0';
+        seg.innerHTML =
+          '<div class="pt-face pt-front"><div class="pt-shade"></div></div>' +
+          '<div class="pt-face pt-back"><div class="pt-shade"></div></div>';
+        parent.appendChild(seg);
+        ptSegs.push(seg);
+        parent = seg;
+      }
+    }
+
+    function easeInOut(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+
+    /* p: 0 = flat covering (front up), 1 = turned onto the left stack (back up) */
+    function renderCurl(p) {
+      const T = p * 180;
+      const C = Math.sin(p * Math.PI) * 80;
+      const base = -(T - C);
+      const delta = -C / PT_N;
+      ptCurl.style.transform = 'rotateY(' + base.toFixed(3) + 'deg)';
+      let cum = base;
+      for (let i = 0; i < ptSegs.length; i++) {
+        const seg = ptSegs[i];
+        seg.style.transform = 'rotateY(' + delta.toFixed(3) + 'deg)';
+        cum += delta;
+        const a = cum * Math.PI / 180;
+        const sh = Math.min(.55, (1 - Math.abs(Math.cos(a))) * .5);
+        const shades = seg.querySelectorAll('.pt-shade');
+        shades[0].style.opacity = sh.toFixed(3);
+        shades[1].style.opacity = sh.toFixed(3);
+      }
+      ptShadow.style.opacity = (Math.sin(p * Math.PI) * .5).toFixed(3);
+      ptShadow.style.left = (p * 54).toFixed(2) + '%';
+    }
+
+    function animateCurl(from, to, duration, onDone) {
+      const start = performance.now();
+      let done = false;
+      const finish = () => { if (done) return; done = true; renderCurl(to); onDone(); };
+      function step(now) {
+        if (done) return;
+        const t = Math.min(1, (now - start) / duration);
+        renderCurl(from + (to - from) * easeInOut(t));
+        if (t < 1) requestAnimationFrame(step); else finish();
+      }
+      requestAnimationFrame(step);
+      setTimeout(finish, duration + 450);
+    }
 
     function playEnter() {
       if (!pageTurn) return;
       if (ptReduced) { pageTurn.classList.add('pt-done'); return; }
+      buildCurl();
+      renderCurl(0);
       document.body.classList.add('pt-entering');
-      pageTurn.classList.add('pt-enter');
-      const page = pageTurn.querySelector('.pt-page');
-      let finished = false;
-      const done = () => {
-        if (finished) return;
-        finished = true;
+      animateCurl(0, 1, 1150, () => {
         pageTurn.classList.add('pt-done');
         document.body.classList.remove('pt-entering');
-      };
-      page.addEventListener('animationend', done, { once: true });
-      setTimeout(done, 1500);
+      });
     }
 
     function playExit(url) {
       if (ptTurning) return;
       if (ptReduced || !pageTurn) { location.href = url; return; }
       ptTurning = true;
-      pageTurn.classList.remove('pt-done', 'pt-enter');
-      void pageTurn.offsetWidth;
-      pageTurn.classList.add('pt-exit');
-      const page = pageTurn.querySelector('.pt-page');
-      let finished = false;
-      const go = () => { if (finished) return; finished = true; location.href = url; };
-      page.addEventListener('animationend', go, { once: true });
-      setTimeout(go, 900);
+      pageTurn.classList.remove('pt-done');
+      buildCurl();
+      renderCurl(1);
+      animateCurl(1, 0, 720, () => { location.href = url; });
     }
 
     document.addEventListener('click', e => {
